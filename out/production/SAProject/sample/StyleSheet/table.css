@@ -1,0 +1,11 @@
+.table-view .column-header-background .label {
+ -fx-font-size: 10pt;
+}
+
+.table-view .table-cell{
+    -fx-font-size: 20px
+}
+
+.list-cell{
+    -fx-font-size: 20px
+}
