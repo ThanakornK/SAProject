@@ -3,10 +3,14 @@ package sample.Controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Recipe_update_Controller {
 
@@ -50,8 +54,12 @@ public class Recipe_update_Controller {
     }
 
     @FXML
-    void handleEditBtn(ActionEvent event) {
-
+    void handleEditBtn(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.show();
     }
 
     @FXML
