@@ -64,9 +64,24 @@ public class Menu_edit_Controller {
     }
 
     @FXML
-    void handleBackBtn(ActionEvent event) {
-        Stage stage = (Stage) back_btn.getScene().getWindow();
-        stage.close();
+    void handleBackBtn(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Menu_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        Screen screen = Screen.getPrimary();
+        Rectangle2D sbounds = screen.getBounds();
+
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
     }
 
 
