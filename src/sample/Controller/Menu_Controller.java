@@ -54,12 +54,14 @@ public class Menu_Controller {
     @FXML
     private TextField menu_name_field;
 
+    ObservableList<Menu> menuList = FXCollections.observableArrayList();
+
     @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                ObservableList<Menu> menuList = FXCollections.observableArrayList();
+
 
                 Recipe ex1 = new Recipe("Egg fried rice",35);
                 Recipe ex2 = new Recipe("Gang Green Sweet",45);
@@ -102,6 +104,7 @@ public class Menu_Controller {
                 SortedList<Menu> menuSortedList = new SortedList<>(menuFilterList);
 
                 listViewMenu.setItems(menuSortedList);
+
             }
         });
     }

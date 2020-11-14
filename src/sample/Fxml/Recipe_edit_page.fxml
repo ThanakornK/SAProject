@@ -87,6 +87,7 @@
                   <Font size="25.0" />
                </font>
             </Text>
+            <Button layoutX="728.0" layoutY="29.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="87.0" text="ค้นหา" />
          </children>
       </AnchorPane>
    </children>

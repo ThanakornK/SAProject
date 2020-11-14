@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import sample.Class.AlertBox;
 import sample.Class.Ingredient;
 import sample.Class.DBConnect;
+import sample.Class.Menu;
 import sample.Class.ParaCommand;
 
 import java.io.IOException;
@@ -24,8 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Ingredient_Controller {
     @FXML
@@ -77,8 +76,26 @@ public class Ingredient_Controller {
 
                 ing_amountCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("Ing_amount"));
 
-                ingredient_table.setItems(ingredientList);
+                FilteredList<Ingredient> ingFilterList = new FilteredList<>(ingredientList, p -> true);
+                update_ing_name.textProperty().addListener((observable, oldValue, newValue) -> {
+                    ingFilterList.setPredicate(menu -> {
+                        if (newValue == null || newValue.isEmpty()){
+                            return true;
+                        }
 
+                        if (menu.getIng_name().indexOf(newValue) != -1){
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    });
+
+                });
+
+                // wrap filter list to sorted list
+                SortedList<Ingredient> ingSortedList = new SortedList<>(ingFilterList);
+
+                ingredient_table.setItems(ingSortedList);
 
             }
         });
@@ -166,32 +183,32 @@ public class Ingredient_Controller {
 
     }
 
-    @FXML
-    public void handleSearchBtn() {
-        if (update_ing_name.getText().isEmpty()){                   // check update_ing_name is Empty?
-            alertBox.alertERR("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการค้นหา");
-
-        } else {
-            if (isInList(update_ing_name.getText()) != -1) {                                                                // show ing data and set update field can edit
-                int indexSearch = isInList(update_ing_name.getText());
-                update_ing_price.setText(String.valueOf(ingredientList.get(indexSearch).getIng_price()));
-                update_ing_amount.setText(String.valueOf(ingredientList.get(indexSearch).getIng_amount()));
-
-                update_ing_price.setEditable(true);
-                update_ing_amount.setEditable(true);
-                update_ing_price.setDisable(false);
-                update_ing_amount.setDisable(false);
-
-                update_ing_name.setEditable(false);
-
-            } else {                                                        // check if ing name don't exist
-                alertBox.alertERR("err","ไม่พบวัตถุดิบ");
-                clearTextField();
-
-            }
-
-        }
-    }
+//    @FXML
+//    public void handleSearchBtn() {
+//        if (update_ing_name.getText().isEmpty()){                   // check update_ing_name is Empty?
+//            alertBox.alertERR("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการค้นหา");
+//
+//        } else {
+//            if (isInList(update_ing_name.getText()) != -1) {                                                                // show ing data and set update field can edit
+//                int indexSearch = isInList(update_ing_name.getText());
+//                update_ing_price.setText(String.valueOf(ingredientList.get(indexSearch).getIng_price()));
+//                update_ing_amount.setText(String.valueOf(ingredientList.get(indexSearch).getIng_amount()));
+//
+//                update_ing_price.setEditable(true);
+//                update_ing_amount.setEditable(true);
+//                update_ing_price.setDisable(false);
+//                update_ing_amount.setDisable(false);
+//
+//                update_ing_name.setEditable(false);
+//
+//            } else {                                                        // check if ing name don't exist
+//                alertBox.alertERR("err","ไม่พบวัตถุดิบ");
+//                clearTextField();
+//
+//            }
+//
+//        }
+//    }
 
     //--------------------------------------- change page method -------------------------------------------------------
 

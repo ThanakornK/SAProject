@@ -71,12 +71,17 @@ public class Recipe_update_Controller {
 
     }
 
+    // method double click try at home
+
 //    @FXML
 //    void recipelistGetClick(MouseEvent mouseEvent) {
 //        recipe_list_view.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {
 //
+//                if (event.getClickCount() == 2) {
+//                    // add AllrecipeList selectRow to select_rec_list
+//                }
 //            }
 //        });
 //    }

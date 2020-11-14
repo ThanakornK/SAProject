@@ -63,9 +63,8 @@
                            </font>
                         </TextField>
                         <Button fx:id="add_btn" layoutX="168.0" layoutY="303.0" mnemonicParsing="false" onAction="#insertRecord" prefHeight="60.0" prefWidth="145.0" text="เพิ่มวัตถุดิบ" />
-                        <Button fx:id="delete_btn" layoutX="16.0" layoutY="303.0" mnemonicParsing="false" onAction="#deleteRecord" prefHeight="60.0" prefWidth="145.0" text="ลบวัตถุดิบ" visible="false" />
-                        <Button fx:id="update_btn" layoutX="168.0" layoutY="303.0" mnemonicParsing="false" onAction="#updateRecord" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false" />
-                        <Button fx:id="search_btn" layoutX="321.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="60.0" prefWidth="145.0" text="ค้นหาวัตถุดิบ" visible="false" />
+                        <Button fx:id="delete_btn" layoutX="67.0" layoutY="303.0" mnemonicParsing="false" onAction="#deleteRecord" prefHeight="60.0" prefWidth="145.0" text="ลบวัตถุดิบ" visible="false" />
+                        <Button fx:id="update_btn" layoutX="272.0" layoutY="303.0" mnemonicParsing="false" onAction="#updateRecord" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false" />
                         <TextField fx:id="update_ing_name" editable="false" layoutX="139.0" layoutY="52.0" prefHeight="51.0" prefWidth="326.0" promptText="กรอกชื่อวัตถุดิบเพื่อค้นหา" visible="false">
                            <font>
                               <Font size="20.0" />
