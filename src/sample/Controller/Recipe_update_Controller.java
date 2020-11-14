@@ -7,6 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sample.Class.DBConnect;
+import sample.Class.Ingredient;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Recipe_update_Controller {
 
@@ -22,6 +27,8 @@ public class Recipe_update_Controller {
     @FXML
     private TableView<?> ingTable;
 
+    private DBConnect dbConnect = new DBConnect();
+
     @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
@@ -32,8 +39,10 @@ public class Recipe_update_Controller {
         });
     }
 
+    //---------------------------------------------- Button method -------------------------------------------
+
     @FXML
-    void handleAddBtn(ActionEvent event) {
+    void handleAddBtn(ActionEvent event) { // Add Ing. button
 
     }
 
@@ -41,12 +50,14 @@ public class Recipe_update_Controller {
     void handleBackBtn(ActionEvent event) {
         Stage stage = (Stage) back_btn.getScene().getWindow();
         stage.close();
-
     }
 
     @FXML
     void handleClearBtn(ActionEvent event) {
-
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_rec_name_field.clear();
+        add_rec_price_field.clear();
     }
 
     @FXML
@@ -55,7 +66,7 @@ public class Recipe_update_Controller {
     }
 
     @FXML
-    void handleRecBtn(ActionEvent event) {
+    void handleRecBtn(ActionEvent event) { // Confirm button
 
     }
 

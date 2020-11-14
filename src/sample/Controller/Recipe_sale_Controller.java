@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sample.Class.DBConnect;
 import sample.Class.Recipe;
 
 public class Recipe_sale_Controller {
@@ -39,14 +40,16 @@ public class Recipe_sale_Controller {
     @FXML
     private Text rec_name;
 
+    private DBConnect dbConnect = new DBConnect();
+
     @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
-                Recipe rec = new Recipe("example", 10);
-                rec_name.setText(rec.getRec_name());
+                //Recipe rec = new Recipe("example", 10);
+                //rec_name.setText(rec.getRec_name());
 
             }
         });
@@ -58,4 +61,7 @@ public class Recipe_sale_Controller {
         stage.close();
     }
 
+    public void setRec_name(String recname){
+        this.rec_name.setText(recname);
+    }
 }

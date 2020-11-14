@@ -118,7 +118,9 @@ public class Recipe_Controller {
     @FXML
     void handle_sale_his(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_sale_page.fxml"));
-        Parent parentRoot = (Parent) fxmlLoader.load();
+        Parent parentRoot = fxmlLoader.load();
+        Recipe_sale_Controller controller = fxmlLoader.getController();
+        controller.setRec_name(listViewRec.getSelectionModel().getSelectedItem().getRec_name());
         Stage stage = new Stage();
         stage.setTitle("ยอดขายของสูตรอาหาร");
         stage.setScene(new Scene(parentRoot));
