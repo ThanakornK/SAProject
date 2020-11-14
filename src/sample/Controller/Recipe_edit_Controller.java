@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Recipe_edit_Controller {
 
     @FXML
-    private Button back_btn, add_rec_btn;
+    private Button back_btn, add_rec_btn, recSearchBtn;
 
 
     @FXML
@@ -28,5 +28,15 @@ public class Recipe_edit_Controller {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_update_page.fxml"));
         stage.setScene(new Scene(loader.load()));
         stage.show();
+    }
+
+    @FXML
+    void handleSearchBtn(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_search_select.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.show();
+
     }
 }

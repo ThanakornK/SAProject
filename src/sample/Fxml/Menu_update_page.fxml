@@ -7,54 +7,54 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Menu_update_Controller">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Menu_update_Controller">
    <children>
-      <Button fx:id="addMenuBox" layoutX="119.0" layoutY="134.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="300.0" style="-fx-background-color: #FFC575;" text="เพิ่มเมนู">
+      <Button fx:id="addMenuBox" layoutX="164.0" layoutY="133.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="เพิ่มเมนู">
          <font>
             <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="editMenuBtn" layoutX="482.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleEditBoxBtn" prefHeight="60.0" prefWidth="300.0" style="-fx-background-color: #FFB146;" text="แก้ไขเมนู">
+      <Button fx:id="editMenuBtn" layoutX="706.0" layoutY="133.0" mnemonicParsing="false" onAction="#handleEditBoxBtn" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="แก้ไขเมนู">
          <font>
             <Font size="25.0" />
          </font>
       </Button>
-      <AnchorPane prefHeight="120.0" prefWidth="900.0" style="-fx-background-color: lightgreen;">
+      <AnchorPane prefHeight="120.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
          <children>
-            <Text layoutX="337.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เพิ่ม/แก้ไข เมนู">
+            <Text layoutX="527.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เพิ่ม/แก้ไข เมนู">
                <font>
                   <Font size="40.0" />
                </font>
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="187.0" prefHeight="515.0" prefWidth="900.0" style="-fx-background-color: #FFD089;">
+      <AnchorPane layoutY="201.0" prefHeight="600.0" prefWidth="1280.0" style="-fx-background-color: #FFD089;">
          <children>
             <Text layoutX="31.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อเมนู:">
                <font>
                   <Font size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="add_menu_name_field" layoutX="142.0" layoutY="29.0" prefHeight="40.0" prefWidth="579.0">
+            <TextField fx:id="add_menu_name_field" layoutX="142.0" layoutY="29.0" prefHeight="44.0" prefWidth="823.0" promptText="กรอกชื่อเมนู">
                <font>
                   <Font size="20.0" />
                </font></TextField>
-            <Button fx:id="add_Menu_btn" layoutX="517.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleAddMenuBtn" prefHeight="45.0" prefWidth="100.0" text="ยืนยันการเพิ่มเมนู" />
-            <Button fx:id="back_btn" layoutX="283.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="45.0" prefWidth="100.0" text="ยกเลิก" />
-            <ListView fx:id="recipe_list_view" layoutX="72.0" layoutY="121.0" prefHeight="306.0" prefWidth="300.0" />
-            <ListView fx:id="select_rec_lsView" layoutX="529.0" layoutY="121.0" prefHeight="306.0" prefWidth="300.0" />
-            <Text layoutX="158.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="สูตรอาหารที่มี">
+            <Button fx:id="add_Menu_btn" layoutX="711.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleAddMenuBtn" prefHeight="53.0" prefWidth="129.0" text="ยืนยันการเพิ่มเมนู" />
+            <Button fx:id="back_btn" layoutX="461.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="53.0" prefWidth="129.0" text="ยกเลิก" />
+            <ListView fx:id="recipe_list_view" layoutX="75.0" layoutY="121.0" prefHeight="375.0" prefWidth="450.0" />
+            <ListView fx:id="select_rec_lsView" layoutX="760.0" layoutY="121.0" prefHeight="375.0" prefWidth="450.0" />
+            <Text layoutX="236.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="สูตรอาหารที่มี">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <Text layoutX="598.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="สูตรอาหารที่เลือก">
+            <Text layoutX="904.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="สูตรอาหารที่เลือก">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="add_btn" layoutX="409.0" layoutY="166.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
-            <Button fx:id="deleteBtn" layoutX="409.0" layoutY="336.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
+            <Button fx:id="add_btn" layoutX="600.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
+            <Button fx:id="deleteBtn" layoutX="600.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
          </children>
       </AnchorPane>
    </children>

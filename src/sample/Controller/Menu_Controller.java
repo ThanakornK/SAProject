@@ -171,10 +171,10 @@ public class Menu_Controller {
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_update_page.fxml"));
         Parent parentRoot = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("เพิ่ม/แก้ไข เมนู");
         stage.setScene(new Scene(parentRoot));
         stage.show();
     }

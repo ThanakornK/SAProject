@@ -127,11 +127,10 @@ public class Recipe_Controller {
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_update_page.fxml"));
-        Parent parentRoot = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("เพิ่ม/แก้ไข สูตรอาหาร");
-        stage.setScene(new Scene(parentRoot));
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_update_page.fxml"));
+        stage.setScene(new Scene(loader.load()));
         stage.show();
     }
 
