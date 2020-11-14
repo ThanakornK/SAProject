@@ -2,13 +2,17 @@ package sample.Controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sample.Class.Recipe;
 
 import java.io.IOException;
 
@@ -24,7 +28,7 @@ public class Recipe_update_Controller {
     private TextField add_rec_name_field, add_rec_price_field;
 
     @FXML
-    private TableView<?> ingTable;
+    private ListView<Recipe> recipe_list_view, select_rec_lsView;
 
     @FXML
     public void initialize(){
@@ -66,5 +70,15 @@ public class Recipe_update_Controller {
     void handleRecBtn(ActionEvent event) {
 
     }
+
+//    @FXML
+//    void recipelistGetClick(MouseEvent mouseEvent) {
+//        recipe_list_view.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//
+//            }
+//        });
+//    }
 
 }

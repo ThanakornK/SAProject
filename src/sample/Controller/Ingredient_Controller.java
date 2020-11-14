@@ -3,6 +3,8 @@ package sample.Controller;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import sample.Class.AlertBox;
 import sample.Class.Ingredient;
 import sample.Class.DBConnect;
+import sample.Class.ParaCommand;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +61,7 @@ public class Ingredient_Controller {
                 readAll(ingredientList);
 
                 ing_nameCol.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("Ing_name"));
-                ing_priceCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("ing_price"));
+                ing_priceCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("Ing_price"));
 
                 ing_priceCol.setCellFactory(tc -> new TableCell<Ingredient, Double>() {
                     @Override
@@ -71,9 +75,10 @@ public class Ingredient_Controller {
                     }
                 });
 
-                ing_amountCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("ing_amount"));
+                ing_amountCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("Ing_amount"));
 
                 ingredient_table.setItems(ingredientList);
+
 
             }
         });
@@ -262,14 +267,18 @@ public class Ingredient_Controller {
     public void go_recipe_page(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_page.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_page.fxml"));
         stage.setScene(new Scene(loader.load(),1280,800));
         stage.show();
     }
 
     @FXML
-    public void go_menu_page(ActionEvent event) {
-
+    public void go_menu_page(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
@@ -293,6 +302,7 @@ public class Ingredient_Controller {
                         selectedRow.forEach(copyList::remove);
 
                         ingredient_table.refresh();
+                        clearTextField();
 
                     }
                 }
@@ -314,12 +324,14 @@ public class Ingredient_Controller {
 
             } else{
                 if (isInList(add_ing_name.getText()) == -1) {                   // check if data already exist
-                    Map<String,String> insertPara = new HashMap<String, String>();
-                    insertPara.put("str",add_ing_name.getText());
-                    insertPara.put("double",add_ing_price.getText());
-                    insertPara.put("int",add_ing_amount.getText());
 
-                    if (dbConnect.insertRecord("INSERT  INTO ingredient( ing_name, ing_price, ing_amount) VALUES(?,?,?) ",insertPara) == 0){   // check insert is not error
+                    ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+
+                    paraCommands.add(new ParaCommand("str",add_ing_name.getText()));
+                    paraCommands.add(new ParaCommand("double",add_ing_price.getText()));
+                    paraCommands.add(new ParaCommand("int",add_ing_amount.getText()));
+
+                    if (dbConnect.insertRecord("INSERT  INTO ingredient( ing_name, ing_price, ing_amount) VALUES(?,?,?) ",paraCommands) == 0){   // check insert is not error
 
                         Ingredient addIngredient = new Ingredient( add_ing_name.getText(), Double.parseDouble(add_ing_price.getText()), Integer.parseInt(add_ing_amount.getText()));
                         ingredientList.add(addIngredient);
@@ -354,12 +366,14 @@ public class Ingredient_Controller {
                 alertBox.alertERR("err","ข้อมูลไม่มีการเปลี่ยนแปลง");
 
             } else {
-                Map<String,String> updatePara = new HashMap<>();
-                updatePara.put("double",update_ing_price.getText());
-                updatePara.put("int",update_ing_amount.getText());
-                updatePara.put("str",update_ing_name.getText());  // ------- last parameter must be pk
 
-                if (dbConnect.updateRecord("UPDATE Ingredient set Ing_price = ?, Ing_amount = ? WHERE Ing_name = ? ",updatePara) == 0) {  // check update is not error
+                ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+
+                paraCommands.add(new ParaCommand("double",update_ing_price.getText()));
+                paraCommands.add(new ParaCommand("int",update_ing_amount.getText()));
+                paraCommands.add(new ParaCommand("str",update_ing_name.getText()));  // last parameter must be pk
+
+                if (dbConnect.updateRecord("UPDATE Ingredient set Ing_price = ?, Ing_amount = ? WHERE Ing_name = ? ",paraCommands) == 0) {  // check update is not error
 
                     Ingredient newIng = new Ingredient(update_ing_name.getText(), Double.parseDouble(update_ing_price.getText()), Integer.parseInt(update_ing_amount.getText()));
                     ingredientList.set(isInList(update_ing_name.getText()),newIng);

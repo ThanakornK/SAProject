@@ -4,15 +4,25 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Recipe_Controller">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Menu_Controller">
    <children>
+      <AnchorPane prefHeight="150.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
+         <children>
+            <Text layoutX="407.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food Plan Program">
+               <font>
+                  <Font size="55.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
       <AnchorPane layoutX="-6.0" layoutY="150.0" prefHeight="652.0" prefWidth="1286.0">
          <children>
-            <Button fx:id="recipe_page_btn" layoutX="438.0" layoutY="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="สูตรอาหาร">
+            <Button fx:id="menu_page_btn" layoutX="862.0" layoutY="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="เมนู">
                <font>
                   <Font size="30.0" />
                </font>
@@ -22,7 +32,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button fx:id="menu_page_btn" layoutX="862.0" layoutY="5.0" mnemonicParsing="false" onAction="#go_menu_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="เมนู">
+            <Button fx:id="recipe_page_btn" layoutX="438.0" layoutY="5.0" mnemonicParsing="false" onAction="#go_recipe_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="สูตรอาหาร">
                <font>
                   <Font size="30.0" />
                </font>
@@ -32,26 +42,26 @@
                   <Button fx:id="home_btn" layoutX="1085.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
                   <AnchorPane layoutX="540.0" layoutY="61.0" prefHeight="410.0" prefWidth="715.0" style="-fx-background-color: lightgreen;">
                      <children>
-                        <Text fx:id="recipe_name" layoutX="55.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อสูตรอาหาร:" wrappingWidth="600.0000196397305">
+                        <Text fx:id="recipe_name" layoutX="55.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อเมนู:" wrappingWidth="91.00001963973045">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Text>
-                        <Text fx:id="price_per_bag" layoutX="55.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:" wrappingWidth="409.99999010562897">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Text>
-                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="111.0" prefHeight="285.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
+                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="65.0" onMouseClicked="#getFoodSelected" prefHeight="331.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
                           <columns>
-                            <TableColumn prefWidth="469.0" text="ชื่อวัตถุดิบ" />
-                            <TableColumn prefWidth="149.0" text="ราคาต้นทุน" />
+                            <TableColumn prefWidth="469.0" text="ชื่ออาหาร" />
+                            <TableColumn prefWidth="149.0" text="ราคาต่อถุง" />
                           </columns>
                         </TableView>
+                        <TextField fx:id="menu_name_field" layoutX="146.0" layoutY="14.0" prefHeight="40.0" prefWidth="501.0" promptText="กรอกชื่อเมนูเพื่อค้นหา">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextField>
                      </children>
                   </AnchorPane>
-                  <ListView fx:id="listViewRec" layoutX="33.0" layoutY="27.0" onMouseClicked="#getSelectMenu" prefHeight="512.0" prefWidth="466.0" stylesheets="@../StyleSheet/table.css" />
-                  <Button fx:id="update_rec_btn" layoutX="811.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="175.0" text="เพิ่ม/แก้ไข สูตรอาหาร">
+                  <ListView fx:id="listViewMenu" layoutX="33.0" layoutY="27.0" onMouseClicked="#getSelectMenu" prefHeight="512.0" prefWidth="466.0" stylesheets="@../StyleSheet/table.css" />
+                  <Button fx:id="update_rec_btn" layoutX="811.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="175.0" text="เพิ่ม/แก้ไข เมนู">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -63,15 +73,6 @@
                   </Button>
                </children>
             </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="150.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
-         <children>
-            <Text layoutX="407.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food Plan Program">
-               <font>
-                  <Font size="55.0" />
-               </font>
-            </Text>
          </children>
       </AnchorPane>
    </children>
