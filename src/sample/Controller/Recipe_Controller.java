@@ -52,11 +52,13 @@ public class Recipe_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-//                readAll(recipeList);  // read recipe from database
-                Recipe ex1 = new Recipe("Egg fried rice",35);
-                Recipe ex2 = new Recipe("Gang Green Sweet",45);
-                recipeList.add(ex1);       // example recipe
-                recipeList.add(ex2);     // example recipe
+
+                readAll(recipeList);  // read recipe from database
+
+//                Recipe ex1 = new Recipe("Egg fried rice",35);
+//                Recipe ex2 = new Recipe("Gang Green Sweet",45);
+//                recipeList.add(ex1);       // example recipe
+//                recipeList.add(ex2);     // example recipe
 
                 listViewRec.setCellFactory(param -> new ListCell<Recipe>() {            // use this method to show recipe name
                     @Override
