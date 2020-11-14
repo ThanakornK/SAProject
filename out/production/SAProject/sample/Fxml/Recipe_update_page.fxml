@@ -45,7 +45,7 @@
                      </font>
                   </Text>
                   <TextField fx:id="add_ing_quan" layoutX="79.0" layoutY="110.0" prefHeight="40.0" prefWidth="134.0" />
-                  <Button fx:id="add_btn" layoutX="301.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
+                  <Button fx:id="add_btn" layoutX="301.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -70,7 +70,7 @@
                   <TableColumn prefWidth="90.0" text="ลบ" />
               </columns>
             </TableView>
-            <Button fx:id="add_rec_btn" layoutX="697.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleRecBtn" prefHeight="45.0" prefWidth="120.0" text="ยืนยันการเพิ่มสูตร" />
+            <Button fx:id="add_rec_btn" layoutX="697.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleAddRecBtn" prefHeight="45.0" prefWidth="120.0" text="ยืนยันการเพิ่มสูตร" />
             <Button fx:id="back_btn" layoutX="463.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="45.0" prefWidth="100.0" text="ยกเลิก" />
             <Text layoutX="138.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:">
                <font>

@@ -47,7 +47,7 @@
                               <Font size="30.0" />
                            </font>
                         </Text>
-                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="65.0" onMouseClicked="#getFoodSelected" prefHeight="331.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
+                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="65.0" prefHeight="331.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
                           <columns>
                             <TableColumn prefWidth="469.0" text="ชื่ออาหาร" />
                             <TableColumn prefWidth="149.0" text="ราคาต่อถุง" />

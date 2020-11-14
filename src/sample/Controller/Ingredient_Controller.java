@@ -249,7 +249,6 @@ public class Ingredient_Controller {
         add_btn.setVisible(false);
         delete_btn.setVisible(true);
         update_btn.setVisible(true);
-        search_btn.setVisible(true);
     }
 
     public void changeAddBox(){                        // just change field to add field
@@ -275,7 +274,6 @@ public class Ingredient_Controller {
 
         delete_btn.setVisible(false);
         update_btn.setVisible(false);
-        search_btn.setVisible(false);
         add_btn.setVisible(true);
 
     }
