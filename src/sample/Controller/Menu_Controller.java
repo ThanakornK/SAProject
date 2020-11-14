@@ -109,16 +109,7 @@ public class Menu_Controller {
         });
     }
 
-    @FXML
-    void getFoodSelected(MouseEvent event) throws IOException {
-        if (event.getClickCount()==2){
-            Parent foodSelect = FXMLLoader.load(getClass().getResource(""));
-            Scene scene = new Scene(foodSelect);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        }
-    }
+    //----------------------------------------- normal method ----------------------------------------------------------
 
     @FXML
     void getSelectMenu(MouseEvent event) {
@@ -131,6 +122,12 @@ public class Menu_Controller {
 
         }
     }
+
+    //---------------------------------------- normal button method ----------------------------------------------------
+
+
+
+    //--------------------------------------- change page method -------------------------------------------------------
 
     @FXML
     void go_ing_page(ActionEvent event) throws IOException {
@@ -178,4 +175,8 @@ public class Menu_Controller {
         stage.setScene(new Scene(parentRoot));
         stage.show();
     }
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
+
 }

@@ -1,5 +1,6 @@
 package sample.Controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
@@ -34,9 +35,27 @@ public class Menu_search_select_Controller {
     private Button confirmBtn;
 
     @FXML
+    public void initialize(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+    //----------------------------------------- normal method ----------------------------------------------------------
+
+    @FXML
     void getSelectItem(ActionEvent event) {
 
     }
+
+    //---------------------------------------- normal button method ----------------------------------------------------
+
+
+
+    //--------------------------------------- change page method -------------------------------------------------------
 
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
@@ -45,24 +64,12 @@ public class Menu_search_select_Controller {
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
 
-//        Button button = (Button) event.getSource();
-//        Stage stage = (Stage) button.getScene().getWindow();
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Menu_edit_page.fxml"));
-//        Parent parentRoot = (Parent) fxmlLoader.load();
-//        Screen screen = Screen.getPrimary();
-//        Rectangle2D sbounds = screen.getBounds();
-//
-//        double sw = sbounds.getWidth() ;
-//        double sh = sbounds.getHeight();
-//
-//        listenToSizeInitialization(stage.widthProperty(),
-//                w -> stage.setX(( sw - w) /2));
-//        listenToSizeInitialization(stage.heightProperty(),
-//                h -> stage.setY(( sh - h) /2));
-//
-//        stage.setScene(new Scene(parentRoot));
-//        stage.show();
     }
+
+
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
 
     @FXML
     void handleConfirmBtn(ActionEvent event) throws IOException {
@@ -74,5 +81,6 @@ public class Menu_search_select_Controller {
 //        Screen screen = Screen.getPrimary();
 //        cs.changeStageAction(screen);
     }
+
 
 }

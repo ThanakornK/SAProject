@@ -42,10 +42,23 @@ public class Recipe_update_Controller {
         });
     }
 
+    //----------------------------------------- normal method ----------------------------------------------------------
+
+
+
+    //---------------------------------------- normal button method ----------------------------------------------------
+
     @FXML
-    void handleAddBtn(ActionEvent event) {
+    void handleAddIngBtn(ActionEvent event) {
 
     }
+
+    @FXML
+    void handleClearBtn(ActionEvent event) {
+
+    }
+
+    //--------------------------------------- change page method -------------------------------------------------------
 
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
@@ -53,11 +66,6 @@ public class Recipe_update_Controller {
         ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
-
-    }
-
-    @FXML
-    void handleClearBtn(ActionEvent event) {
 
     }
 
@@ -70,10 +78,22 @@ public class Recipe_update_Controller {
         stage.show();
     }
 
+
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
     @FXML
-    void handleRecBtn(ActionEvent event) {
+    void handleAddRecBtn(ActionEvent event) {
 
     }
+
+
+
+
+
+
+
+
 
     // method double click try at home
 

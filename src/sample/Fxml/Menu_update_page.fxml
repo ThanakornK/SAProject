@@ -53,8 +53,8 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="add_btn" layoutX="600.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
-            <Button fx:id="deleteBtn" layoutX="600.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
+            <Button fx:id="add_btn" layoutX="600.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleAddRecBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
+            <Button fx:id="deleteBtn" layoutX="600.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleDeleteRecBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
          </children>
       </AnchorPane>
    </children>

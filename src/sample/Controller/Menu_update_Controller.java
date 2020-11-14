@@ -1,5 +1,6 @@
 package sample.Controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
@@ -49,7 +50,22 @@ public class Menu_update_Controller {
     private Button deleteBtn;
 
     @FXML
-    void handleAddBtn(ActionEvent event) {
+    public void initialize(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+    //----------------------------------------- normal method ----------------------------------------------------------
+
+
+    //---------------------------------------- normal button method ----------------------------------------------------
+
+    @FXML
+    void handleAddRecBtn(ActionEvent event) {
 
     }
 
@@ -59,33 +75,18 @@ public class Menu_update_Controller {
     }
 
     @FXML
+    void handleDeleteRecBtn(ActionEvent event) {
+
+    }
+
+    //--------------------------------------- change page method -------------------------------------------------------
+
+    @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
 
         ChangeScene cs = new ChangeScene("../Fxml/Menu_page.fxml",event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
-
-//        Button button = (Button) event.getSource();
-//        Stage stage = (Stage) button.getScene().getWindow();
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Menu_page.fxml"));
-//        Parent parentRoot = (Parent) fxmlLoader.load();
-//        Screen screen = Screen.getPrimary();
-//        Rectangle2D sbounds = screen.getBounds();
-//
-//        double sw = sbounds.getWidth() ;
-//        double sh = sbounds.getHeight();
-//
-//        listenToSizeInitialization(stage.widthProperty(),
-//                w -> stage.setX(( sw - w) /2));
-//        listenToSizeInitialization(stage.heightProperty(),
-//                h -> stage.setY(( sh - h) /2));
-//
-//        stage.setScene(new Scene(parentRoot));
-//        stage.show();
-    }
-
-    @FXML
-    void handleDeleteBtn(ActionEvent event) {
 
     }
 
@@ -98,5 +99,8 @@ public class Menu_update_Controller {
         stage.show();
 
     }
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
 
 }
