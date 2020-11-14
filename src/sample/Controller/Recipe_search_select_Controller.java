@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.Class.ChangeScene;
 
 import java.io.IOException;
 import java.util.function.DoubleConsumer;
@@ -39,23 +40,28 @@ public class Recipe_search_select_Controller {
 
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
-        Button button = (Button) event.getSource();
-        Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
-        Parent parentRoot = (Parent) fxmlLoader.load();
+
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_edit_page.fxml",event);
         Screen screen = Screen.getPrimary();
-        Rectangle2D sbounds = screen.getBounds();
+        cs.changeStageAction(screen);
 
-        double sw = sbounds.getWidth() ;
-        double sh = sbounds.getHeight();
-
-        listenToSizeInitialization(stage.widthProperty(),
-                w -> stage.setX(( sw - w) /2));
-        listenToSizeInitialization(stage.heightProperty(),
-                h -> stage.setY(( sh - h) /2));
-
-        stage.setScene(new Scene(parentRoot));
-        stage.show();
+//        Button button = (Button) event.getSource();
+//        Stage stage = (Stage) button.getScene().getWindow();
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
+//        Parent parentRoot = (Parent) fxmlLoader.load();
+//        Screen screen = Screen.getPrimary();
+//        Rectangle2D sbounds = screen.getBounds();
+//
+//        double sw = sbounds.getWidth() ;
+//        double sh = sbounds.getHeight();
+//
+//        listenToSizeInitialization(stage.widthProperty(),
+//                w -> stage.setX(( sw - w) /2));
+//        listenToSizeInitialization(stage.heightProperty(),
+//                h -> stage.setY(( sh - h) /2));
+//
+//        stage.setScene(new Scene(parentRoot));
+//        stage.show();
     }
 
     @FXML

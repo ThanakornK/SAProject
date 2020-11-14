@@ -67,19 +67,4 @@ public class Recipe_edit_Controller {
 
     }
 
-    private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
-                                            DoubleConsumer handler) {
-
-        ChangeListener<Number> listener = new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> obs,
-                                Number oldSize, Number newSize) {
-                if (newSize.doubleValue() != Double.NaN) {
-                    handler.accept(newSize.doubleValue());
-                    size.removeListener(this);
-                }
-            }
-        };
-        size.addListener(listener);
-    }
 }

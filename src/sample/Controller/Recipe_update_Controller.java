@@ -11,7 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.Class.ChangeScene;
 import sample.Class.Recipe;
 
 import java.io.IOException;
@@ -46,9 +48,11 @@ public class Recipe_update_Controller {
     }
 
     @FXML
-    void handleBackBtn(ActionEvent event) {
-        Stage stage = (Stage) back_btn.getScene().getWindow();
-        stage.close();
+    void handleBackBtn(ActionEvent event) throws IOException {
+
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
 
     }
 
