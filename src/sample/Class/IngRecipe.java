@@ -3,19 +3,19 @@ package sample.Class;
 
 public class IngRecipe {
     private String ingName;
-    private Double recQuan;
+    private Double ingQuan;
 
     public IngRecipe(String ingName, Double recQuan){
         this.ingName = ingName;
-        this.recQuan = recQuan;
+        this.ingQuan = recQuan;
     }
 
     public String getIngName() {
         return ingName;
     }
 
-    public Double getRecQuan() {
-        return recQuan;
+    public Double getIngQuan() {
+        return ingQuan;
     }
 
     public void setIngName(String ingName) {
@@ -23,6 +23,6 @@ public class IngRecipe {
     }
 
     public void setRecQuan(Double recQuan) {
-        this.recQuan = recQuan;
+        this.ingQuan = recQuan;
     }
 }

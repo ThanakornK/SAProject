@@ -5,14 +5,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Class.*;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,16 +47,15 @@ public class Recipe_update_Controller {
 
     private AlertBox alertBox = new AlertBox();
 
-    private ObservableList<Recipe> recipeList = FXCollections.observableArrayList();
-
-    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
-
-    private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList();
-
-    private Map<Ingredient,String> ingQuantity = new HashMap<>();
-
     private DBConnect dbConnect = new DBConnect();
 
+    private ObservableList<Recipe> recipeList = FXCollections.observableArrayList(); // Used to store all recipe in database
+
+    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList(); // Used to store all ingredient in database
+
+    private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient name and quantity
+
+    private Map<Ingredient,String> ingQuantity = new HashMap<>();   // Hashmap used to store ing_name and ing_quan
 
     @FXML
     public void initialize(){
@@ -125,7 +128,38 @@ public class Recipe_update_Controller {
         add_ing_quan.clear();
     }
 
-    //---------------------------------------------- Button method -------------------------------------------
+
+    @FXML
+    void handleClearBtn(ActionEvent event) {
+
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_rec_name_field.clear();
+        add_rec_price_field.clear();
+    }
+
+    //---------------------------------------------- Change page method ----------------------------------------
+
+    @FXML
+    void handleBackBtn(ActionEvent event) throws IOException {
+
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
+    }
+
+    @FXML
+    void handleEditBtn(ActionEvent event) throws IOException {
+
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.show();
+
+    }
+
+    //---------------------------------------------- Database method -------------------------------------------
 
     @FXML
     void handleAddBtn(ActionEvent event) { // Add Ing. button
@@ -137,40 +171,19 @@ public class Recipe_update_Controller {
             alertBox.alertERR("err","กรุณากรอกปริมาณวัตถุดิบ");
         }
         else{
+
             if(isInIngList(add_ing_name.getText()) == -1){  // If there is no ingredient in database that has the same name in textfield alert user
                 alertBox.alertERR("err","ไม่มีวัตถุดิบนี้ในระบบ");
             }
+
             else{
                 recipeIngList.add(ingredientList.get(isInIngList(add_ing_name.getText())));
                 ingQuantity.put(ingredientList.get(isInIngList(add_ing_name.getText())), add_ing_quan.getText());
                 add_ing_name.clear();
                 add_ing_quan.clear();
                 System.out.println("Insert recipe ingredients in to list");
-
             }
-
         }
-    }
-
-    @FXML
-    void handleBackBtn(ActionEvent event) {
-
-        Stage stage = (Stage) back_btn.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    void handleClearBtn(ActionEvent event) {
-
-        add_ing_name.clear();
-        add_ing_quan.clear();
-        add_rec_name_field.clear();
-        add_rec_price_field.clear();
-    }
-
-    @FXML
-    void handleEditBtn(ActionEvent event) {
-
     }
 
     @FXML
@@ -189,18 +202,29 @@ public class Recipe_update_Controller {
         }
 
         else{
+
             if(isInRecList(add_rec_name_field.getText()) == -1){
 
                 ArrayList<ParaCommand> paraCommands = new ArrayList<>();
                 paraCommands.add(new ParaCommand("str", add_rec_name_field.getText()));
                 paraCommands.add(new ParaCommand("int", add_rec_price_field.getText()));
 
-                if(dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)",paraCommands) == 0) {
+                if(dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)", paraCommands) == 0) {
 
                     Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
                     for (Ingredient ing : recipeIngList) {
                         addRecipe.addIngList(ing, Double.parseDouble(ingQuantity.get(ing)));
-                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe");
+//                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe"); //For debug only
+                    }
+                    paraCommands.clear();
+                    for(IngRecipe inr: addRecipe.getIngList()){        //Insert value in to IngRecipe table in database
+                        paraCommands.add(new ParaCommand("str", inr.getIngName()));
+                        paraCommands.add(new ParaCommand("str", addRecipe.getRec_name()));
+                        paraCommands.add(new ParaCommand("double", String.valueOf(inr.getIngQuan())));
+
+                        if(dbConnect.insertRecord("INSERT  INTO ingrecipe( ing_name, rec_name, ing_quan) VALUES(?,?,?)", paraCommands) == 0) {
+                            System.out.println("Insert data into IngRecipe");
+                        }
                     }
                     recipeList.add(addRecipe);
                     clearTextField();

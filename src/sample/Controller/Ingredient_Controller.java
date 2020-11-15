@@ -337,7 +337,17 @@ public class Ingredient_Controller {
             if (add_ing_name.getText().isEmpty() || add_ing_price.getText().isEmpty() || add_ing_amount.getText().isEmpty()){
                 alertBox.alertERR("err", "กรุณากรอกข้อมูลให้ครบถ้วน");
 
-            } else{
+            }
+
+            else if (Double.parseDouble(add_ing_price.getText()) <= 0){
+                alertBox.alertERR("err", "กรุณากรอกราคาให้ถูกต้อง");
+            }
+
+            else if (Integer.parseInt(add_ing_amount.getText()) <= 0){
+                alertBox.alertERR("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
+            }
+
+            else{
                 if (isInList(add_ing_name.getText()) == -1) {                   // check if data already exist
 
                     ArrayList<ParaCommand> paraCommands = new ArrayList<>();
