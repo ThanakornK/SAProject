@@ -11,7 +11,6 @@ public class Recipe {
     public Recipe(String rec_name, double rec_price) {
         this.rec_name = rec_name;
         this.rec_price = rec_price;
-
     }
 
     public String getRec_name() {
@@ -30,7 +29,7 @@ public class Recipe {
         this.rec_price = rec_price;
     }
 
-    public void addIngList(String ing, String recName, double ingQuan){
-        ingList.add(new IngRecipe(ing, recName, ingQuan));
+    public void addIngList(IngRecipe ingRecipe){
+        ingList.add(ingRecipe);
     }
 }

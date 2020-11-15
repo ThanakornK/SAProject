@@ -120,7 +120,7 @@ public class Recipe_Controller {
                 double recPrice = rs.getDouble("Rec_price");
 
                 Recipe readRec = new Recipe(recName, recPrice);
-                
+
                 String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'",readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
@@ -129,7 +129,10 @@ public class Recipe_Controller {
                     String rec_Name = rs2.getString("Rec_name");
                     double ingQuan = rs2.getDouble("Ing_quan");
                     System.out.println(String.format("Added %s into %s", ingName, rec_Name));
-                    readRec.addIngList(ingName, rec_Name, ingQuan);
+                    IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
+                    temp.calculateTotalCost(ingredientList);
+                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe",temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
+                    readRec.addIngList(temp);
                 }
 
                 list.add(readRec);

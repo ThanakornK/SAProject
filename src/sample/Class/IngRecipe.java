@@ -1,17 +1,18 @@
 package sample.Class;
 
 
+import javafx.collections.ObservableList;
+
 public class IngRecipe {
     private String ingName;
     private String recName;
-    private double totalCost;
     private double ingQuan;
+    private double totalCost;
 
     public IngRecipe(String ingName, String recName, double recQuan){
         this.ingName = ingName;
         this.recName = recName;
         this.ingQuan = recQuan;
-//        this.totalCost = ingPrice*ingQuan;
     }
 
     public String getIngName() {
@@ -22,7 +23,7 @@ public class IngRecipe {
         return ingQuan;
     }
 
-    public double getIngPrice() {
+    public double getTotalCost() {
         return totalCost;
     }
 
@@ -34,7 +35,15 @@ public class IngRecipe {
         this.ingQuan = recQuan;
     }
 
-    public void setTotalCost(double ingPrice) {
-        this.totalCost = this.ingQuan*ingPrice;
+    public void calculateTotalCost(ObservableList<Ingredient> ingredients){
+        for(Ingredient i: ingredients){
+            if(i.getIng_name().equals(ingName)){
+                totalCost = i.getIng_price()*this.ingQuan;
+            }
+            else{
+                continue;
+            }
+        }
     }
+
 }

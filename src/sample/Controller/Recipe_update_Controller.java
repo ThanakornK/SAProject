@@ -239,7 +239,8 @@ public class Recipe_update_Controller {
 
                     Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
                     for (Ingredient ing : recipeIngList) {
-                        addRecipe.addIngList(ing.getIng_name(), addRecipe.getRec_name() ,Double.parseDouble(ingQuantity.get(ing)));
+                        IngRecipe temp = new IngRecipe(ing.getIng_name(), addRecipe.getRec_name() ,Double.parseDouble(ingQuantity.get(ing)));
+                        addRecipe.addIngList(temp);
 //                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe"); //For debug only
                     }
 
