@@ -8,9 +8,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sample.Class.Menu;
 import sample.Class.Recipe;
 
-public class Recipe_sale_Controller {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Menu_sale_Controller {
+
+    @FXML
+    private Button back_btn;
+
+    @FXML
+    private Text menu_name;
 
     @FXML
     private TableView<?> salesTable;
@@ -19,13 +29,10 @@ public class Recipe_sale_Controller {
     private TableColumn<?, ?> dateCol;
 
     @FXML
-    private TableColumn<?, ?> menuCol;
+    private TableColumn<?, ?> recCol;
 
     @FXML
     private TableColumn<?, ?> salesCol;
-
-    @FXML
-    private TableColumn<?, ?> salesBagCol;
 
     @FXML
     private TableColumn<?, ?> foodQuanCol;
@@ -34,20 +41,18 @@ public class Recipe_sale_Controller {
     private TableColumn<?, ?> leftCol;
 
     @FXML
-    private Button back_btn;
-
-    @FXML
-    private Text rec_name;
-
-    @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
-                Recipe rec = new Recipe("example", 10);
-                rec_name.setText(rec.getRec_name());
+                Recipe ex1 = new Recipe("Egg fried rice",35);
+                Recipe ex2 = new Recipe("Gang Green Sweet",45);
+                List<Recipe> recipeList = new ArrayList<>();
+                recipeList.add(ex1); recipeList.add(ex2);
 
+                Menu menu = new Menu("example", recipeList);
+                menu_name.setText(menu.getMenu_name());
             }
         });
     }

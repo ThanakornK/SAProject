@@ -2,11 +2,21 @@ package sample.Controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.Class.ChangeScene;
+import sample.Class.Recipe;
+
+import java.io.IOException;
 
 public class Recipe_update_Controller {
 
@@ -20,7 +30,7 @@ public class Recipe_update_Controller {
     private TextField add_rec_name_field, add_rec_price_field;
 
     @FXML
-    private TableView<?> ingTable;
+    private ListView<Recipe> recipe_list_view, select_rec_lsView;
 
     @FXML
     public void initialize(){
@@ -32,15 +42,14 @@ public class Recipe_update_Controller {
         });
     }
 
-    @FXML
-    void handleAddBtn(ActionEvent event) {
+    //----------------------------------------- normal method ----------------------------------------------------------
 
-    }
+
+
+    //---------------------------------------- normal button method ----------------------------------------------------
 
     @FXML
-    void handleBackBtn(ActionEvent event) {
-        Stage stage = (Stage) back_btn.getScene().getWindow();
-        stage.close();
+    void handleAddIngBtn(ActionEvent event) {
 
     }
 
@@ -49,14 +58,56 @@ public class Recipe_update_Controller {
 
     }
 
+    //--------------------------------------- change page method -------------------------------------------------------
+
     @FXML
-    void handleEditBtn(ActionEvent event) {
+    void handleBackBtn(ActionEvent event) throws IOException {
+
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
 
     }
 
     @FXML
-    void handleRecBtn(ActionEvent event) {
+    void handleEditBtn(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.show();
+    }
+
+
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
+    @FXML
+    void handleAddRecBtn(ActionEvent event) {
 
     }
+
+
+
+
+
+
+
+
+
+    // method double click try at home
+
+//    @FXML
+//    void recipelistGetClick(MouseEvent mouseEvent) {
+//        recipe_list_view.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//
+//                if (event.getClickCount() == 2) {
+//                    // add AllrecipeList selectRow to select_rec_list
+//                }
+//            }
+//        });
+//    }
 
 }

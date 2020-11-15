@@ -10,17 +10,23 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Recipe_Controller">
    <children>
-      <AnchorPane prefHeight="150.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
-         <children>
-            <Text layoutX="407.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food Plan Program">
-               <font>
-                  <Font size="55.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
       <AnchorPane layoutX="-6.0" layoutY="150.0" prefHeight="652.0" prefWidth="1286.0">
          <children>
+            <Button fx:id="recipe_page_btn" layoutX="438.0" layoutY="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="สูตรอาหาร">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
+            <Button fx:id="ing_page_btn" layoutX="15.0" layoutY="5.0" mnemonicParsing="false" onAction="#go_ing_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="วัตถุดิบ">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
+            <Button fx:id="menu_page_btn" layoutX="862.0" layoutY="5.0" mnemonicParsing="false" onAction="#go_menu_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="เมนู">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
             <AnchorPane layoutX="6.0" layoutY="77.0" prefHeight="576.0" prefWidth="1280.0" style="-fx-background-color: #FFD089;">
                <children>
                   <Button fx:id="home_btn" layoutX="1085.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
@@ -45,7 +51,7 @@
                      </children>
                   </AnchorPane>
                   <ListView fx:id="listViewRec" layoutX="33.0" layoutY="27.0" onMouseClicked="#getSelectMenu" prefHeight="512.0" prefWidth="466.0" stylesheets="@../StyleSheet/table.css" />
-                  <Button fx:id="update_rec_btn" layoutX="811.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="175.0" text="เพิ่ม/แก้ไข สูตรอาหาร" >
+                  <Button fx:id="update_rec_btn" layoutX="811.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="175.0" text="เพิ่ม/แก้ไข สูตรอาหาร">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -57,21 +63,15 @@
                   </Button>
                </children>
             </AnchorPane>
-            <Button fx:id="ing_page_btn" layoutX="15.0" layoutY="5.0" mnemonicParsing="false" onAction="#go_ing_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="วัตถุดิบ">
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="150.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
+         <children>
+            <Text layoutX="407.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food Plan Program">
                <font>
-                  <Font size="30.0" />
+                  <Font size="55.0" />
                </font>
-            </Button>
-            <Button fx:id="recipe_page_btn" layoutX="438.0" layoutY="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="สูตรอาหาร">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Button>
-            <Button fx:id="menu_page_btn" layoutX="862.0" layoutY="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="เมนู">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Button>
+            </Text>
          </children>
       </AnchorPane>
    </children>
