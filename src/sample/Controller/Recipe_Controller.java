@@ -9,17 +9,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import sample.Class.AlertBox;
-import sample.Class.DBConnect;
-import sample.Class.Ingredient;
-import sample.Class.Recipe;
+import sample.Class.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -35,7 +29,13 @@ public class Recipe_Controller {
     private Text recipe_name, price_per_bag;
 
     @FXML
-    private TableView<?> ing_list;
+    private TableView<IngRecipe> ing_list;
+
+    @FXML
+    private TableColumn<IngRecipe, String> ing_name;
+
+    @FXML
+    private TableColumn<IngRecipe, Double> cost_price;
 
     @FXML
     private ListView<Recipe> listViewRec;
@@ -43,7 +43,11 @@ public class Recipe_Controller {
     @FXML
     private Button update_rec_btn, sale_his_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn;
 
+    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
+
     private ObservableList<Recipe> recipeList = FXCollections.observableArrayList();
+
+    private ObservableList<IngRecipe> selectRecIng = FXCollections.observableArrayList();
 
     private AlertBox alertBox;
 
@@ -52,13 +56,8 @@ public class Recipe_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
-                readAll(recipeList);  // read recipe from database
-
-//                Recipe ex1 = new Recipe("Egg fried rice",35);
-//                Recipe ex2 = new Recipe("Gang Green Sweet",45);
-//                recipeList.add(ex1);       // example recipe
-//                recipeList.add(ex2);     // example recipe
+                readAllIng(ingredientList);  // read ingredient from database
+                readAllRec(recipeList);  // read recipe from database
 
                 listViewRec.setCellFactory(param -> new ListCell<Recipe>() {            // use this method to show recipe name
                     @Override
@@ -73,16 +72,44 @@ public class Recipe_Controller {
                     }
                 });
                 listViewRec.setItems(recipeList);
+
             }
         });
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
-    private void readAll(ObservableList<Recipe> list){
+    private void readAllIng(ObservableList<Ingredient> list){
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM Ingredient";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String ingName = rs.getString("Ing_name");
+                double ingPrice = rs.getDouble("Ing_price");
+                int ingAmount = rs.getInt("Ing_amount");
+
+                Ingredient newIngredient = new Ingredient(ingName,ingPrice,ingAmount);
+                list.add(newIngredient);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    private void readAllRec(ObservableList<Recipe> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        PreparedStatement ps2 = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
 
         try {
             String sql = "SELECT * FROM Recipe";
@@ -92,8 +119,23 @@ public class Recipe_Controller {
                 String recName = rs.getString("Rec_name");
                 double recPrice = rs.getDouble("Rec_price");
 
-                list.add(new Recipe(recName,recPrice));
+                Recipe readRec = new Recipe(recName, recPrice);
+                
+                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'",readRec.getRec_name());
+                ps2 = con.prepareStatement(sql2);
+                rs2 = ps2.executeQuery();
+                while (rs2.next()){
+                    String ingName = rs2.getString("Ing_name");
+                    String rec_Name = rs2.getString("Rec_name");
+                    double ingQuan = rs2.getDouble("Ing_quan");
+                    System.out.println(String.format("Added %s into %s", ingName, rec_Name));
+                    readRec.addIngList(ingName, rec_Name, ingQuan);
+                }
+
+                list.add(readRec);
             }
+
+
 
         } catch (SQLException e) {
             System.out.println(e.toString());

@@ -37,13 +37,13 @@ public class Recipe_update_Controller {
     private TextField add_rec_name_field, add_rec_price_field;
 
     @FXML
-    private TableView<Ingredient> ingTable;
+    private TableView<Recipe> ingTable;
 
     @FXML
-    private TableColumn<Ingredient, String> ing_name;
+    private TableColumn<Recipe, String> ing_name;
 
     @FXML
-    private TableColumn<Ingredient, Integer> ing_amount;
+    private TableColumn<Recipe, Double> ing_quan;
 
     private AlertBox alertBox = new AlertBox();
 
@@ -53,7 +53,9 @@ public class Recipe_update_Controller {
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList(); // Used to store all ingredient in database
 
-    private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient name and quantity
+    private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient
+
+    private ObservableList<Recipe> curRecipe = FXCollections.observableArrayList();
 
     private Map<Ingredient,String> ingQuantity = new HashMap<>();   // Hashmap used to store ing_name and ing_quan
 
@@ -62,12 +64,13 @@ public class Recipe_update_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                readAll(ingredientList);
+                readAllIng(ingredientList);
+                readAllRec(recipeList);
 
-                ing_name.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ing_name"));
-                ing_amount.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("ing_amount"));
+                ing_name.setCellValueFactory(new PropertyValueFactory<>("ing_name"));
+                ing_quan.setCellValueFactory(new PropertyValueFactory<>("ing_quan"));
 
-                ingTable.setItems(recipeIngList);
+                //ingTable.setItems();
 
             }
         });
@@ -75,7 +78,7 @@ public class Recipe_update_Controller {
 
     //---------------------------------------------- Common method -------------------------------------------
 
-    private void readAll(ObservableList<Ingredient> list){
+    private void readAllIng(ObservableList<Ingredient> list){
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -91,6 +94,29 @@ public class Recipe_update_Controller {
 
                 Ingredient newIngredient = new Ingredient(ingName,ingPrice,ingAmount);
                 list.add(newIngredient);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    private void readAllRec(ObservableList<Recipe> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM Recipe";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String recName = rs.getString("Rec_name");
+                double recPrice = rs.getDouble("Rec_price");
+
+                list.add(new Recipe(recName,recPrice));
 
             }
 
@@ -213,9 +239,10 @@ public class Recipe_update_Controller {
 
                     Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
                     for (Ingredient ing : recipeIngList) {
-                        addRecipe.addIngList(ing, Double.parseDouble(ingQuantity.get(ing)));
+                        addRecipe.addIngList(ing.getIng_name(), addRecipe.getRec_name() ,Double.parseDouble(ingQuantity.get(ing)));
 //                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe"); //For debug only
                     }
+
                     paraCommands.clear();
                     for(IngRecipe inr: addRecipe.getIngList()){        //Insert value in to IngRecipe table in database
                         paraCommands.add(new ParaCommand("str", inr.getIngName()));
@@ -224,10 +251,13 @@ public class Recipe_update_Controller {
 
                         if(dbConnect.insertRecord("INSERT  INTO ingrecipe( ing_name, rec_name, ing_quan) VALUES(?,?,?)", paraCommands) == 0) {
                             System.out.println("Insert data into IngRecipe");
+                            paraCommands.clear();
                         }
                     }
                     recipeList.add(addRecipe);
                     clearTextField();
+                    recipeIngList.clear();
+                    ingTable.refresh();
                 }
 
 
@@ -235,8 +265,9 @@ public class Recipe_update_Controller {
             else{
                 alertBox.alertERR("err","สูตรอาหารนี้มีอยู่แล้ว");
             }
-            recipeIngList.clear();
+
             ingQuantity.clear();
+            curRecipe.clear();
         }
     }
 }

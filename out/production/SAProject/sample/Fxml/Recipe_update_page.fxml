@@ -56,7 +56,7 @@
             <TableView fx:id="ingTable" layoutX="446.0" layoutY="151.0" prefHeight="280.0" prefWidth="420.0" stylesheets="@../StyleSheet/table.css">
               <columns>
                 <TableColumn fx:id="ing_name" prefWidth="300.0" text="ชื่อวัตถุดิบ" />
-                <TableColumn fx:id="ing_amount" prefWidth="120.0" text="ปริมาณที่ใช้" />
+                <TableColumn fx:id="ing_quan" prefWidth="120.0" text="ปริมาณที่ใช้" />
               </columns>
             </TableView>
             <Button fx:id="add_rec_btn" layoutX="517.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleRecBtn" prefHeight="45.0" prefWidth="100.0" text="ยืนยันการเพิ่มสูตร" />

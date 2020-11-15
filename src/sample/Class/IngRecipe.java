@@ -3,11 +3,15 @@ package sample.Class;
 
 public class IngRecipe {
     private String ingName;
-    private Double ingQuan;
+    private String recName;
+    private double totalCost;
+    private double ingQuan;
 
-    public IngRecipe(String ingName, Double recQuan){
+    public IngRecipe(String ingName, String recName, double recQuan){
         this.ingName = ingName;
+        this.recName = recName;
         this.ingQuan = recQuan;
+//        this.totalCost = ingPrice*ingQuan;
     }
 
     public String getIngName() {
@@ -18,11 +22,19 @@ public class IngRecipe {
         return ingQuan;
     }
 
+    public double getIngPrice() {
+        return totalCost;
+    }
+
     public void setIngName(String ingName) {
         this.ingName = ingName;
     }
 
     public void setRecQuan(Double recQuan) {
         this.ingQuan = recQuan;
+    }
+
+    public void setTotalCost(double ingPrice) {
+        this.totalCost = this.ingQuan*ingPrice;
     }
 }
