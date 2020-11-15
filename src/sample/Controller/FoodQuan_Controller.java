@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -72,12 +73,13 @@ public class FoodQuan_Controller {
 
 
 
+    //----------------------------------------- normal method ----------------------------------------------------------
+
+
+
     //---------------------------------------- normal button method ----------------------------------------------------
 
-    @FXML
-    void handleFoodPlanBox(ActionEvent event) {
 
-    }
 
     //--------------------------------------- change page method -------------------------------------------------------
 
@@ -109,9 +111,20 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleCheckStoreBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+
+        ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml");
+        cs.newWindow();
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DevelopScene.fxml"));
+//        Parent parentRoot = (Parent) fxmlLoader.load();
+//        Stage stage = new Stage();
+//        stage.setTitle("Developer");
+//        stage.setScene(new Scene(parentRoot));
+//        stage.show();
+//
+//        ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml",event);
+//        Screen screen = Screen.getPrimary();
+//        cs.changeStageAction(screen);
     }
 
     @FXML
@@ -119,6 +132,12 @@ public class FoodQuan_Controller {
         ChangeScene cs = new ChangeScene("../Fxml/FoodLeft_page.fxml",event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
+    }
+
+    @FXML
+    public void handleRecomBtn(ActionEvent event) throws IOException {
+        ChangeScene cs = new ChangeScene("../Fxml/RecommendFoodQuan_page.fxml");
+        cs.newWindow();
     }
 
     //-------------------------------------------- database method -----------------------------------------------------

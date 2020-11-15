@@ -21,7 +21,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <Button fx:id="FoodPlanBox" layoutX="164.0" layoutY="133.0" mnemonicParsing="false" onAction="#handleFoodPlanBox" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="แผนปริมาณอาหาร">
+      <Button fx:id="FoodPlanBox" layoutX="164.0" layoutY="133.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFC575;" text="แผนปริมาณอาหาร">
          <font>
             <Font size="25.0" />
          </font>
@@ -67,7 +67,7 @@
                      </font>
                   </Text>
                   <Button fx:id="back_btn" layoutX="1044.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
-                  <Button layoutX="493.0" layoutY="423.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="120.0" text="ปริมาณที่ระบบแนะนำ" />
+                  <Button fx:id="recommendBtn" layoutX="493.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleRecomBtn" prefHeight="55.0" prefWidth="120.0" text="ปริมาณที่ระบบแนะนำ" />
                   <Button fx:id="checkIngStore_btn" layoutX="686.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleCheckStoreBtn" prefHeight="55.0" prefWidth="125.0" text="ตรวจสอบวัตถุดิบในคลัง" />
                </children>
             </AnchorPane>
