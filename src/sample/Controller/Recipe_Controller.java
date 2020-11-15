@@ -55,7 +55,7 @@ public class Recipe_Controller {
 
     private ObservableList<IngRecipe> selectIngRec = FXCollections.observableArrayList();
 
-    private AlertBox alertBox;
+    private AlertBox alertBox = new AlertBox();
 
     @FXML
     public void initialize(){
@@ -106,7 +106,7 @@ public class Recipe_Controller {
         });
     }
 
-    //----------------------------------------- normal method ----------------------------------------------------------
+    //----------------------------------------- Normal method ----------------------------------------------------------
 
     private void readAllIng(ObservableList<Ingredient> list){
         Connection con = DBConnect.connect();
@@ -167,8 +167,6 @@ public class Recipe_Controller {
                 list.add(readRec);
             }
 
-
-
         } catch (SQLException e) {
             System.out.println(e.toString());
             alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
@@ -184,8 +182,6 @@ public class Recipe_Controller {
             sale_his_btn.setVisible(true);
 
             String priceText = String.format("%.2f",listViewRec.getSelectionModel().getSelectedItem().getRec_price());
-
-            //recipe_name.setText("ชื่อสูตรอาหาร: "+ listViewRec.getSelectionModel().getSelectedItem().getRec_name());
             price_per_bag.setText("ราคาต่อถุง: "+ priceText +" บาท");
 
             for(IngRecipe i: listViewRec.getSelectionModel().getSelectedItem().getIngList()){
@@ -194,11 +190,10 @@ public class Recipe_Controller {
             ing_list.setItems(selectIngRec);
             ing_list.refresh();
 
-
         }
     }
 
-    //--------------------------------------- normal button method -----------------------------------------------------
+    //--------------------------------------- Button method -----------------------------------------------------
 
     @FXML
     void handle_sale_his(ActionEvent event) throws IOException {
@@ -214,15 +209,14 @@ public class Recipe_Controller {
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_update_page.fxml"));
-        Parent parentRoot = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("เพิ่ม/แก้ไข สูตรอาหาร");
-        stage.setScene(new Scene(parentRoot));
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_update_page.fxml"));
+        stage.setScene(new Scene(loader.load()));
         stage.show();
     }
 
-    //--------------------------------------- change page method -------------------------------------------------------
+    //--------------------------------------- Change page method -------------------------------------------------------
 
     @FXML
     public void go_ing_page(ActionEvent event) throws IOException {
