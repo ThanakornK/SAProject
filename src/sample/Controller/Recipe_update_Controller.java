@@ -37,13 +37,13 @@ public class Recipe_update_Controller {
     private TextField add_rec_name_field, add_rec_price_field;
 
     @FXML
-    private TableView<Recipe> ingTable;
+    private TableView<IngRecipe> ingTable;
 
     @FXML
-    private TableColumn<Recipe, String> ing_name;
+    private TableColumn<IngRecipe, String> ing_name;
 
     @FXML
-    private TableColumn<Recipe, Double> ing_quan;
+    private TableColumn<IngRecipe, Double> ing_quan;
 
     private AlertBox alertBox = new AlertBox();
 
@@ -55,7 +55,7 @@ public class Recipe_update_Controller {
 
     private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient
 
-    private ObservableList<Recipe> curRecipe = FXCollections.observableArrayList();
+    private ObservableList<IngRecipe> addIngInfo = FXCollections.observableArrayList();
 
     private Map<Ingredient,String> ingQuantity = new HashMap<>();   // Hashmap used to store ing_name and ing_quan
 
@@ -67,10 +67,8 @@ public class Recipe_update_Controller {
                 readAllIng(ingredientList);
                 readAllRec(recipeList);
 
-                ing_name.setCellValueFactory(new PropertyValueFactory<>("ing_name"));
-                ing_quan.setCellValueFactory(new PropertyValueFactory<>("ing_quan"));
-
-                //ingTable.setItems();
+                ing_name.setCellValueFactory(new PropertyValueFactory<>("ingName"));
+                ing_quan.setCellValueFactory(new PropertyValueFactory<>("ingQuan"));
 
             }
         });
@@ -146,6 +144,18 @@ public class Recipe_update_Controller {
         return -1;
     }
 
+    public int isInAddList(String ingName){
+        if(addIngInfo.isEmpty()){
+            return 0;
+        }
+        for(IngRecipe i: addIngInfo){
+            if(ingName.equals(i.getIngName())){
+                return -1;
+            }
+        }
+        return 0;
+    }
+
     public void clearTextField(){
 
         add_rec_name_field.clear();
@@ -169,9 +179,8 @@ public class Recipe_update_Controller {
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        Stage stage = (Stage) back_btn.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -196,6 +205,12 @@ public class Recipe_update_Controller {
         else if (add_ing_quan.getText().isEmpty()){
             alertBox.alertERR("err","กรุณากรอกปริมาณวัตถุดิบ");
         }
+        else if (Double.parseDouble(add_ing_quan.getText()) <= 0){
+            alertBox.alertERR("err", "ปริมาณวัตถุดิบที่ใช้ห้ามติดลบหรือเท่ากับ0");
+        }
+        else if (isInAddList(add_ing_name.getText()) == -1){
+            alertBox.alertERR("err", "มีวัตถุดิบนี้อยู่แล้ว");
+        }
         else{
 
             if(isInIngList(add_ing_name.getText()) == -1){  // If there is no ingredient in database that has the same name in textfield alert user
@@ -203,12 +218,20 @@ public class Recipe_update_Controller {
             }
 
             else{
+                IngRecipe temp = new IngRecipe(ingredientList.get(isInIngList(add_ing_name.getText())).getIng_name(), "temp", Double.parseDouble(add_ing_quan.getText()));
                 recipeIngList.add(ingredientList.get(isInIngList(add_ing_name.getText())));
                 ingQuantity.put(ingredientList.get(isInIngList(add_ing_name.getText())), add_ing_quan.getText());
                 add_ing_name.clear();
                 add_ing_quan.clear();
                 System.out.println("Insert recipe ingredients in to list");
+
+                addIngInfo.add(temp);
+                ingTable.setItems(addIngInfo);
+                ingTable.refresh();
             }
+
+
+
         }
     }
 
@@ -225,6 +248,10 @@ public class Recipe_update_Controller {
 
         else if(recipeIngList.isEmpty()){
             alertBox.alertERR("err","ไม่มีวัตุดิบที่ใช้");
+        }
+
+        else if(Double.parseDouble(add_rec_price_field.getText()) <= 0){
+            alertBox.alertERR("err", "ราคาอาหารห้ามติดลบ");
         }
 
         else{
@@ -268,7 +295,8 @@ public class Recipe_update_Controller {
             }
 
             ingQuantity.clear();
-            curRecipe.clear();
+            addIngInfo.clear();
+            ingTable.refresh();
         }
     }
 }

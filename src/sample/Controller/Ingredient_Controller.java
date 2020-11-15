@@ -343,7 +343,7 @@ public class Ingredient_Controller {
                 alertBox.alertERR("err", "กรุณากรอกราคาให้ถูกต้อง");
             }
 
-            else if (Integer.parseInt(add_ing_amount.getText()) <= 0){
+            else if (Integer.parseInt(add_ing_amount.getText()) < 0){
                 alertBox.alertERR("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
             }
 

@@ -4,6 +4,8 @@ import com.sun.xml.internal.bind.v2.runtime.property.PropertyFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Class.*;
+import sample.Class.Menu;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -41,13 +44,16 @@ public class Recipe_Controller {
     private ListView<Recipe> listViewRec;
 
     @FXML
+    private TextField recipe_name_field;
+
+    @FXML
     private Button update_rec_btn, sale_his_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn;
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
 
     private ObservableList<Recipe> recipeList = FXCollections.observableArrayList();
 
-    private ObservableList<IngRecipe> selectRecIng = FXCollections.observableArrayList();
+    private ObservableList<IngRecipe> selectIngRec = FXCollections.observableArrayList();
 
     private AlertBox alertBox;
 
@@ -71,7 +77,30 @@ public class Recipe_Controller {
                         }
                     }
                 });
-                listViewRec.setItems(recipeList);
+
+                FilteredList<Recipe> recipeFilterList = new FilteredList<>(recipeList, p -> true);
+                recipe_name_field.textProperty().addListener((observable, oldValue, newValue) -> {
+                    recipeFilterList.setPredicate(recipe -> {
+                        if (newValue == null || newValue.isEmpty()){
+                            return true;
+                        }
+
+                        if (recipe.getRec_name().indexOf(newValue) != -1){
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    });
+
+                });
+
+                // wrap filter list to sorted list
+                SortedList<Recipe> RecipeSortedList = new SortedList<>(recipeFilterList);
+
+                listViewRec.setItems(RecipeSortedList);
+
+                ing_name.setCellValueFactory(new PropertyValueFactory<>("ingName"));
+                cost_price.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
 
             }
         });
@@ -147,6 +176,8 @@ public class Recipe_Controller {
     }
 
     public void getSelectMenu(){
+        selectIngRec.clear();
+        System.out.println(listViewRec.getSelectionModel().getSelectedItem().getRec_name() + " has been selected");
         if (listViewRec.getSelectionModel().getSelectedItem() != null){   // check select row not null
 
             sale_his_btn.setDisable(false);
@@ -154,8 +185,15 @@ public class Recipe_Controller {
 
             String priceText = String.format("%.2f",listViewRec.getSelectionModel().getSelectedItem().getRec_price());
 
-            recipe_name.setText("ชื่อสูตรอาหาร: "+ listViewRec.getSelectionModel().getSelectedItem().getRec_name());
+            //recipe_name.setText("ชื่อสูตรอาหาร: "+ listViewRec.getSelectionModel().getSelectedItem().getRec_name());
             price_per_bag.setText("ราคาต่อถุง: "+ priceText +" บาท");
+
+            for(IngRecipe i: listViewRec.getSelectionModel().getSelectedItem().getIngList()){
+                selectIngRec.add(i);
+            }
+            ing_list.setItems(selectIngRec);
+            ing_list.refresh();
+
 
         }
     }
