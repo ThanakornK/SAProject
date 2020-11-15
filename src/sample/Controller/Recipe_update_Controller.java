@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -190,35 +191,21 @@ public class Recipe_update_Controller {
         else{
             if(isInRecList(add_rec_name_field.getText()) == -1){
 
-                Map<String,String> insertPara = new HashMap<>();
-                insertPara.put("str",add_rec_name_field.getText());
-                insertPara.put("int",add_rec_price_field.getText());
+                ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+                paraCommands.add(new ParaCommand("str", add_rec_name_field.getText()));
+                paraCommands.add(new ParaCommand("int", add_rec_price_field.getText()));
 
-                if(dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)",insertPara) == 0){
+                if(dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)",paraCommands) == 0) {
 
                     Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
-                    for(Ingredient ing: recipeIngList) {
+                    for (Ingredient ing : recipeIngList) {
                         addRecipe.addIngList(ing, Double.parseDouble(ingQuantity.get(ing)));
-////                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe");
+                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe");
                     }
-////                    for(IngRecipe ir: addRecipe.getIngList()){
-////                        System.out.println("IngName: " + ir.getIngName() + " ingQuan: " + ir.getRecQuan());
-////                    }
-//                    for(IngRecipe inr: addRecipe.getIngList()){
-//                        insertPara.replace("str",inr.getIngName());
-//                        insertPara.replace("str",add_rec_name_field.getText());
-//                        insertPara.replace("double",String.valueOf(inr.getRecQuan()));
-//                        if(dbConnect.insertRecord("INSERT  INTO ingrecipe( ing_name, rec_name, ing_quan) VALUES(?,?,?)",insertPara) == 0){
-//                            System.out.println("Added data to IngRecipe successful");
-//                        }
-//                        else{
-//                            break;
-//                        }
-//                    }
-
                     recipeList.add(addRecipe);
                     clearTextField();
                 }
+
 
             }
             else{

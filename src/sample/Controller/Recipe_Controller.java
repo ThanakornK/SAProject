@@ -151,6 +151,16 @@ public class Recipe_Controller {
     }
 
     @FXML
+    public void go_menu_page(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
+
+    }
+
+    @FXML
     public void handleHomeBtn(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
