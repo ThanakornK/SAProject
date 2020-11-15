@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Menu_edit_Controller">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.FoodQuan_Controller">
    <children>
       <AnchorPane prefHeight="120.0" prefWidth="1280.0" style="-fx-background-color: lightgreen;">
          <children>
@@ -26,7 +26,7 @@
             <Font size="25.0" />
          </font>
       </Button>
-      <Button fx:id="editMenuBtn" layoutX="706.0" layoutY="133.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="ปริมาณอาหารคงเหลือ">
+      <Button fx:id="foodLeftBtn" layoutX="706.0" layoutY="133.0" mnemonicParsing="false" onAction="#go_FoodLeft_page" prefHeight="75.0" prefWidth="410.0" style="-fx-background-color: #FFB146;" text="ปริมาณอาหารคงเหลือ">
          <font>
             <Font size="25.0" />
          </font>
@@ -66,9 +66,9 @@
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <Button layoutX="1044.0" layoutY="423.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
+                  <Button fx:id="back_btn" layoutX="1044.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
                   <Button layoutX="493.0" layoutY="423.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="120.0" text="ปริมาณที่ระบบแนะนำ" />
-                  <Button layoutX="686.0" layoutY="423.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="125.0" text="ตรวจสอบวัตถุดิบในคลัง" />
+                  <Button fx:id="checkIngStore_btn" layoutX="686.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleCheckStoreBtn" prefHeight="55.0" prefWidth="125.0" text="ตรวจสอบวัตถุดิบในคลัง" />
                </children>
             </AnchorPane>
             <Text layoutX="475.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เลือกเมนูที่จะทำ">
@@ -82,11 +82,12 @@
                </font>
             </Text>
             <DatePicker fx:id="dateSale" layoutX="269.0" layoutY="29.0" prefHeight="35.0" prefWidth="175.0" promptText="เลือกวันที่ขาย" />
-            <TextField fx:id="menu_name_field" editable="false" layoutX="632.0" layoutY="25.0" prefHeight="44.0" prefWidth="450.0" promptText="กรอกชื่อเมนู">
+            <TextField fx:id="menu_name_field" editable="false" layoutX="632.0" layoutY="25.0" prefHeight="44.0" prefWidth="410.0" promptText="กดปุ่ม &quot;ค้นหา&quot; เพื่อเลือกเมนู">
                <font>
                   <Font size="20.0" />
                </font>
             </TextField>
+            <Button fx:id="searchBtn" layoutX="1058.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="44.0" prefWidth="71.0" text="ค้นหา" />
          </children>
       </AnchorPane>
    </children>

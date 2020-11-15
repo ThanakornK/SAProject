@@ -23,7 +23,10 @@
       </Button>
       <Button layoutX="185.0" layoutY="356.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="185.0" layoutY="510.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="977.0" layoutY="245.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="foodQuan_btn" layoutX="881.0" layoutY="245.0" mnemonicParsing="false" onAction="#go_FoodQuan_page" prefHeight="50.0" prefWidth="245.0" text="จัดการปริมาณอาหาร">
+         <font>
+            <Font size="20.0" />
+         </font></Button>
       <Button layoutX="977.0" layoutY="356.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="977.0" layoutY="535.0" mnemonicParsing="false" text="Button" />
    </children>
