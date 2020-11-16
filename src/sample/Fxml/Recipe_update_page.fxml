@@ -31,26 +31,26 @@
       </AnchorPane>
       <AnchorPane layoutY="201.0" prefHeight="600.0" prefWidth="1280.0" style="-fx-background-color: #FFD089;">
          <children>
-            <AnchorPane layoutX="31.0" layoutY="151.0" prefHeight="347.0" prefWidth="549.0" style="-fx-background-color: lightgreen;">
+            <AnchorPane layoutX="43.0" layoutY="219.0" prefHeight="280.0" prefWidth="550.0" style="-fx-background-color: lightgreen;">
                <children>
-                  <TextField fx:id="add_ing_name" layoutX="78.0" layoutY="34.0" prefHeight="40.0" prefWidth="410.0" />
+                  <TextField fx:id="add_ing_name" layoutX="94.0" layoutY="32.0" prefHeight="40.0" prefWidth="410.0" />
                   <Text layoutX="14.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วัตถุดิบ">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="25.0" />
                      </font>
                   </Text>
                   <Text layoutX="12.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ปริมาณ">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="25.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="add_ing_quan" layoutX="79.0" layoutY="110.0" prefHeight="40.0" prefWidth="134.0" />
-                  <Button fx:id="add_btn" layoutX="301.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
+                  <TextField fx:id="add_ing_quan" layoutX="94.0" layoutY="102.0" prefHeight="40.0" prefWidth="134.0" />
+                  <Button fx:id="add_btn" layoutX="299.0" layoutY="200.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="clear_btn" layoutX="128.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="44.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
+                  <Button fx:id="clear_btn" layoutX="127.0" layoutY="200.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -83,6 +83,16 @@
                   <Font size="25.0" />
                </font>
             </Text>
+            <Button fx:id="add_box_btn" layoutX="97.0" layoutY="149.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="เพิ่ม">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
+            <Button fx:id="update_box_btn" layoutX="339.0" layoutY="149.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: #79DC63;" text="แก้ไข/ลบ">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </children>

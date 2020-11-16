@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class Recipe_edit_Controller{
 
     @FXML
-    private Button back_btn, add_rec_btn, recSearchBtn;
+    private Button back_btn, add_rec_btn, recSearchBtn, add_btn, update_btn, delete_btn, add_box_btn, update_box_btn;
 
     @FXML
     private TextField add_rec_name_field, add_rec_price_field;
@@ -73,8 +73,6 @@ public class Recipe_edit_Controller{
 
                 if(selectRecipe != null){
                     add_rec_price_field.setDisable(false);
-                    add_ing_name.setDisable(false);
-                    add_ing_quan.setDisable(false);
                     add_rec_name_field.setText(selectRecipe.getRec_name());
 
                     add_rec_price_field.setText(String.valueOf(selectRecipe.getRec_price()));
@@ -214,8 +212,6 @@ public class Recipe_edit_Controller{
         add_rec_price_field.clear();
         add_ing_name.clear();
         add_ing_quan.clear();
-        add_ing_name.setDisable(true);
-        add_ing_quan.setDisable(true);
         selectRecIngList.clear();
         selectRecipe = null;
     }
@@ -249,6 +245,35 @@ public class Recipe_edit_Controller{
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
 
+    }
+
+    @FXML
+    void changeUpdateBox(){
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_box_btn.setStyle("-fx-background-color: #79DC63");
+        update_box_btn.setStyle("-fx-background-color: lightgreen");
+        add_btn.setVisible(false);
+        add_btn.setDisable(true);
+        update_btn.setVisible(true);
+        update_btn.setDisable(false);
+        delete_btn.setVisible(true);
+        delete_btn.setDisable(false);
+
+    }
+
+    @FXML
+    void changeAddBox(){
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_box_btn.setStyle("-fx-background-color: lightgreen");
+        update_box_btn.setStyle("-fx-background-color: #79DC63");
+        add_btn.setVisible(true);
+        add_btn.setDisable(false);
+        update_btn.setVisible(false);
+        update_btn.setDisable(true);
+        delete_btn.setVisible(false);
+        delete_btn.setDisable(true);
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
@@ -287,6 +312,16 @@ public class Recipe_edit_Controller{
         }
     }
 
+//    @FXML
+//    void handleUpdateBtn(ActionEvent event){
+//
+//    }
+//
+//    @FXML
+//    void handleDelBtn(ActionEvent event){
+//
+//    }
+
 
     @FXML
     void handleEditRecBtn(ActionEvent event){
@@ -306,7 +341,7 @@ public class Recipe_edit_Controller{
                 } else {
 
                     ArrayList<ParaCommand> paraCommands = new ArrayList<>();
-                    paraCommands.add(new ParaCommand("int", add_rec_price_field.getText()));
+                    paraCommands.add(new ParaCommand("double", add_rec_price_field.getText()));
                     paraCommands.add(new ParaCommand("str", add_rec_name_field.getText()));
 
                     if (dbConnect.updateRecord("UPDATE Recipe set Rec_price = ? WHERE Rec_name = ? ", paraCommands) == 0) {
@@ -330,7 +365,9 @@ public class Recipe_edit_Controller{
             } else {
                 alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
             }
-        } else {
+            handleClearBtn();
+        }
+        else {
             System.out.println("Terminate");
         }
     }

@@ -36,26 +36,36 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="add_rec_name_field" layoutX="249.0" layoutY="40.0" prefHeight="40.0" prefWidth="579.0" promptText="กรอกชื่อสูตรอาหารหรือกดปุ่มค้นหา">
+            <TextField fx:id="add_rec_name_field" editable="false" layoutX="249.0" layoutY="40.0" prefHeight="40.0" prefWidth="579.0" promptText="กดปุ่มค้นหาเพื่อเลือกสูตรอาหารที่ต้องการ">
                <font>
                   <Font size="20.0" />
                </font>
             </TextField>
-            <AnchorPane layoutX="31.0" layoutY="151.0" prefHeight="347.0" prefWidth="549.0" style="-fx-background-color: lightgreen;">
+            <AnchorPane layoutX="43.0" layoutY="219.0" prefHeight="280.0" prefWidth="550.0" style="-fx-background-color: lightgreen;">
                <children>
-                  <TextField fx:id="add_ing_name" disable="true" layoutX="78.0" layoutY="34.0" prefHeight="40.0" prefWidth="410.0" />
-                  <Text layoutX="14.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วัตถุดิบ">
+                  <TextField fx:id="add_ing_name" layoutX="93.0" layoutY="48.0" prefHeight="40.0" prefWidth="410.0" />
+                  <Text layoutX="14.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วัตถุดิบ">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="12.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ปริมาณ">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="add_ing_quan" layoutX="93.0" layoutY="125.0" prefHeight="40.0" prefWidth="134.0" />
+                  <Button fx:id="add_btn" layoutX="208.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="60.0" prefWidth="134.0" text="เพิ่มวัตถุดิบ">
                      <font>
                         <Font size="20.0" />
                      </font>
-                  </Text>
-                  <Text layoutX="12.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ปริมาณ">
+                  </Button>
+                  <Button fx:id="update_btn" layoutX="304.0" layoutY="183.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false">
                      <font>
                         <Font size="20.0" />
                      </font>
-                  </Text>
-                  <TextField fx:id="add_ing_quan" disable="true" layoutX="79.0" layoutY="110.0" prefHeight="40.0" prefWidth="134.0" />
-                  <Button fx:id="add_btn" layoutX="215.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
+                  </Button>
+                  <Button fx:id="delete_btn" layoutX="100.0" layoutY="183.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="145.0" text="ลบวัตถุดิบ" visible="false">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -86,6 +96,16 @@
             <Button fx:id="clear_btn" layoutX="549.0" layoutY="531.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="44.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
                <font>
                   <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="add_box_btn" layoutX="97.0" layoutY="149.0" mnemonicParsing="false" onAction="#changeAddBox" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="เพิ่ม">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
+            <Button fx:id="update_box_btn" layoutX="339.0" layoutY="149.0" mnemonicParsing="false" onAction="#changeUpdateBox" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: #79DC63;" text="แก้ไข/ลบ">
+               <font>
+                  <Font size="30.0" />
                </font>
             </Button>
          </children>

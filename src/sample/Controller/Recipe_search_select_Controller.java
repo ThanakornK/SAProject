@@ -1,11 +1,15 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,6 +25,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.function.DoubleConsumer;
 
 public class Recipe_search_select_Controller {
 
@@ -144,8 +149,22 @@ public class Recipe_search_select_Controller {
         if( select != null){
             selectRecipe = select;
         }
+    }
 
+    private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
+                                            DoubleConsumer handler) {
 
+        ChangeListener<Number> listener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> obs,
+                                Number oldSize, Number newSize) {
+                if (newSize.doubleValue() != Double.NaN) {
+                    handler.accept(newSize.doubleValue());
+                    size.removeListener(this);
+                }
+            }
+        };
+        size.addListener(listener);
     }
 
     //---------------------------------------- normal button method ----------------------------------------------------
@@ -163,16 +182,25 @@ public class Recipe_search_select_Controller {
 
     }
 
-    //-------------------------------------------- database method -----------------------------------------------------
-
     @FXML
     void handleConfirmBtn(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_edit_page.fxml"));
-        Parent parentRoot = fxmlLoader.load();
+        Screen screen = Screen.getPrimary();
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_edit_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
         Recipe_edit_Controller controller = fxmlLoader.getController();
         controller.setSelectRecipe(selectRecipe);
-        Stage stage = new Stage();
-        stage.setTitle("ยอดขายของสูตรอาหาร");
+        Rectangle2D sbounds = screen.getBounds();
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setTitle("Food Plan");
         stage.setScene(new Scene(parentRoot));
         stage.show();
         // do sth with database
@@ -183,6 +211,10 @@ public class Recipe_search_select_Controller {
 //        cs.changeStageAction(screen);
 
     }
+
+    //-------------------------------------------- database method -----------------------------------------------------
+
+
 
 
 }

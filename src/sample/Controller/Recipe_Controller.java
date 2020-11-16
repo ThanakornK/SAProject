@@ -175,9 +175,10 @@ public class Recipe_Controller {
 
     public void getSelectMenu(){
         selectIngRec.clear();
-        System.out.println(listViewRec.getSelectionModel().getSelectedItem().getRec_name() + " has been selected");
+
         if (listViewRec.getSelectionModel().getSelectedItem() != null){   // check select row not null
 
+            System.out.println(listViewRec.getSelectionModel().getSelectedItem().getRec_name() + " has been selected");
             sale_his_btn.setDisable(false);
             sale_his_btn.setVisible(true);
 

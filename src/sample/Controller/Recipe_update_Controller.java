@@ -31,7 +31,7 @@ public class Recipe_update_Controller {
     private TextField add_ing_name, add_ing_quan;
 
     @FXML
-    private Button add_btn, clear_btn, add_rec_btn, back_btn, addRecBox, editRecBtn;
+    private Button add_btn, clear_btn, add_rec_btn, back_btn, addRecBox, editRecBtn, add_box_btn, update_box_btn;
 
     @FXML
     private TextField add_rec_name_field, add_rec_price_field;
@@ -346,7 +346,6 @@ public class Recipe_update_Controller {
         }else {
             System.out.println("Terminate");
         }
-
 
     }
 }
