@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class DBConnect {
         return con;
     }
 
-    public int insertRecord(String sql, Map<String,String> ParaCommands){             //ParaCommands = {{"str","food_name"},{"double,food_price"},{"int,food_amount"}}
+    public int insertRecord(String sql, ArrayList<ParaCommand> paraCommands){             //ParaCommands = {{"str","food_name"},{"double,food_price"},{"int,food_amount"}}
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         int index = 1;  // for tell parameter position
@@ -28,21 +29,23 @@ public class DBConnect {
         try {
             ps = con.prepareStatement(sql);
 
-            for (String i : ParaCommands.keySet()) {
-                switch (i) {
+            for (int i = 0; i < paraCommands.size(); i++) {
+                String type = paraCommands.get(i).getParaType();
+                switch (type) {
                     case "str":
-                        ps.setString(index, ParaCommands.get(i));
+                        ps.setString(index, paraCommands.get(i).getParaData());
                         index++;
                         continue;
                     case "double":
-                        ps.setDouble(index, Double.parseDouble(ParaCommands.get(i)));
+                        ps.setDouble(index, Double.parseDouble(paraCommands.get(i).getParaData()));
                         index++;
                         continue;
                     case "int":
-                        ps.setInt(index, Integer.parseInt(ParaCommands.get(i)));
+                        ps.setInt(index, Integer.parseInt(paraCommands.get(i).getParaData()));
                         index++;
                         continue;
                 }
+
             }
 
             ps.execute();
@@ -59,7 +62,7 @@ public class DBConnect {
         }
     }
 
-    public int updateRecord(String sql, Map<String,String> ParaCommands) { // last parameter must be pk
+    public int updateRecord(String sql, ArrayList<ParaCommand> paraCommands) { // last parameter must be pk
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         int index = 1;
@@ -67,21 +70,23 @@ public class DBConnect {
         try {
             ps = con.prepareStatement(sql);
 
-            for (String i : ParaCommands.keySet()) {
-                switch (i) {
+            for (int i = 0; i < paraCommands.size(); i++) {
+                String type = paraCommands.get(i).getParaType();
+                switch (type) {
                     case "str":
-                        ps.setString(index, ParaCommands.get(i));
+                        ps.setString(index, paraCommands.get(i).getParaData());
                         index++;
                         continue;
                     case "double":
-                        ps.setDouble(index, Double.parseDouble(ParaCommands.get(i)));
+                        ps.setDouble(index, Double.parseDouble(paraCommands.get(i).getParaData()));
                         index++;
                         continue;
                     case "int":
-                        ps.setInt(index, Integer.parseInt(ParaCommands.get(i)));
+                        ps.setInt(index, Integer.parseInt(paraCommands.get(i).getParaData()));
                         index++;
                         continue;
                 }
+
             }
 
             ps.execute();
@@ -138,4 +143,5 @@ public class DBConnect {
         }
 
     }
+
 }

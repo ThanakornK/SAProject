@@ -3,6 +3,8 @@ package sample.Controller;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,21 +15,23 @@ import javafx.stage.Stage;
 import sample.Class.AlertBox;
 import sample.Class.Ingredient;
 import sample.Class.DBConnect;
+import sample.Class.Menu;
+import sample.Class.ParaCommand;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class Ingredient_Controller {
     @FXML
     private TextField add_ing_name, add_ing_price, add_ing_amount, update_ing_name, update_ing_price, update_ing_amount;
 
     @FXML
-    private Button add_btn, delete_btn, search_btn, update_btn, recipe_page_btn, menu_page_btn, add_box_btn, update_box_btn;
+    private Button add_btn, delete_btn, search_btn, update_btn, recipe_page_btn, add_box_btn, update_box_btn;
 
     @FXML
     private TableView<Ingredient> ingredient_table;
@@ -56,16 +60,48 @@ public class Ingredient_Controller {
                 readAll(ingredientList);
 
                 ing_nameCol.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("Ing_name"));
-                ing_priceCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("ing_price"));
-                ing_amountCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("ing_amount"));
+                ing_priceCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("Ing_price"));
 
-                ingredient_table.setItems(ingredientList);
+                ing_priceCol.setCellFactory(tc -> new TableCell<Ingredient, Double>() {
+                    @Override
+                    protected void updateItem(Double item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            setText(String.format("%.2f",item));
+                        }
+                    }
+                });
+
+                ing_amountCol.setCellValueFactory(new PropertyValueFactory<Ingredient, Integer>("Ing_amount"));
+
+                FilteredList<Ingredient> ingFilterList = new FilteredList<>(ingredientList, p -> true);
+                update_ing_name.textProperty().addListener((observable, oldValue, newValue) -> {
+                    ingFilterList.setPredicate(menu -> {
+                        if (newValue == null || newValue.isEmpty()){
+                            return true;
+                        }
+
+                        if (menu.getIng_name().indexOf(newValue) != -1){
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    });
+
+                });
+
+                // wrap filter list to sorted list
+                SortedList<Ingredient> ingSortedList = new SortedList<>(ingFilterList);
+
+                ingredient_table.setItems(ingSortedList);
 
             }
         });
     }
 
-    //----------------------------------------- normal method -----------------------------------------------------------
+    //----------------------------------------- normal method ----------------------------------------------------------
 
     private void readAll(ObservableList<Ingredient> list){
         Connection con = DBConnect.connect();
@@ -104,6 +140,7 @@ public class Ingredient_Controller {
         update_ing_price.setDisable(true);
         update_ing_amount.setDisable(true);
 
+        update_ing_name.setEditable(true);
         update_ing_price.setEditable(false);
         update_ing_price.setEditable(false);
 
@@ -112,7 +149,7 @@ public class Ingredient_Controller {
     public void getSelectedRow(){
         if (update_btn.isVisible() && (ingredient_table.getSelectionModel().getSelectedItem() != null)){
             update_ing_name.setText(ingredient_table.getSelectionModel().getSelectedItem().getIng_name());
-            update_ing_price.setText(String.valueOf(ingredient_table.getSelectionModel().getSelectedItem().getIng_price()));
+            update_ing_price.setText(String.format("%.2f",ingredient_table.getSelectionModel().getSelectedItem().getIng_price()));
             update_ing_amount.setText(String.valueOf(ingredient_table.getSelectionModel().getSelectedItem().getIng_amount()));
 
             update_ing_name.setEditable(false);
@@ -212,7 +249,6 @@ public class Ingredient_Controller {
         add_btn.setVisible(false);
         delete_btn.setVisible(true);
         update_btn.setVisible(true);
-        search_btn.setVisible(true);
     }
 
     public void changeAddBox(){                        // just change field to add field
@@ -238,23 +274,26 @@ public class Ingredient_Controller {
 
         delete_btn.setVisible(false);
         update_btn.setVisible(false);
-        search_btn.setVisible(false);
         add_btn.setVisible(true);
 
     }
 
     @FXML
-    public void go_recipe_page(ActionEvent event) throws IOException {
+    public void goto_recipe_page(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_page.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_page.fxml"));
         stage.setScene(new Scene(loader.load(),1280,800));
         stage.show();
     }
 
     @FXML
-    public void go_menu_page(ActionEvent event) {
-
+    public void go_menu_page(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
@@ -278,15 +317,14 @@ public class Ingredient_Controller {
                         selectedRow.forEach(copyList::remove);
 
                         ingredient_table.refresh();
-
                         clearTextField();
+
                     }
                 }
 
             } else {
 
                 alertBox.alertERR("err","ไม่พบวัตถุดิบ");
-                clearTextField();
 
             }
 
@@ -296,24 +334,39 @@ public class Ingredient_Controller {
 
     @FXML
     public void insertRecord() {
+            if (add_ing_name.getText().isEmpty() || add_ing_price.getText().isEmpty() || add_ing_amount.getText().isEmpty()){
+                alertBox.alertERR("err", "กรุณากรอกข้อมูลให้ครบถ้วน");
 
-            if (isInList(add_ing_name.getText()) == -1) {                   // check if data already exist
-                Map<String,String> insertPara = new HashMap<String, String>();
-                insertPara.put("str",add_ing_name.getText());
-                insertPara.put("double",add_ing_price.getText());
-                insertPara.put("int",add_ing_amount.getText());
+            }
 
-                if (dbConnect.insertRecord("INSERT  INTO ingredient( ing_name, ing_price, ing_amount) VALUES(?,?,?) ",insertPara) == 0){   // check insert is not error
+            else if (Double.parseDouble(add_ing_price.getText()) <= 0){
+                alertBox.alertERR("err", "กรุณากรอกราคาให้ถูกต้อง");
+            }
 
-                    Ingredient addIngredient = new Ingredient( add_ing_name.getText(), Double.parseDouble(add_ing_price.getText()), Integer.parseInt(add_ing_amount.getText()));
-                    ingredientList.add(addIngredient);
-                    clearTextField();
-                    ingredient_table.refresh();
+            else if (Integer.parseInt(add_ing_amount.getText()) < 0){
+                alertBox.alertERR("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
+            }
+
+            else{
+                if (isInList(add_ing_name.getText()) == -1) {                   // check if data already exist
+
+                    ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+
+                    paraCommands.add(new ParaCommand("str",add_ing_name.getText()));
+                    paraCommands.add(new ParaCommand("double",add_ing_price.getText()));
+                    paraCommands.add(new ParaCommand("int",add_ing_amount.getText()));
+
+                    if (dbConnect.insertRecord("INSERT  INTO ingredient( ing_name, ing_price, ing_amount) VALUES(?,?,?) ",paraCommands) == 0){   // check insert is not error
+
+                        Ingredient addIngredient = new Ingredient( add_ing_name.getText(), Double.parseDouble(add_ing_price.getText()), Integer.parseInt(add_ing_amount.getText()));
+                        ingredientList.add(addIngredient);
+                        clearTextField();
+                        ingredient_table.refresh();
+                    }
+
+                }else {
+                    alertBox.alertERR("err","วัตถุดิบนี้มีอยู่แล้ว");
                 }
-
-            }else {
-                alertBox.alertERR("err","วัตถุดิบนี้มีอยู่แล้ว");
-
             }
 
     }
@@ -337,13 +390,19 @@ public class Ingredient_Controller {
 
                 alertBox.alertERR("err","ข้อมูลไม่มีการเปลี่ยนแปลง");
 
-            } else {
-                Map<String,String> updatePara = new HashMap<>();
-                updatePara.put("double",update_ing_price.getText());
-                updatePara.put("int",update_ing_amount.getText());
-                updatePara.put("str",update_ing_name.getText());  // ------- last parameter must be pk
+            }else if(Double.parseDouble(update_ing_price.getText()) <= 0 || Integer.parseInt(update_ing_amount.getText()) < 0){
+                alertBox.alertERR("err","กรอกข้อมูลไม่ถูกต้อง");
+                update_ing_price.clear();
+                update_ing_amount.clear();
+            }else {
 
-                if (dbConnect.updateRecord("UPDATE Ingredient set Ing_price = ?, Ing_amount = ? WHERE Ing_name = ? ",updatePara) == 0) {  // check update is not error
+                ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+
+                paraCommands.add(new ParaCommand("double",update_ing_price.getText()));
+                paraCommands.add(new ParaCommand("int",update_ing_amount.getText()));
+                paraCommands.add(new ParaCommand("str",update_ing_name.getText()));  // last parameter must be pk
+
+                if (dbConnect.updateRecord("UPDATE Ingredient set Ing_price = ?, Ing_amount = ? WHERE Ing_name = ? ",paraCommands) == 0) {  // check update is not error
 
                     Ingredient newIng = new Ingredient(update_ing_name.getText(), Double.parseDouble(update_ing_price.getText()), Integer.parseInt(update_ing_amount.getText()));
                     ingredientList.set(isInList(update_ing_name.getText()),newIng);
