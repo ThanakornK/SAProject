@@ -43,7 +43,7 @@
             </TextField>
             <AnchorPane layoutX="31.0" layoutY="151.0" prefHeight="347.0" prefWidth="549.0" style="-fx-background-color: lightgreen;">
                <children>
-                  <TextField fx:id="add_ing_name" disable="true" editable="false" layoutX="78.0" layoutY="34.0" prefHeight="40.0" prefWidth="410.0" />
+                  <TextField fx:id="add_ing_name" disable="true" layoutX="78.0" layoutY="34.0" prefHeight="40.0" prefWidth="410.0" />
                   <Text layoutX="14.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วัตถุดิบ">
                      <font>
                         <Font size="20.0" />
@@ -54,13 +54,8 @@
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="add_ing_quan" disable="true" editable="false" layoutX="79.0" layoutY="110.0" prefHeight="40.0" prefWidth="134.0" />
-                  <Button fx:id="add_btn" layoutX="301.0" layoutY="269.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="clear_btn" layoutX="128.0" layoutY="269.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
+                  <TextField fx:id="add_ing_quan" disable="true" layoutX="79.0" layoutY="110.0" prefHeight="40.0" prefWidth="134.0" />
+                  <Button fx:id="add_btn" layoutX="215.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="44.0" prefWidth="120.0" text="เพิ่มวัตถุดิบ">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -74,20 +69,25 @@
                   <TableColumn prefWidth="90.0" text="ลบ" />
               </columns>
             </TableView>
-            <Button fx:id="add_rec_btn" layoutX="697.0" layoutY="520.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="ยืนยันการแก้ไขสูตร" />
-            <Button fx:id="back_btn" layoutX="463.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="45.0" prefWidth="100.0" text="ยกเลิก" />
+            <Button fx:id="add_rec_btn" layoutX="855.0" layoutY="531.0" mnemonicParsing="false" onAction="#handleEditRecBtn" prefHeight="45.0" prefWidth="134.0" text="ยืนยันการแก้ไขสูตร" />
+            <Button fx:id="back_btn" layoutX="256.0" layoutY="530.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="45.0" prefWidth="100.0" text="ยกเลิก" />
             <Text layoutX="138.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <TextField fx:id="add_rec_price_field" disable="true" editable="false" layoutX="249.0" layoutY="101.0" prefHeight="33.0" prefWidth="169.0" />
+            <TextField fx:id="add_rec_price_field" disable="true" layoutX="249.0" layoutY="101.0" prefHeight="33.0" prefWidth="169.0" />
             <Text layoutX="432.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
             <Button fx:id="recSearchBtn" layoutX="835.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="44.0" prefWidth="87.0" text="ค้นหา" />
+            <Button fx:id="clear_btn" layoutX="549.0" layoutY="531.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="44.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </children>

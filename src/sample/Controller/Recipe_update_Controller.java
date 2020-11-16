@@ -75,7 +75,7 @@ public class Recipe_update_Controller {
 
                 delCol.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));  // Delete button column
                 delCol.setCellFactory(param -> new TableCell<IngRecipe,IngRecipe>(){
-                    private final Button deleteButton = new Button("ลบ");
+                    private final Button deleteButton = new Button("ลบข้อมูล");
                     @Override
                     protected void updateItem(IngRecipe ing, boolean empty){
                         super.updateItem(ing, empty);
@@ -93,7 +93,6 @@ public class Recipe_update_Controller {
                         );
                     }
                 });
-                ingTable.getSelectionModel().getSelectedItem().getIngName();
 
             }
         });
@@ -271,7 +270,6 @@ public class Recipe_update_Controller {
                     ingQuantity.put(ingredientList.get(isInIngList(add_ing_name.getText())), add_ing_quan.getText());
                     add_ing_name.clear();
                     add_ing_quan.clear();
-                    System.out.println("Insert recipe ingredients in to list");
 
                     addIngInfo.add(temp);
                     ingTable.setItems(addIngInfo);
