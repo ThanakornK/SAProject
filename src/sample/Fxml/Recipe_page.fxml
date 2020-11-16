@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -44,10 +45,15 @@
                         </Text>
                         <TableView fx:id="ing_list" layoutX="55.0" layoutY="111.0" prefHeight="285.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
                           <columns>
-                            <TableColumn prefWidth="469.0" text="ชื่อวัตถุดิบ" />
-                            <TableColumn prefWidth="149.0" text="ราคาต้นทุน" />
+                            <TableColumn fx:id="ing_name" prefWidth="469.0" text="ชื่อวัตถุดิบ" />
+                            <TableColumn fx:id="cost_price" prefWidth="149.0" text="ราคาต้นทุน" />
                           </columns>
                         </TableView>
+                        <TextField fx:id="recipe_name_field" layoutX="222.0" layoutY="10.0" prefHeight="48.0" prefWidth="427.0" promptText="กรอกชื่อสูตรอาหารเพื่อค้นหา">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextField>
                      </children>
                   </AnchorPane>
                   <ListView fx:id="listViewRec" layoutX="33.0" layoutY="27.0" onMouseClicked="#getSelectMenu" prefHeight="512.0" prefWidth="466.0" stylesheets="@../StyleSheet/table.css" />

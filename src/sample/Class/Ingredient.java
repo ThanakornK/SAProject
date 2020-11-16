@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 public class Ingredient {
     private String Ing_name;
     private double Ing_price;
-    private int Ing_amount;
+    private double Ing_amount;
 
     public Ingredient(String ing_name, double ing_price, int ing_amount) {
         this.Ing_name = ing_name;
@@ -26,7 +26,7 @@ public class Ingredient {
         Ing_price = ing_price;
     }
 
-    public int getIng_amount() {
+    public double getIng_amount() {
         return Ing_amount;
     }
 
