@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 import sample.Class.ChangeScene;
 
 import java.io.IOException;
@@ -51,9 +52,8 @@ public class Recipe_search_select_Controller {
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Recipe_edit_page.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        stage.close();
 
     }
 

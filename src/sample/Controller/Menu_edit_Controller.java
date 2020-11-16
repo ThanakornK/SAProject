@@ -97,9 +97,8 @@ public class Menu_edit_Controller {
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Menu_search_select.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        ChangeScene cs = new ChangeScene("../Fxml/Menu_search_select.fxml");
+        cs.newWindow();
 
     }
 

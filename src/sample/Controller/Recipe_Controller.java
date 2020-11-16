@@ -127,6 +127,7 @@ public class Recipe_Controller {
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
+
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_update_page.fxml"));

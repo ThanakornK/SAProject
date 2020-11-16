@@ -27,6 +27,6 @@
             <TableColumn fx:id="additionCol" prefWidth="135.0" text="หมายเหตุ" />
         </columns>
       </TableView>
-      <Button fx:id="reportBtn" layoutX="451.0" layoutY="792.0" mnemonicParsing="false" onAction="#handleReportBtn" prefHeight="85.0" prefWidth="185.0" text="รายงาน" />
+      <Button fx:id="reportBtn" layoutX="451.0" layoutY="792.0" mnemonicParsing="false" onAction="#handleReportBtn" prefHeight="85.0" prefWidth="185.0" text="คัดลอก" />
    </children>
 </AnchorPane>

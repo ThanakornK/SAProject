@@ -103,9 +103,8 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleSearchBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/FoodMenu_search_select_page.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        ChangeScene cs = new ChangeScene("../Fxml/FoodMenu_search_select_page.fxml");
+        cs.newWindow();
 
     }
 

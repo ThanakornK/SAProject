@@ -44,6 +44,6 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <Button fx:id="pdfBtn" layoutX="460.0" layoutY="810.0" mnemonicParsing="false" onAction="#handleReportBtn" prefHeight="54.0" prefWidth="185.0" text="รายงาน" />
+      <Button fx:id="pdfBtn" layoutX="460.0" layoutY="810.0" mnemonicParsing="false" onAction="#handleReportBtn" prefHeight="54.0" prefWidth="185.0" text="PDF" />
    </children>
 </AnchorPane>
