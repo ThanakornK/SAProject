@@ -21,7 +21,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="518.0" layoutY="567.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="245.0" text="รายงาน">
+      <Button fx:id="report_btn" layoutX="518.0" layoutY="567.0" mnemonicParsing="false" onAction="#go_Report_page" prefHeight="50.0" prefWidth="245.0" text="รายงาน">
          <font>
             <Font size="20.0" />
          </font></Button>

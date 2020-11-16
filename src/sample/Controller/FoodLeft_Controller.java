@@ -106,8 +106,12 @@ public class FoodLeft_Controller {
     }
 
     @FXML
-    void handleReport(ActionEvent event) {
-
+    void handleReport(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Report_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
     }
 
     @FXML
