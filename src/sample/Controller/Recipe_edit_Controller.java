@@ -32,7 +32,7 @@ public class Recipe_edit_Controller{
     private TextField add_rec_name_field, add_rec_price_field;
 
     @FXML
-    private TextField add_ing_name, add_ing_quan;
+    private TextField add_ing_name, add_ing_quan, update_ing_name, update_ing_quan;
 
     @FXML
     private TableView<IngRecipe> ingTable;
@@ -259,7 +259,14 @@ public class Recipe_edit_Controller{
         update_btn.setDisable(false);
         delete_btn.setVisible(true);
         delete_btn.setDisable(false);
-
+        add_ing_name.setDisable(true);
+        add_ing_name.setVisible(false);
+        add_ing_quan.setDisable(true);
+        add_ing_quan.setVisible(false);
+        update_ing_name.setDisable(false);
+        update_ing_name.setVisible(true);
+        update_ing_quan.setDisable(false);
+        update_ing_quan.setVisible(true);
     }
 
     @FXML
@@ -274,6 +281,14 @@ public class Recipe_edit_Controller{
         update_btn.setDisable(true);
         delete_btn.setVisible(false);
         delete_btn.setDisable(true);
+        add_ing_name.setDisable(false);
+        add_ing_name.setVisible(true);
+        add_ing_quan.setDisable(false);
+        add_ing_quan.setVisible(true);
+        update_ing_name.setDisable(true);
+        update_ing_name.setVisible(false);
+        update_ing_quan.setDisable(true);
+        update_ing_quan.setVisible(false);
     }
 
     //-------------------------------------------- database method -----------------------------------------------------

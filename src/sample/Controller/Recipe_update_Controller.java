@@ -28,10 +28,10 @@ import java.util.Map;
 public class Recipe_update_Controller {
 
     @FXML
-    private TextField add_ing_name, add_ing_quan;
+    private TextField add_ing_name, add_ing_quan, update_ing_name, update_ing_quan;
 
     @FXML
-    private Button add_btn, clear_btn, add_rec_btn, back_btn, addRecBox, editRecBtn, add_box_btn, update_box_btn;
+    private Button add_btn, clear_btn, add_rec_btn, back_btn, addRecBox, editRecBtn, update_btn, delete_btn, add_box_btn, update_box_btn;
 
     @FXML
     private TextField add_rec_name_field, add_rec_price_field;
@@ -244,6 +244,51 @@ public class Recipe_update_Controller {
         stage.show();
 
     }
+
+    @FXML
+    void changeUpdateBox(){
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_box_btn.setStyle("-fx-background-color: #79DC63");
+        update_box_btn.setStyle("-fx-background-color: lightgreen");
+        update_btn.setDisable(false);
+        update_btn.setVisible(true);
+        delete_btn.setDisable(false);
+        delete_btn.setVisible(true);
+        add_btn.setDisable(true);
+        add_btn.setVisible(false);
+        add_ing_name.setDisable(true);
+        add_ing_name.setVisible(false);
+        add_ing_quan.setDisable(true);
+        add_ing_quan.setVisible(false);
+        update_ing_name.setDisable(false);
+        update_ing_name.setVisible(true);
+        update_ing_quan.setDisable(false);
+        update_ing_quan.setVisible(true);
+    }
+
+    @FXML
+    void changeAddBox(){
+        add_ing_name.clear();
+        add_ing_quan.clear();
+        add_box_btn.setStyle("-fx-background-color: lightgreen");
+        update_box_btn.setStyle("-fx-background-color: #79DC63");
+        update_btn.setDisable(true);
+        update_btn.setVisible(false);
+        delete_btn.setDisable(true);
+        delete_btn.setVisible(false);
+        add_btn.setDisable(false);
+        add_btn.setVisible(true);
+        add_ing_name.setDisable(false);
+        add_ing_name.setVisible(true);
+        add_ing_quan.setDisable(false);
+        add_ing_quan.setVisible(true);
+        update_ing_name.setDisable(true);
+        update_ing_name.setVisible(false);
+        update_ing_quan.setDisable(true);
+        update_ing_quan.setVisible(false);
+    }
+
 
     //---------------------------------------------- Database method -------------------------------------------
 
