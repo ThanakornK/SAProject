@@ -49,6 +49,47 @@ public class FoodLeft_Controller {
 
     }
 
+    //---------------------------------------- calculate method --------------------------------------------------------
+
+    //example
+    public double calculateFood(){
+
+        Double foodQuan = 200.00; // x bar from foodQuanList (keep record 5 - 30 record)
+        Double foodLeft = 50.00;  // x bar from foodLeftList (keep record 5 - 30 record)
+        String additional; // for tell เพิ่ม ลด เท่าเดิม
+        Double howMuch;
+
+        Double foodLeftPer = ( foodLeft/foodQuan ) * 100;
+
+        if (foodLeftPer > 70.00) {
+            additional = "เพิ่มปริมาณ";
+            if ( foodLeftPer <= 85.00 ) {
+                howMuch = 25.00;
+            }else {
+                howMuch = 50.00;
+            }
+        }else if (foodLeftPer > 40.00) {
+            additional = "ไม่เปลี่ยนแปลง";
+            howMuch = 0.0;
+        }else{
+            additional = "ลดปริมาณ";
+            if ( foodLeftPer >= 25.00 ){
+                howMuch = -25.00;
+            }else {
+                howMuch = -50.00;
+            }
+        }
+
+        // if record less than 5 alert box say record too low
+        // use howMuch to find change quantity and add to original quantity to show user
+
+        Double changeQuan = (foodQuan*howMuch)/100;
+        Double newQuan = foodQuan+changeQuan;
+
+        return newQuan;
+    }
+
+
     //---------------------------------------- normal button method ----------------------------------------------------
 
 
