@@ -24,6 +24,10 @@ public class ChangeScene {
         this.event = event;
     }
 
+    public ChangeScene(String strFxml) {
+        this.strFxml = strFxml;
+    }
+
     public void changeStageAction(Screen screen) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
@@ -39,6 +43,14 @@ public class ChangeScene {
         listenToSizeInitialization(stage.heightProperty(),
                 h -> stage.setY(( sh - h) /2));
 
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
+    }
+
+    public void newWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(strFxml));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
         stage.setScene(new Scene(parentRoot));
         stage.show();
     }

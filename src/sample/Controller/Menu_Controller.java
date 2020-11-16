@@ -168,6 +168,7 @@ public class Menu_Controller {
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
+
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_update_page.fxml"));

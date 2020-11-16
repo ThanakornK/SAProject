@@ -31,4 +31,22 @@ public class Main_page {
         stage.setScene(new Scene(loader.load(),1280,800));
         stage.show();
     }
+
+    @FXML
+    public void go_FoodQuan_page(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/FoodQuan_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
+    }
+
+    @FXML
+    public void go_Report_page(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Report_page.fxml"));
+        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.show();
+    }
 }
