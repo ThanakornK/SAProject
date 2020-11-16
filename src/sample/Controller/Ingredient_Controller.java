@@ -31,7 +31,7 @@ public class Ingredient_Controller {
     private TextField add_ing_name, add_ing_price, add_ing_amount, update_ing_name, update_ing_price, update_ing_amount;
 
     @FXML
-    private Button add_btn, delete_btn, search_btn, update_btn, recipe_page_btn, menu_page_btn, add_box_btn, update_box_btn;
+    private Button add_btn, delete_btn, search_btn, update_btn, recipe_page_btn, add_box_btn, update_box_btn;
 
     @FXML
     private TableView<Ingredient> ingredient_table;
@@ -337,7 +337,17 @@ public class Ingredient_Controller {
             if (add_ing_name.getText().isEmpty() || add_ing_price.getText().isEmpty() || add_ing_amount.getText().isEmpty()){
                 alertBox.alertERR("err", "กรุณากรอกข้อมูลให้ครบถ้วน");
 
-            } else{
+            }
+
+            else if (Double.parseDouble(add_ing_price.getText()) <= 0){
+                alertBox.alertERR("err", "กรุณากรอกราคาให้ถูกต้อง");
+            }
+
+            else if (Integer.parseInt(add_ing_amount.getText()) < 0){
+                alertBox.alertERR("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
+            }
+
+            else{
                 if (isInList(add_ing_name.getText()) == -1) {                   // check if data already exist
 
                     ArrayList<ParaCommand> paraCommands = new ArrayList<>();
@@ -380,7 +390,11 @@ public class Ingredient_Controller {
 
                 alertBox.alertERR("err","ข้อมูลไม่มีการเปลี่ยนแปลง");
 
-            } else {
+            }else if(Double.parseDouble(update_ing_price.getText()) <= 0 || Integer.parseInt(update_ing_amount.getText()) < 0){
+                alertBox.alertERR("err","กรอกข้อมูลไม่ถูกต้อง");
+                update_ing_price.clear();
+                update_ing_amount.clear();
+            }else {
 
                 ArrayList<ParaCommand> paraCommands = new ArrayList<>();
 

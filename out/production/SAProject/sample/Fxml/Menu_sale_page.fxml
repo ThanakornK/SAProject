@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.Menu_sale_Controller">
+   <children>
+      <Button fx:id="back_btn" layoutX="446.0" layoutY="725.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="50.0" prefWidth="100.0" text="กลับ" />
+      <Text fx:id="menu_name" layoutX="457.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อเมนู">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <AnchorPane prefHeight="120.0" prefWidth="1000.0" style="-fx-background-color: lightgreen;">
+         <children>
+            <Text layoutX="320.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ยอดขายของอาหาร">
+               <font>
+                  <Font size="50.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="salesTable" layoutX="28.0" layoutY="204.0" prefHeight="500.0" prefWidth="935.0">
+        <columns>
+          <TableColumn fx:id="dateCol" prefWidth="130.0" text="วันที่" />
+          <TableColumn fx:id="recCol" prefWidth="310.0" text="ชื่ออาหาร" />
+            <TableColumn fx:id="salesCol" prefWidth="115.0" text="ยอดขาย" />
+            <TableColumn fx:id="foodQuanCol" prefWidth="190.0" text="ปริมาณที่ทำ(กรัม)" />
+            <TableColumn fx:id="leftCol" prefWidth="190.0" text="ปริมาณคงเหลือ(กรัม)" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

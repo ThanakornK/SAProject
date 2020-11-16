@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="900.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.RecomQuan_Controller">
+   <children>
+      <AnchorPane prefHeight="120.0" prefWidth="800.0" style="-fx-background-color: lightgreen;">
+         <children>
+            <Text layoutX="244.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ปริมาณอาหารที่ระบบแนะนำ">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <Button fx:id="backBtn" layoutX="133.0" layoutY="792.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="85.0" prefWidth="185.0" text="ยกเลิก" />
+      <TableView fx:id="recipeList" layoutX="47.0" layoutY="156.0" prefHeight="585.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="recipe_nameCol" prefWidth="330.0" text="ชื่ออาหาร" />
+          <TableColumn fx:id="originalQuanCol" prefWidth="100.0" text="ปริมาณที่ทำ" />
+            <TableColumn fx:id="recomendQuanCol" prefWidth="135.0" text="ปริมาณอาหารที่แนะนำ" />
+            <TableColumn fx:id="additionCol" prefWidth="135.0" text="หมายเหตุ" />
+        </columns>
+      </TableView>
+      <Button fx:id="reportBtn" layoutX="451.0" layoutY="792.0" mnemonicParsing="false" onAction="#handleReportBtn" prefHeight="85.0" prefWidth="185.0" text="คัดลอก" />
+   </children>
+</AnchorPane>
