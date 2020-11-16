@@ -115,16 +115,6 @@ public class FoodQuan_Controller {
         ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml");
         cs.newWindow();
 
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DevelopScene.fxml"));
-//        Parent parentRoot = (Parent) fxmlLoader.load();
-//        Stage stage = new Stage();
-//        stage.setTitle("Developer");
-//        stage.setScene(new Scene(parentRoot));
-//        stage.show();
-//
-//        ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml",event);
-//        Screen screen = Screen.getPrimary();
-//        cs.changeStageAction(screen);
     }
 
     @FXML
