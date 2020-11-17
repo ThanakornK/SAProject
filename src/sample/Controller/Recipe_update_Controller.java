@@ -34,7 +34,7 @@ public class Recipe_update_Controller {
     private Button add_btn, clear_btn, add_rec_btn, back_btn, addRecBox, editRecBtn, update_btn, delete_btn, add_box_btn, update_box_btn;
 
     @FXML
-    private TextField add_rec_name_field, add_rec_price_field;
+    private TextField add_rec_name_field;
 
     @FXML
     private TableView<IngRecipe> ingTable;
@@ -104,21 +104,37 @@ public class Recipe_update_Controller {
         }
     }
 
-    private void readAllRec(ObservableList<Recipe> list) {
+    private void readAllRec(ObservableList<Recipe> list){
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
+        PreparedStatement ps2 = null;
         ResultSet rs = null;
+        ResultSet rs2 = null;
 
         try {
             String sql = "SELECT * FROM Recipe";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            while(rs.next()) {
                 String recName = rs.getString("Rec_name");
-                double recPrice = rs.getDouble("Rec_price");
 
-                list.add(new Recipe(recName, recPrice));
+                Recipe readRec = new Recipe(recName);
 
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
+                ps2 = con.prepareStatement(sql2);
+                rs2 = ps2.executeQuery();
+                while (rs2.next()){
+                    String ingName = rs2.getString("Ing_name");
+                    String rec_Name = rs2.getString("Rec_name");
+                    double ingQuan = rs2.getDouble("Ing_quan");
+                    System.out.println(String.format("Added %s into %s", ingName, rec_Name));
+                    IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
+                    temp.calculateTotalCost(ingredientList);
+                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe",temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
+                    readRec.addIngList(temp);
+                }
+
+                list.add(readRec);
             }
 
         } catch (SQLException e) {
@@ -172,7 +188,6 @@ public class Recipe_update_Controller {
     public void clearTextField() {
 
         add_rec_name_field.clear();
-        add_rec_price_field.clear();
         add_ing_name.clear();
         add_ing_quan.clear();
     }
@@ -184,7 +199,6 @@ public class Recipe_update_Controller {
         add_ing_name.clear();
         add_ing_quan.clear();
         add_rec_name_field.clear();
-        add_rec_price_field.clear();
         addIngInfo.clear();
     }
 
@@ -363,33 +377,24 @@ public class Recipe_update_Controller {
 
         if (alertBox.alertConfirm("ยืนยันการเพิ่มสูตรอาหารหรือไม่") == 0) {
 
-            if (isDouble(add_rec_price_field.getText()) == 0) {
-
                 if (add_rec_name_field.getText().isEmpty()) {
                     alertBox.alertERR("err", "กรุณากรอกชื่อสูตรอาหาร");
-                } else if (add_rec_price_field.getText().isEmpty()) {
-                    alertBox.alertERR("err", "กรุณากรอกราคาของสูตรอาหาร");
                 } else if (addIngInfo.isEmpty()) {
                     alertBox.alertERR("err", "ไม่มีวัตุดิบที่ใช้");
-                } else if (Double.parseDouble(add_rec_price_field.getText()) <= 0) {
-                    alertBox.alertERR("err", "ราคาอาหารห้ามติดลบ");
                 } else {
 
-                    //            isDouble(add_ing_quan.getText());
 
                     if (isInRecList(add_rec_name_field.getText()) == -1) {
 
                         ArrayList<ParaCommand> paraCommands = new ArrayList<>();
                         paraCommands.add(new ParaCommand("str", add_rec_name_field.getText()));
-                        paraCommands.add(new ParaCommand("int", add_rec_price_field.getText()));
 
-                        if (dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)", paraCommands) == 0) {
+                        if (dbConnect.insertRecord("INSERT  INTO recipe( rec_name ) VALUES(?)", paraCommands) == 0) {
 
-                            Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
+                            Recipe addRecipe = new Recipe(add_rec_name_field.getText());
                             for (IngRecipe ing : addIngInfo) {
                                 IngRecipe temp = new IngRecipe(ing.getIngName(), addRecipe.getRec_name(), ing.getIngQuan());
                                 addRecipe.addIngList(temp);
-                                //                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe"); //For debug only
                             }
 
                             paraCommands.clear();
@@ -398,7 +403,7 @@ public class Recipe_update_Controller {
                                 paraCommands.add(new ParaCommand("str", addRecipe.getRec_name()));
                                 paraCommands.add(new ParaCommand("double", String.valueOf(inr.getIngQuan())));
 
-                                if (dbConnect.insertRecord("INSERT  INTO ingrecipe( ing_name, rec_name, ing_quan) VALUES(?,?,?)", paraCommands) == 0) {
+                                if (dbConnect.insertRecord("INSERT  INTO IngRec ( ing_name, rec_name, ing_quan) VALUES(?,?,?)", paraCommands) == 0) {
                                     System.out.println("Insert data into IngRecipe");
                                     paraCommands.clear();
                                 }
@@ -417,9 +422,6 @@ public class Recipe_update_Controller {
                 ingQuantity.clear();
                 addIngInfo.clear();
                 ingTable.refresh();
-            } else {
-                alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
-            }
         } else {
             System.out.println("Terminate");
         }

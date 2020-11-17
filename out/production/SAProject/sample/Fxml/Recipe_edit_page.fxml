@@ -89,17 +89,6 @@
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <Text layoutX="138.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
-            <TextField fx:id="add_rec_price_field" disable="true" layoutX="249.0" layoutY="101.0" prefHeight="33.0" prefWidth="169.0" />
-            <Text layoutX="432.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
             <Button fx:id="recSearchBtn" layoutX="835.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="44.0" prefWidth="87.0" text="ค้นหา" />
             <Button fx:id="clear_btn" layoutX="553.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="60.0" prefWidth="134.0" text="เคลียร์ฟอร์ม">
                <font>

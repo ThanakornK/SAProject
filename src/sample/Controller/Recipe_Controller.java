@@ -29,9 +29,6 @@ import java.util.List;
 public class Recipe_Controller {
 
     @FXML
-    private Text recipe_name, price_per_bag;
-
-    @FXML
     private TableView<IngRecipe> ing_list;
 
     @FXML
@@ -146,11 +143,10 @@ public class Recipe_Controller {
             rs = ps.executeQuery();
             while(rs.next()) {
                 String recName = rs.getString("Rec_name");
-                double recPrice = rs.getDouble("Rec_price");
 
-                Recipe readRec = new Recipe(recName, recPrice);
+                Recipe readRec = new Recipe(recName);
 
-                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'",readRec.getRec_name());
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
                 while (rs2.next()){
@@ -181,9 +177,6 @@ public class Recipe_Controller {
             System.out.println(listViewRec.getSelectionModel().getSelectedItem().getRec_name() + " has been selected");
             sale_his_btn.setDisable(false);
             sale_his_btn.setVisible(true);
-
-            String priceText = String.format("%.2f",listViewRec.getSelectionModel().getSelectedItem().getRec_price());
-            price_per_bag.setText("ราคาต่อถุง: "+ priceText +" บาท");
 
             for(IngRecipe i: listViewRec.getSelectionModel().getSelectedItem().getIngList()){
                 selectIngRec.add(i);

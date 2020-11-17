@@ -63,8 +63,8 @@ public class Menu_Controller {
             public void run() {
 
 
-                Recipe ex1 = new Recipe("Egg fried rice",35);
-                Recipe ex2 = new Recipe("Gang Green Sweet",45);
+                Recipe ex1 = new Recipe("Egg fried rice");
+                Recipe ex2 = new Recipe("Gang Green Sweet");
                 List<Recipe> recipeList = new ArrayList<>();
                 recipeList.add(ex1); recipeList.add(ex2);
                 Menu menu1 = new Menu("ตลาดนัดคลองข้าง",recipeList);

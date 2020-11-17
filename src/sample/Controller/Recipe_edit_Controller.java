@@ -29,7 +29,7 @@ public class Recipe_edit_Controller {
     private Button back_btn, add_rec_btn, recSearchBtn, add_btn, update_btn, delete_btn, add_box_btn, update_box_btn;
 
     @FXML
-    private TextField add_rec_name_field, add_rec_price_field;
+    private TextField add_rec_name_field;
 
     @FXML
     private TextField add_ing_name, add_ing_quan, update_ing_name, update_ing_quan;
@@ -72,10 +72,7 @@ public class Recipe_edit_Controller {
 
 
                 if (selectRecipe != null) {
-                    add_rec_price_field.setDisable(false);
                     add_rec_name_field.setText(selectRecipe.getRec_name());
-
-                    add_rec_price_field.setText(String.valueOf(selectRecipe.getRec_price()));
 
                     for (IngRecipe i : selectRecipe.getIngList()) {
                         selectRecIngList.add(i);
@@ -130,11 +127,10 @@ public class Recipe_edit_Controller {
             rs = ps.executeQuery();
             while (rs.next()) {
                 String recName = rs.getString("Rec_name");
-                double recPrice = rs.getDouble("Rec_price");
 
-                Recipe readRec = new Recipe(recName, recPrice);
+                Recipe readRec = new Recipe(recName);
 
-                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'", readRec.getRec_name());
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'", readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
                 while (rs2.next()) {
@@ -217,7 +213,7 @@ public class Recipe_edit_Controller {
 
         for (IngRecipe i : selectRecIngList) {
             if (i.getIngName().equals(update_ing_name.getText())) {
-                if (dbConnect.deleteRecord("delete from IngRecipe WHERE Ing_name = ?", "str", update_ing_name.getText()) == 0) {
+                if (dbConnect.deleteRecord("delete from IngRec WHERE Ing_name = ?", "str", update_ing_name.getText()) == 0) {
                     System.out.println("Delete successful");
                 }
                 selectRecIngList.remove(i);
@@ -255,7 +251,7 @@ public class Recipe_edit_Controller {
                     paraCommands.add(new ParaCommand("str", update_ing_name.getText()));
                     paraCommands.add(new ParaCommand("str", selectRecipe.getRec_name()));
 
-                    if (dbConnect.updateRecord("UPDATE IngRecipe set Ing_quan = ? WHERE Ing_name = ? AND Rec_name = ?", paraCommands) == 0) {
+                    if (dbConnect.updateRecord("UPDATE IngRec set Ing_quan = ? WHERE Ing_name = ? AND Rec_name = ?", paraCommands) == 0) {
                         System.out.println("Update Successful");
                     }
                     selectRecIngList.get(selectRecIngList.indexOf(j)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
@@ -278,7 +274,6 @@ public class Recipe_edit_Controller {
     @FXML
     public void handleClearBtn() {
         add_rec_name_field.clear();
-        add_rec_price_field.clear();
         add_ing_name.clear();
         add_ing_quan.clear();
         selectRecIngList.clear();
@@ -413,25 +408,13 @@ public class Recipe_edit_Controller {
 
         if (alertBox.alertConfirm("ยืนยันการแก้ไขสูตรอาหารหรือไม่") == 0) {
 
-            if (isDouble(add_rec_price_field.getText()) == 0) {
-
                 if (add_rec_name_field.getText().isEmpty()) {
                     alertBox.alertERR("err", "กรุณากรอกชื่อสูตรอาหาร");
-                } else if (add_rec_price_field.getText().isEmpty()) {
-                    alertBox.alertERR("err", "กรุณากรอกราคาของสูตรอาหาร");
                 } else if (selectRecIngList.isEmpty()) {
                     alertBox.alertERR("err", "ไม่มีวัตุดิบที่ใช้");
-                } else if (Double.parseDouble(add_rec_price_field.getText()) <= 0) {
-                    alertBox.alertERR("err", "ราคาอาหารห้ามติดลบ");
                 } else {
 
                     ArrayList<ParaCommand> paraCommands = new ArrayList<>();
-                    paraCommands.add(new ParaCommand("double", add_rec_price_field.getText()));
-                    paraCommands.add(new ParaCommand("str", add_rec_name_field.getText()));
-
-                    if (dbConnect.updateRecord("UPDATE Recipe set Rec_price = ? WHERE Rec_name = ? ", paraCommands) == 0) {
-                        System.out.println("Update Successful");
-                    }
 
                     if (!tempList.isEmpty()) {
                         paraCommands.clear();
@@ -439,7 +422,7 @@ public class Recipe_edit_Controller {
                             paraCommands.add(new ParaCommand("str", i.getIngName()));
                             paraCommands.add(new ParaCommand("str", selectRecipe.getRec_name()));
                             paraCommands.add(new ParaCommand("double", String.valueOf(i.getIngQuan())));
-                            if (dbConnect.insertRecord("INSERT  INTO IngRecipe( Ing_Name, Rec_Name, Ing_Quan) VALUES(?,?,?)", paraCommands) == 0) {
+                            if (dbConnect.insertRecord("INSERT  INTO IngRec( Ing_Name, Rec_Name, Ing_Quan) VALUES(?,?,?)", paraCommands) == 0) {
                                 paraCommands.clear();
                             }
                         }
@@ -447,9 +430,6 @@ public class Recipe_edit_Controller {
                     }
 
                 }
-            } else {
-                alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
-            }
             handleClearBtn();
         } else {
             System.out.println("Terminate");

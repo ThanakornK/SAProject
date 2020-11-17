@@ -38,11 +38,6 @@
                               <Font size="30.0" />
                            </font>
                         </Text>
-                        <Text fx:id="price_per_bag" layoutX="55.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:" wrappingWidth="409.99999010562897">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Text>
                         <TableView fx:id="ing_list" layoutX="55.0" layoutY="111.0" prefHeight="285.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
                           <columns>
                             <TableColumn fx:id="ing_name" prefWidth="469.0" text="ชื่อวัตถุดิบ" />

@@ -115,11 +115,10 @@ public class Recipe_search_select_Controller {
             rs = ps.executeQuery();
             while(rs.next()) {
                 String recName = rs.getString("Rec_name");
-                double recPrice = rs.getDouble("Rec_price");
 
-                Recipe readRec = new Recipe(recName, recPrice);
+                Recipe readRec = new Recipe(recName);
 
-                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'",readRec.getRec_name());
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
                 while (rs2.next()){

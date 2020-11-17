@@ -85,17 +85,6 @@
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <Text layoutX="138.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ราคาต่อถุง:">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
-            <TextField fx:id="add_rec_price_field" layoutX="249.0" layoutY="101.0" prefHeight="33.0" prefWidth="169.0" />
-            <Text layoutX="432.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
             <Button fx:id="add_box_btn" layoutX="97.0" layoutY="149.0" mnemonicParsing="false" onAction="#changeAddBox" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" text="เพิ่ม">
                <font>
                   <Font size="30.0" />
