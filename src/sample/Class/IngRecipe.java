@@ -31,7 +31,7 @@ public class IngRecipe {
         this.ingName = ingName;
     }
 
-    public void setRecQuan(Double recQuan) {
+    public void setIngQuan(Double recQuan) {
         this.ingQuan = recQuan;
     }
 

@@ -73,27 +73,6 @@ public class Recipe_update_Controller {
                 ing_name.setCellValueFactory(new PropertyValueFactory<>("ingName"));
                 ing_quan.setCellValueFactory(new PropertyValueFactory<>("ingQuan"));
 
-                delCol.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));  // Delete button column
-                delCol.setCellFactory(param -> new TableCell<IngRecipe,IngRecipe>(){
-                    private final Button deleteButton = new Button("ลบข้อมูล");
-                    @Override
-                    protected void updateItem(IngRecipe ing, boolean empty){
-                        super.updateItem(ing, empty);
-
-                        if(ing == null) {
-                            setGraphic(null);
-                            return;
-                        }
-
-                        setGraphic(deleteButton);
-                        deleteButton.setOnAction(
-                                event -> getTableView().getItems().remove(ing)
-
-
-                        );
-                    }
-                });
-
             }
         });
     }
@@ -209,6 +188,45 @@ public class Recipe_update_Controller {
         addIngInfo.clear();
     }
 
+    public void getSelectedRow(){
+        if(update_btn.isVisible() && (ingTable.getSelectionModel().getSelectedItem() != null)){
+            System.out.println(ingTable.getSelectionModel().getSelectedItem().getIngName() + " is selected");
+            update_ing_name.setText(ingTable.getSelectionModel().getSelectedItem().getIngName());
+            update_ing_quan.setText(String.valueOf(ingTable.getSelectionModel().getSelectedItem().getIngQuan()));
+        }
+    }
+
+    @FXML
+    void handleDeleteBtn(){
+        for(IngRecipe i: addIngInfo){
+            if(i.getIngName().equals(update_ing_name.getText())){
+                addIngInfo.remove(i);
+                break;
+            }
+            else{
+                continue;
+            }
+        }
+        update_ing_name.clear();
+        update_ing_quan.clear();
+
+    }
+
+    @FXML
+    void handleUpdateBtn(){
+        for(IngRecipe i: addIngInfo){
+            if(i.getIngName().equals(update_ing_name.getText())){
+                addIngInfo.get(addIngInfo.indexOf(i)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
+                ingTable.refresh();
+                break;
+            }
+            else{
+                continue;
+            }
+        }
+        update_ing_name.clear();
+        update_ing_quan.clear();
+    }
 //     method double click try at home
 
 //    @FXML
@@ -265,6 +283,8 @@ public class Recipe_update_Controller {
         update_ing_name.setVisible(true);
         update_ing_quan.setDisable(false);
         update_ing_quan.setVisible(true);
+        add_ing_name.clear();
+        add_ing_quan.clear();
     }
 
     @FXML
@@ -287,6 +307,8 @@ public class Recipe_update_Controller {
         update_ing_name.setVisible(false);
         update_ing_quan.setDisable(true);
         update_ing_quan.setVisible(false);
+        update_ing_name.clear();
+        update_ing_quan.clear();
     }
 
 
@@ -337,7 +359,7 @@ public class Recipe_update_Controller {
                     alertBox.alertERR("err", "กรุณากรอกชื่อสูตรอาหาร");
                 } else if (add_rec_price_field.getText().isEmpty()) {
                     alertBox.alertERR("err", "กรุณากรอกราคาของสูตรอาหาร");
-                } else if (recipeIngList.isEmpty()) {
+                } else if (addIngInfo.isEmpty()) {
                     alertBox.alertERR("err", "ไม่มีวัตุดิบที่ใช้");
                 } else if (Double.parseDouble(add_rec_price_field.getText()) <= 0) {
                     alertBox.alertERR("err", "ราคาอาหารห้ามติดลบ");
@@ -354,8 +376,8 @@ public class Recipe_update_Controller {
                         if (dbConnect.insertRecord("INSERT  INTO recipe( rec_name, rec_price) VALUES(?,?)", paraCommands) == 0) {
 
                             Recipe addRecipe = new Recipe(add_rec_name_field.getText(), Double.parseDouble(add_rec_price_field.getText()));
-                            for (Ingredient ing : recipeIngList) {
-                                IngRecipe temp = new IngRecipe(ing.getIng_name(), addRecipe.getRec_name(), Double.parseDouble(ingQuantity.get(ing)));
+                            for (IngRecipe ing : addIngInfo) {
+                                IngRecipe temp = new IngRecipe(ing.getIngName(), addRecipe.getRec_name(), ing.getIngQuan());
                                 addRecipe.addIngList(temp);
                                 //                        System.out.println("Added " + ing.getIng_name() + " and " + Double.parseDouble(ingQuantity.get(ing)) + " to recently added recipe"); //For debug only
                             }
