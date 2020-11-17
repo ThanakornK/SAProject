@@ -28,7 +28,7 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <ListView fx:id="listView" layoutX="62.0" layoutY="217.0" onEditStart="#getSelectItem" prefHeight="520.0" prefWidth="678.0" />
+      <ListView fx:id="listView" layoutX="62.0" layoutY="217.0" onMouseClicked="#getSelectItem" prefHeight="520.0" prefWidth="678.0" />
       <Button fx:id="backBtn" layoutX="75.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="85.0" prefWidth="185.0" text="ยกเลิก" />
       <Button fx:id="confirmBtn" layoutX="537.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleConfirmBtn" prefHeight="85.0" prefWidth="185.0" text="ยืนยัน" />
    </children>
