@@ -188,22 +188,24 @@ public class Recipe_update_Controller {
         addIngInfo.clear();
     }
 
-    public void getSelectedRow(){
-        if(update_btn.isVisible() && (ingTable.getSelectionModel().getSelectedItem() != null)){
+    public void getSelectedRow() {
+
+        if (update_btn.isVisible() && (ingTable.getSelectionModel().getSelectedItem() != null)) {
             System.out.println(ingTable.getSelectionModel().getSelectedItem().getIngName() + " is selected");
             update_ing_name.setText(ingTable.getSelectionModel().getSelectedItem().getIngName());
             update_ing_quan.setText(String.valueOf(ingTable.getSelectionModel().getSelectedItem().getIngQuan()));
         }
+
     }
 
     @FXML
-    void handleDeleteBtn(){
-        for(IngRecipe i: addIngInfo){
-            if(i.getIngName().equals(update_ing_name.getText())){
+    void handleDeleteBtn() {
+
+        for (IngRecipe i : addIngInfo) {
+            if (i.getIngName().equals(update_ing_name.getText())) {
                 addIngInfo.remove(i);
                 break;
-            }
-            else{
+            } else {
                 continue;
             }
         }
@@ -213,19 +215,23 @@ public class Recipe_update_Controller {
     }
 
     @FXML
-    void handleUpdateBtn(){
-        for(IngRecipe i: addIngInfo){
-            if(i.getIngName().equals(update_ing_name.getText())){
-                addIngInfo.get(addIngInfo.indexOf(i)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
-                ingTable.refresh();
-                break;
+    void handleUpdateBtn() {
+        if((!update_ing_quan.getText().isEmpty()) && (isDouble(update_ing_quan.getText()) == 0) && ( Double.parseDouble(update_ing_quan.getText()) > 0) ) {
+            for (IngRecipe i : addIngInfo) {
+                if (i.getIngName().equals(update_ing_name.getText())) {
+                    addIngInfo.get(addIngInfo.indexOf(i)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
+                    ingTable.refresh();
+                    break;
+                } else {
+                    continue;
+                }
             }
-            else{
-                continue;
-            }
+        } else {
+            alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
         }
         update_ing_name.clear();
         update_ing_quan.clear();
+
     }
 //     method double click try at home
 
@@ -264,7 +270,8 @@ public class Recipe_update_Controller {
     }
 
     @FXML
-    void changeUpdateBox(){
+    void changeUpdateBox() {
+
         add_ing_name.clear();
         add_ing_quan.clear();
         add_box_btn.setStyle("-fx-background-color: #79DC63");
@@ -285,10 +292,12 @@ public class Recipe_update_Controller {
         update_ing_quan.setVisible(true);
         add_ing_name.clear();
         add_ing_quan.clear();
+
     }
 
     @FXML
-    void changeAddBox(){
+    void changeAddBox() {
+
         add_ing_name.clear();
         add_ing_quan.clear();
         add_box_btn.setStyle("-fx-background-color: lightgreen");
@@ -309,6 +318,7 @@ public class Recipe_update_Controller {
         update_ing_quan.setVisible(false);
         update_ing_name.clear();
         update_ing_quan.clear();
+
     }
 
 
@@ -410,7 +420,7 @@ public class Recipe_update_Controller {
             } else {
                 alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
             }
-        }else {
+        } else {
             System.out.println("Terminate");
         }
 

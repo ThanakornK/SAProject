@@ -23,7 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Recipe_edit_Controller{
+public class Recipe_edit_Controller {
 
     @FXML
     private Button back_btn, add_rec_btn, recSearchBtn, add_btn, update_btn, delete_btn, add_box_btn, update_box_btn;
@@ -60,7 +60,7 @@ public class Recipe_edit_Controller{
     private DBConnect dbConnect = new DBConnect();
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -71,19 +71,18 @@ public class Recipe_edit_Controller{
                 ing_quan.setCellValueFactory(new PropertyValueFactory<>("ingQuan"));
 
 
-                if(selectRecipe != null){
+                if (selectRecipe != null) {
                     add_rec_price_field.setDisable(false);
                     add_rec_name_field.setText(selectRecipe.getRec_name());
 
                     add_rec_price_field.setText(String.valueOf(selectRecipe.getRec_price()));
 
-                    for(IngRecipe i: selectRecipe.getIngList()){
+                    for (IngRecipe i : selectRecipe.getIngList()) {
                         selectRecIngList.add(i);
                     }
                     ingTable.setItems(selectRecIngList);
                     ingTable.refresh();
-                }
-                else{
+                } else {
                     System.out.println("null naja");
                 }
 
@@ -93,7 +92,7 @@ public class Recipe_edit_Controller{
 
     //----------------------------------------- Normal method ----------------------------------------------------------
 
-    private void readAllIng(ObservableList<Ingredient> list){
+    private void readAllIng(ObservableList<Ingredient> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -102,12 +101,12 @@ public class Recipe_edit_Controller{
             String sql = "SELECT * FROM Ingredient";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String ingName = rs.getString("Ing_name");
                 double ingPrice = rs.getDouble("Ing_price");
                 int ingAmount = rs.getInt("Ing_amount");
 
-                Ingredient newIngredient = new Ingredient(ingName,ingPrice,ingAmount);
+                Ingredient newIngredient = new Ingredient(ingName, ingPrice, ingAmount);
                 list.add(newIngredient);
 
             }
@@ -118,7 +117,7 @@ public class Recipe_edit_Controller{
         }
     }
 
-    private void readAllRec(ObservableList<Recipe> list){
+    private void readAllRec(ObservableList<Recipe> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         PreparedStatement ps2 = null;
@@ -129,23 +128,23 @@ public class Recipe_edit_Controller{
             String sql = "SELECT * FROM Recipe";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String recName = rs.getString("Rec_name");
                 double recPrice = rs.getDouble("Rec_price");
 
                 Recipe readRec = new Recipe(recName, recPrice);
 
-                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'",readRec.getRec_name());
+                String sql2 = String.format("SELECT * FROM IngRecipe WHERE Rec_name = '%s'", readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
-                while (rs2.next()){
+                while (rs2.next()) {
                     String ingName = rs2.getString("Ing_name");
                     String rec_Name = rs2.getString("Rec_name");
                     double ingQuan = rs2.getDouble("Ing_quan");
                     System.out.println(String.format("Added %s into %s", ingName, rec_Name));
                     IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
                     temp.calculateTotalCost(ingredientList);
-                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe",temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
+                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe", temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
                     readRec.addIngList(temp);
                 }
 
@@ -158,7 +157,7 @@ public class Recipe_edit_Controller{
         }
     }
 
-    public void setSelectRecipe(Recipe rec){
+    public void setSelectRecipe(Recipe rec) {
         this.selectRecipe = rec;
     }
 
@@ -184,30 +183,100 @@ public class Recipe_edit_Controller{
         return -1;
     }
 
-    public int isInRecList(String rec_name) {
-
-        for (Recipe rec : recipesList) {
-            if (rec_name.equals(rec.getRec_name())) {
-                return recipesList.indexOf(rec);
-            }
-        }
-        return -1;
-    }
-
     public int isDouble(String input) {
         try {
             Double.parseDouble(input);
             return 0;
         } catch (NumberFormatException e) {
             return 1;
-//            alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
         }
+    }
+
+    public void getSelectedRow() {
+        if (update_btn.isVisible() && (ingTable.getSelectionModel().getSelectedItem() != null)) {
+            System.out.println(ingTable.getSelectionModel().getSelectedItem().getIngName() + " is selected");
+            update_ing_name.setText(ingTable.getSelectionModel().getSelectedItem().getIngName());
+            update_ing_quan.setText(String.valueOf(ingTable.getSelectionModel().getSelectedItem().getIngQuan()));
+        }
+    }
+
+    @FXML
+    void handleDeleteBtn() {
+        if (!tempList.isEmpty()) {                                         // Remove ingredients that is not currently in database
+            for (IngRecipe j : tempList) {
+                if (j.getIngName().equals(update_ing_name.getText())) {
+                    tempList.remove(j);
+                    selectRecIngList.remove(j);
+                    ingTable.refresh();
+                    break;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for (IngRecipe i : selectRecIngList) {
+            if (i.getIngName().equals(update_ing_name.getText())) {
+                if (dbConnect.deleteRecord("delete from IngRecipe WHERE Ing_name = ?", "str", update_ing_name.getText()) == 0) {
+                    System.out.println("Delete successful");
+                }
+                selectRecIngList.remove(i);
+                ingTable.refresh();
+                break;
+            } else {
+                continue;
+            }
+
+        }
+        update_ing_name.clear();
+        update_ing_quan.clear();
+    }
+
+    @FXML
+    void handleEditBtn() {
+        if((!update_ing_quan.getText().isEmpty()) && (isDouble(update_ing_quan.getText()) == 0) && ( Double.parseDouble(update_ing_quan.getText()) > 0 ) ) {
+            if (!tempList.isEmpty()) {
+                for (IngRecipe i : tempList) {
+                    if (i.getIngName().equals(update_ing_name.getText())) {
+                        i.setIngQuan(Double.parseDouble(update_ing_quan.getText()));
+                        selectRecIngList.get(selectRecIngList.indexOf(i)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
+                        ingTable.refresh();
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+
+            for (IngRecipe j : selectRecIngList) {
+                if (j.getIngName().equals(update_ing_name.getText())) {
+                    ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+                    paraCommands.add(new ParaCommand("double", update_ing_quan.getText()));
+                    paraCommands.add(new ParaCommand("str", update_ing_name.getText()));
+                    paraCommands.add(new ParaCommand("str", selectRecipe.getRec_name()));
+
+                    if (dbConnect.updateRecord("UPDATE IngRecipe set Ing_quan = ? WHERE Ing_name = ? AND Rec_name = ?", paraCommands) == 0) {
+                        System.out.println("Update Successful");
+                    }
+                    selectRecIngList.get(selectRecIngList.indexOf(j)).setIngQuan(Double.parseDouble(update_ing_quan.getText()));
+                    ingTable.refresh();
+                    break;
+                } else {
+                    continue;
+                }
+
+            }
+        } else {
+            alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
+        }
+        update_ing_name.clear();
+        update_ing_quan.clear();
     }
 
     //---------------------------------------- Normal button method ----------------------------------------------------
 
     @FXML
-    public void handleClearBtn(){
+    public void handleClearBtn() {
         add_rec_name_field.clear();
         add_rec_price_field.clear();
         add_ing_name.clear();
@@ -217,13 +286,12 @@ public class Recipe_edit_Controller{
     }
 
 
-
     //--------------------------------------- Change page method -------------------------------------------------------
 
     @FXML
     public void handleBackBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml",event);
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_page.fxml", event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
 
@@ -241,14 +309,15 @@ public class Recipe_edit_Controller{
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Recipe_search_select.fxml",event);
+        ChangeScene cs = new ChangeScene("../Fxml/Recipe_search_select.fxml", event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
 
     }
 
     @FXML
-    void changeUpdateBox(){
+    void changeUpdateBox() {
+
         add_ing_name.clear();
         add_ing_quan.clear();
         add_box_btn.setStyle("-fx-background-color: #79DC63");
@@ -270,7 +339,8 @@ public class Recipe_edit_Controller{
     }
 
     @FXML
-    void changeAddBox(){
+    void changeAddBox() {
+
         add_ing_name.clear();
         add_ing_quan.clear();
         add_box_btn.setStyle("-fx-background-color: lightgreen");
@@ -339,7 +409,7 @@ public class Recipe_edit_Controller{
 
 
     @FXML
-    void handleEditRecBtn(ActionEvent event){
+    void handleEditRecBtn(ActionEvent event) {
 
         if (alertBox.alertConfirm("ยืนยันการแก้ไขสูตรอาหารหรือไม่") == 0) {
 
@@ -363,7 +433,7 @@ public class Recipe_edit_Controller{
                         System.out.println("Update Successful");
                     }
 
-                    if (!tempList.isEmpty()){
+                    if (!tempList.isEmpty()) {
                         paraCommands.clear();
                         for (IngRecipe i : tempList) {
                             paraCommands.add(new ParaCommand("str", i.getIngName()));
@@ -381,14 +451,10 @@ public class Recipe_edit_Controller{
                 alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
             }
             handleClearBtn();
-        }
-        else {
+        } else {
             System.out.println("Terminate");
         }
     }
-
-
-
 
 
 }
