@@ -4,6 +4,10 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,14 +15,21 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import sample.Class.ChangeScene;
-import sample.Class.Menu;
+import sample.Class.*;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.DoubleConsumer;
 
 public class Menu_report_select_Controller {
@@ -27,28 +38,70 @@ public class Menu_report_select_Controller {
     private TextField nameField;
 
     @FXML
-    private ListView<Menu> listView;
+    private ListView<String> listView;
 
     @FXML
     private Button backBtn, confirmBtn;
 
-    @FXML
     private Menu selectMenu;
+
+    private ObservableList<Menu> menuList = FXCollections.observableArrayList();
+
+    private ObservableList<String> menuStrList = FXCollections.observableArrayList();
+
+    private AlertBox alertBox;
 
     @FXML
     private void initialize() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                readMenu(menuStrList);
 
+
+                listView.setCellFactory(param -> new ListCell<String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item);
+                        }
+                    }
+                });
+
+                FilteredList<String> menuFilterList = new FilteredList<>(menuStrList, p -> true);
+                nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    menuFilterList.setPredicate(menu -> {
+                        if (newValue == null || newValue.isEmpty()){
+                            return true;
+                        }
+
+                        if (menu.indexOf(newValue) != -1){
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    });
+
+                });
+
+                // wrap filter list to sorted list
+                SortedList<String> sortedList = new SortedList<>(menuFilterList);
+
+                listView.setItems(sortedList);
             }
         });
     }
     //----------------------------------------- normal method ----------------------------------------------------------
 
-    @FXML
-    void getSelectItem(ActionEvent event) {
+    public void getSelectMenu(MouseEvent mouseEvent) {
+        if (listView.getSelectionModel().getSelectedItem() != null){   // check select row not null
 
+            nameField.setText(listView.getSelectionModel().getSelectedItem());
+
+        }
     }
 
     private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
@@ -92,7 +145,8 @@ public class Menu_report_select_Controller {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Report_page.fxml"));
         Parent parentRoot = (Parent) fxmlLoader.load();
         Report_Controller controller = fxmlLoader.getController();
-        controller.setMenuChoose(selectMenu.getMenu_name());
+        String name = nameField.getText();
+        controller.setMenuChoose(name);
         Rectangle2D sbounds = screen.getBounds();
         double sw = sbounds.getWidth() ;
         double sh = sbounds.getHeight();
@@ -106,5 +160,27 @@ public class Menu_report_select_Controller {
         stage.setScene(new Scene(parentRoot));
         stage.show();
     }
+
+    public void readMenu(ObservableList<String> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM MenuRecipe GROUP BY Menu_name";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String MenuName = rs.getString("Menu_name");
+                System.out.println(MenuName);
+                list.add(MenuName);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
 
 }

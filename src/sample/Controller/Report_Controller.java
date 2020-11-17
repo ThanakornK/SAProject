@@ -66,13 +66,13 @@ public class Report_Controller {
 
     private Menu selectMenu, lastMenuUpdate;
 
-    private AlertBox alertBox;
+    private AlertBox alertBox = new AlertBox();
 
     private ObservableList<RecipeReport> recipeReportList = FXCollections.observableArrayList();
 
     private ObservableList<IngReport> ingReportList = FXCollections.observableArrayList();
 
-    private String menuChoose;
+    private String menuChoose = "";
 
     @FXML
     public void initialize() {
@@ -80,21 +80,9 @@ public class Report_Controller {
             @Override
             public void run() {
 
-                //- - - - - - - - - -  Recipe Report - - - - - - - - - - - - -
-                readSetRecipeReport(recipeReportList);
-
-
                 recipe_nameCol.setCellValueFactory( new PropertyValueFactory<RecipeReport, String>("recNameReport"));
                 recQuanCol.setCellValueFactory( new PropertyValueFactory<RecipeReport, Double>("recommend_fqReport"));
                 planQuanCol.setCellValueFactory( new PropertyValueFactory<RecipeReport, Double>("total_fqReport"));
-
-                setRecipeReportColumnDouble(recQuanCol); setRecipeReportColumnDouble(planQuanCol);
-                recipe_table.setItems(recipeReportList);
-
-
-                //- - - - - - - -  - - - -  - - - - - - - - - - - - - - - - - - - -
-
-                readSetIngReport(ingReportList);
 
                 ing_nameCol.setCellValueFactory( new PropertyValueFactory<IngReport, String>("Ing_name"));
                 ing_amountCol.setCellValueFactory( new PropertyValueFactory<IngReport, Double>("Ing_am"));
@@ -102,10 +90,29 @@ public class Report_Controller {
                 add_quanCol.setCellValueFactory( new PropertyValueFactory<IngReport, Double>("Ing_add"));
                 ing_costCol.setCellValueFactory( new PropertyValueFactory<IngReport, Double>("Ing_cost"));
 
-                setIngReportColumnDouble(ing_amountCol); setIngReportColumnDouble(add_quanCol);
-                setIngReportColumnDouble(ing_costCol); setIngReportColumnDouble(need_quanCol);
+                if (menuChoose == ""){
+                    //- - - - - - - - - -  Recipe Report - - - - - - - - - - - - -
+                    readSetRecipeReport(recipeReportList);
 
-                ing_table.setItems(ingReportList);
+                    setRecipeReportColumnDouble(recQuanCol); setRecipeReportColumnDouble(planQuanCol);
+                    recipe_table.setItems(recipeReportList);
+
+                    //- - - - - - - -  - - - -  - - - - - - - - - - - - - - - - - - - -
+
+                    readSetIngReport(ingReportList);
+
+                    setIngReportColumnDouble(ing_amountCol); setIngReportColumnDouble(add_quanCol);
+                    setIngReportColumnDouble(ing_costCol); setIngReportColumnDouble(need_quanCol);
+
+                    ing_table.setItems(ingReportList);
+                }else {
+                    clearList();
+                    System.out.println(menuChoose);
+                    readSetChooseIngReport(ingReportList);
+                    readSetChooseRecipeReport(recipeReportList);
+                }
+
+
             }
         });
     }
@@ -149,6 +156,11 @@ public class Report_Controller {
         menuChoose = menuName;
     }
 
+    public void clearList() {
+        recipeReportList.clear();
+        ingReportList.clear();
+    }
+
     //---------------------------------------- normal button method ----------------------------------------------------
 
     @FXML
@@ -158,6 +170,8 @@ public class Report_Controller {
 
     @FXML
     void handleNewMenuBtn(ActionEvent event) {
+        recipeReportList.clear();
+        ingReportList.clear();
         readSetRecipeReport(recipeReportList);
         readSetIngReport(ingReportList);
         recipe_table.setItems(recipeReportList);
@@ -239,7 +253,7 @@ public class Report_Controller {
 
                 Ingredient newIng = new Ingredient(ing_name,ing_price,ing_amount);
                 IngReport newIngReport = new IngReport(newIng,ing_quan,newIng.getIng_price()*ing_quan);
-                ingReportList.add(newIngReport);
+                list.add(newIngReport);
 
             }
 
@@ -258,8 +272,9 @@ public class Report_Controller {
             String sql = "SELECT MenuRecipe.Menu_name, MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.Total_fq , FoodQuan.Food_date " +
                     "FROM MenuRecipe " +
                     "INNER JOIN FoodQuan ON FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID " +
-                    "WHERE  MenuRecipe.Menu_name = " + menuChoose + " AND FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) FROM FoodQuan WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ; ";
+                    "WHERE  MenuRecipe.Menu_name = ? AND FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) FROM FoodQuan WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ; ";
             ps = con.prepareStatement(sql);
+            ps.setString(1,menuChoose);
             rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -269,12 +284,11 @@ public class Report_Controller {
                 double total_fq = rs.getDouble("Total_fq");
 
                 menu_name_text.setText(menu_name);
-
                 RecipeReport rp = new RecipeReport(regName,recommendFq,total_fq);
                 list.add(rp);
 
             }
-
+            recipe_table.setItems(list);
 
 
         } catch (SQLException e) {
@@ -288,12 +302,10 @@ public class Report_Controller {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ingReportList.clear();
-            String sql = "SELECT MenuRecipe.Menu_name, MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.Total_fq" +
-                    "FROM MenuRecipe " +
-                    "INNER JOIN FoodQuan ON FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID " +
-                    "WHERE  MenuRecipe.Menu_name = " + menuChoose + " AND FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) FROM FoodQuan);";
+
+            String sql = "SELECT Ingredient.Ing_name, Ingredient.Ing_amount, SUM (IngRec.Ing_quan), Ingredient.Ing_price FROM (( IngRec INNER JOIN MenuRecipe ON IngRec.Rec_name = MenuRecipe.Rec_name ) INNER JOIN Ingredient ON IngRec.Ing_name = Ingredient.Ing_name) WHERE MenuRecipe.Menu_name = ? GROUP BY Ingredient.Ing_name;";
             ps = con.prepareStatement(sql);
+            ps.setString(1,menuChoose);
             rs = ps.executeQuery();
             while (rs.next()) {
                 String ing_name = rs.getString("Ing_name");
@@ -303,9 +315,10 @@ public class Report_Controller {
 
                 Ingredient newIng = new Ingredient(ing_name,ing_price,ing_amount);
                 IngReport newIngReport = new IngReport(newIng,ing_quan,newIng.getIng_price()*ing_quan);
-                ingReportList.add(newIngReport);
+                list.add(newIngReport);
 
             }
+            ing_table.setItems(list);
 
 
         } catch (SQLException throwables) {
