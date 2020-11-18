@@ -1,11 +1,15 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.function.DoubleConsumer;
 
 public class FoodQuan_Controller {
 
@@ -78,6 +83,8 @@ public class FoodQuan_Controller {
 
     private ObservableList<RecipeReport> recList = FXCollections.observableArrayList();
     private ObservableList<IngReport> ingList = FXCollections.observableArrayList();
+
+    RecipeReport selectRecipe;
 
     @FXML
     public void initialize() {
@@ -153,11 +160,9 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleBackBtn(ActionEvent event) throws IOException {
-        Button button = (Button) event.getSource();
-        Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Main_page.fxml"));
-        stage.setScene(new Scene(loader.load(),1280,800));
-        stage.show();
+        ChangeScene cs = new ChangeScene("../Fxml/FoodQuan_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
     }
 
     @FXML
@@ -185,8 +190,25 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleRecomBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/RecommendFoodQuan_page.fxml");
-        cs.newWindow();
+        Screen screen = Screen.getPrimary();
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/RecommendFoodQuan_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        RecomQuan_Controller controller = fxmlLoader.getController();
+        controller.setMenuSelect(menuSelect);
+        Rectangle2D sbounds = screen.getBounds();
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setTitle("Food Plan");
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
@@ -206,19 +228,18 @@ public class FoodQuan_Controller {
                     "FROM MenuRecipe " +
                     "WHERE MenuRecipe.Menu_name = ? ;";
             ps = con.prepareStatement(sql);
-            ps.setString(1,menuSelect);
+            ps.setString(1, menuSelect);
             rs = ps.executeQuery();
 
             while(rs.next()) {
                 String regName = rs.getString("Rec_name");
                 double recommendFq = rs.getDouble("Recommend_fq");
 
-                RecipeReport rp = new RecipeReport(regName,recommendFq,0.0);
+                RecipeReport rp = new RecipeReport(regName, recommendFq, 0.0);
                 list.add(rp);
 
             }
             recPlanQuan_table.setItems(list);
-
 
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -260,10 +281,20 @@ public class FoodQuan_Controller {
         }
     }
 
+    private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
+                                            DoubleConsumer handler) {
 
-
-
-
-
+        ChangeListener<Number> listener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> obs,
+                                Number oldSize, Number newSize) {
+                if (newSize.doubleValue() != Double.NaN) {
+                    handler.accept(newSize.doubleValue());
+                    size.removeListener(this);
+                }
+            }
+        };
+        size.addListener(listener);
+    }
 
 }

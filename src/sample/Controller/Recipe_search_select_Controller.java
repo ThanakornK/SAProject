@@ -140,7 +140,6 @@ public class Recipe_search_select_Controller {
         }
     }
 
-
     public void getSelectItem(){
 
         Recipe select = listView.getSelectionModel().getSelectedItem();
