@@ -68,7 +68,7 @@
                   </Button>
                   <TextField fx:id="update_ing_name" disable="true" editable="false" layoutX="94.0" layoutY="32.0" prefHeight="40.0" prefWidth="410.0" promptText="แก้ไขวัตถุดิบ" visible="false" />
                   <TextField fx:id="update_ing_quan" disable="true" layoutX="94.0" layoutY="102.0" prefHeight="40.0" prefWidth="134.0" promptText="แก้ไขปริมาณ" visible="false" />
-                  <Text layoutX="239.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ต่ออาหาร 1,000 กรัม">
+                  <Text layoutX="239.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ต่ออาหาร 500 กรัม">
                      <font>
                         <Font size="25.0" />
                      </font>

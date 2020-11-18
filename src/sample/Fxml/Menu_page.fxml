@@ -68,7 +68,7 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="sale_his_btn" disable="true" layoutX="575.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_sale_his" prefHeight="55.0" prefWidth="175.0" text="ลบเมนู">
+                  <Button fx:id="sale_his_btn" disable="true" layoutX="575.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_sale_his" prefHeight="55.0" prefWidth="175.0" text="ลบเมนู" visible="false">
                      <font>
                         <Font size="20.0" />
                      </font>
