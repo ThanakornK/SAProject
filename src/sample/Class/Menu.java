@@ -16,9 +16,9 @@ public class Menu {
 //        return menu_name;
 //    }
 
-    public void setMenu_name(String menu_name) {
-        this.menu_name = menu_name;
-    }
+//    public void setMenu_name(String menu_name) {
+//        this.menu_name = menu_name;
+//    }
 
     public List<Recipe> getRecipeList() {
         return recipeList;

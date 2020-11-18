@@ -12,29 +12,25 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import sample.Class.Ingredient;
+import sample.Class.*;
 import sample.Class.Menu;
-import sample.Class.Recipe;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Menu_Controller {
-    @FXML
-    private Button menu_page_btn;
 
     @FXML
-    private Button ing_page_btn;
-
-    @FXML
-    private Button recipe_page_btn;
-
-    @FXML
-    private Button home_btn;
+    private Button recipe_page_btn,home_btn,ing_page_btn,menu_page_btn,update_rec_btn,sale_his_btn;
 
     @FXML
     private Text recipe_name;
@@ -43,38 +39,37 @@ public class Menu_Controller {
     private TableView<?> ing_list;
 
     @FXML
-    private ListView<Menu> listViewMenu;
+    private TableColumn<MenuRecipe, String> menu_name;
 
     @FXML
-    private Button update_rec_btn;
-
-    @FXML
-    private Button sale_his_btn;
+    private ListView<MenuRecipe> listViewMenu;
 
     @FXML
     private TextField menu_name_field;
 
-    ObservableList<Menu> menuList = FXCollections.observableArrayList();
+    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
+
+    private ObservableList<MenuRecipe> menuList = FXCollections.observableArrayList();
+
+    private ObservableList<Recipe> recipesList = FXCollections.observableArrayList();
+
+    Recipe selectRecipe;
+
+    AlertBox alertBox = new AlertBox();
+
+    private DBConnect dbConnect = new DBConnect();
 
     @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                readAllMenu(menuList);  // read menuRecipe from database
+                readAllRec(recipesList);  // read recipe from database
 
-
-                Recipe ex1 = new Recipe("Egg fried rice");
-                Recipe ex2 = new Recipe("Gang Green Sweet");
-                List<Recipe> recipeList = new ArrayList<>();
-                recipeList.add(ex1); recipeList.add(ex2);
-                Menu menu1 = new Menu("ตลาดนัดคลองข้าง",recipeList);
-                Menu menu2 = new Menu("ตลาดนัดคลองไกล",recipeList);
-
-                menuList.add(menu1); menuList.add(menu2);
-
-                listViewMenu.setCellFactory(param -> new ListCell<Menu>() {
+                listViewMenu.setCellFactory(param -> new ListCell<MenuRecipe>() {
                     @Override
-                    protected void updateItem(Menu item, boolean empty) {
+                    protected void updateItem(MenuRecipe item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty || item == null || item.getMenu_name() == null) {
                             setText(null);
@@ -84,7 +79,7 @@ public class Menu_Controller {
                     }
                 });
 
-                FilteredList<Menu> menuFilterList = new FilteredList<>(menuList, p -> true);
+                FilteredList<MenuRecipe> menuFilterList = new FilteredList<>(menuList, p -> true);
                 menu_name_field.textProperty().addListener((observable, oldValue, newValue) -> {
                     menuFilterList.setPredicate(menu -> {
                         if (newValue == null || newValue.isEmpty()){
@@ -101,15 +96,78 @@ public class Menu_Controller {
                 });
 
                 // wrap filter list to sorted list
-                SortedList<Menu> menuSortedList = new SortedList<>(menuFilterList);
+                SortedList<MenuRecipe> menuSortedList = new SortedList<>(menuFilterList);
 
                 listViewMenu.setItems(menuSortedList);
-
+//NullPointerException
+                menu_name.setCellValueFactory(new PropertyValueFactory<>("MenuName"));
+//                cost_price.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
             }
         });
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
+
+    private void readAllMenu(ObservableList<MenuRecipe> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM MenuRecipe";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String MenuName = rs.getString("Menu_name");
+
+                MenuRecipe newMenu = new MenuRecipe(MenuName,recipesList);
+                list.add(newMenu);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    private void readAllRec(ObservableList<Recipe> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        PreparedStatement ps2 = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+
+        try {
+            String sql = "SELECT * FROM Recipe";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String recName = rs.getString("Rec_name");
+
+                Recipe readRec = new Recipe(recName);
+
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
+                ps2 = con.prepareStatement(sql2);
+                rs2 = ps2.executeQuery();
+                while (rs2.next()){
+                    String ingName = rs2.getString("Ing_name");
+                    String rec_Name = rs2.getString("Rec_name");
+                    double ingQuan = rs2.getDouble("Ing_quan");
+                    System.out.println(String.format("Added %s into %s", ingName, rec_Name));
+                    IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
+                    temp.calculateTotalCost(ingredientList);
+                    readRec.addIngList(temp);
+                }
+
+                list.add(readRec);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
 
     @FXML
     void getSelectMenu(MouseEvent event) {
