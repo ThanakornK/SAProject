@@ -7,7 +7,7 @@ public class Ingredient {
     private double Ing_price;
     private double Ing_amount;
 
-    public Ingredient(String ing_name, double ing_price, int ing_amount) {
+    public Ingredient(String ing_name, double ing_price, double ing_amount) {
         this.Ing_name = ing_name;
         this.Ing_price = ing_price;
         this.Ing_amount = ing_amount;

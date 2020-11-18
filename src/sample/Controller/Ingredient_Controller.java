@@ -394,6 +394,7 @@ public class Ingredient_Controller {
                 alertBox.alertERR("err","กรอกข้อมูลไม่ถูกต้อง");
                 update_ing_price.clear();
                 update_ing_amount.clear();
+
             }else {
 
                 ArrayList<ParaCommand> paraCommands = new ArrayList<>();
