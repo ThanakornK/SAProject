@@ -33,7 +33,10 @@
          <children>
             <AnchorPane layoutX="43.0" layoutY="219.0" prefHeight="280.0" prefWidth="550.0" style="-fx-background-color: lightgreen;">
                <children>
-                  <TextField fx:id="add_ing_name" layoutX="94.0" layoutY="32.0" prefHeight="40.0" prefWidth="410.0" promptText="เพิ่มวัตถุดิบ" />
+                  <TextField fx:id="add_ing_name" layoutX="94.0" layoutY="32.0" prefHeight="40.0" prefWidth="410.0" promptText="เพิ่มวัตถุดิบ">
+                     <font>
+                        <Font size="20.0" />
+                     </font></TextField>
                   <Text layoutX="14.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วัตถุดิบ">
                      <font>
                         <Font size="25.0" />
@@ -44,7 +47,10 @@
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="add_ing_quan" layoutX="94.0" layoutY="102.0" prefHeight="40.0" prefWidth="134.0" promptText="เพิ่มปริมาณ" />
+                  <TextField fx:id="add_ing_quan" layoutX="94.0" layoutY="102.0" prefHeight="40.0" prefWidth="134.0" promptText="เพิ่มปริมาณ">
+                     <font>
+                        <Font size="20.0" />
+                     </font></TextField>
                   <Button fx:id="add_btn" layoutX="208.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleAddIngBtn" prefHeight="60.0" prefWidth="134.0" text="เพิ่มวัตถุดิบ">
                      <font>
                         <Font size="20.0" />
@@ -69,12 +75,14 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="add_rec_name_field" layoutX="249.0" layoutY="40.0" prefHeight="40.0" prefWidth="579.0" />
+            <TextField fx:id="add_rec_name_field" layoutX="249.0" layoutY="40.0" prefHeight="48.0" prefWidth="754.0">
+               <font>
+                  <Font size="20.0" />
+               </font></TextField>
             <TableView fx:id="ingTable" layoutX="650.0" layoutY="114.0" onMouseClicked="#getSelectedRow" prefHeight="385.0" prefWidth="590.0" stylesheets="@../StyleSheet/table.css">
               <columns>
-                <TableColumn fx:id="ing_name" prefWidth="400.0" text="ชื่อวัตถุดิบ" />
+                <TableColumn fx:id="ing_name" prefWidth="490.0" text="ชื่อวัตถุดิบ" />
                 <TableColumn fx:id="ing_quan" prefWidth="100.0" text="ปริมาณที่ใช้" />
-                  <TableColumn fx:id="delCol" prefWidth="90.0" text="ลบ" />
               </columns>
             </TableView>
             <Button fx:id="add_rec_btn" layoutX="855.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleAddRecBtn" prefHeight="60.0" prefWidth="182.0" text="ยืนยันการเพิ่มสูตร">
