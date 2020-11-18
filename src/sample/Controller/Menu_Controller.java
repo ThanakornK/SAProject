@@ -39,6 +39,9 @@ public class Menu_Controller {
     private TableView<?> ing_list;
 
     @FXML
+    private TableView<?> rec_list;
+
+    @FXML
     private TableColumn<MenuRecipe, String> menu_name;
 
     @FXML
@@ -100,7 +103,7 @@ public class Menu_Controller {
 
                 listViewMenu.setItems(menuSortedList);
 //NullPointerException
-                menu_name.setCellValueFactory(new PropertyValueFactory<>("MenuName"));
+                menu_name.setCellValueFactory(new PropertyValueFactory<>("menuName"));
             }
         });
     }
@@ -117,10 +120,10 @@ public class Menu_Controller {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()) {
-                String MenuName = rs.getString("Menu_name");
+                String menuName = rs.getString("Menu_name");
 
-                MenuRecipe newMenu = new MenuRecipe(MenuName,recipesList);
-                list.add(newMenu);
+                MenuRecipe newMenuRecipe = new MenuRecipe(menuName,recipesList);
+                list.add(newMenuRecipe);
 
             }
 

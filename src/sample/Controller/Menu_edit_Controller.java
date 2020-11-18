@@ -30,7 +30,7 @@ public class Menu_edit_Controller {
     private Button editMenuBtn;
 
     @FXML
-    private TextField add_menu_name_field;
+    private TextField add_menu_name_field, update_rec_name;
 
     @FXML
     private Button add_Menu_btn;
@@ -74,7 +74,7 @@ public class Menu_edit_Controller {
 
     private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient
 
-    private ObservableList<IngRecipe> tempList = FXCollections.observableArrayList();
+    private ObservableList<Recipe> tempList = FXCollections.observableArrayList();
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
 
@@ -85,22 +85,6 @@ public class Menu_edit_Controller {
     AlertBox alertBox = new AlertBox();
 
     private DBConnect dbConnect = new DBConnect();
-
-
-    @FXML
-    void handleAddBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDeleteBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleAddMenuBtn(ActionEvent event) {
-
-    }
 
     @FXML
     public void initialize(){
@@ -195,8 +179,63 @@ public class Menu_edit_Controller {
         }
     }
 
-    public void setSelectMenu(Recipe rec) {
-        this.selectRecipe = rec;
+    public void setSelectMenu(MenuRecipe menu) {
+        this.selectMenu = menu;
+    }
+
+    public int isInSelectRecIngList(String ingName) {
+        if (selectRecIngList.isEmpty()) {
+            return 0;
+        }
+        for (IngRecipe i : selectRecIngList) {
+            if (ingName.equals(i.getIngName())) {
+                return -1;
+            }
+        }
+        return 0;
+    }
+
+
+    @FXML
+    void handleAddBtn(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleDeleteBtn() {
+//        if (!tempList.isEmpty()) {                                         // Remove ingredients that is not currently in database
+//            for (Recipe j : tempList) {
+//                if (j.getRec_name().equals(update_rec_name.getText())) {
+//                    tempList.remove(j);
+//                    selectMenuRecList.remove(j);
+//                    recTable.refresh();
+//                    break;
+//                } else {
+//                    continue;
+//                }
+//            }
+//        }
+//
+//        for (MenuRecipe i : selectMenuRecList) {
+//            if (i.getRecName().equals(update_rec_name.getText())) {
+//                if (dbConnect.deleteRecord("delete from IngRec WHERE Ing_name = ?", "str", update_ing_name.getText()) == 0) {
+//                    System.out.println("Delete successful");
+//                }
+//                selectRecIngList.remove(i);
+//                ingTable.refresh();
+//                break;
+//            } else {
+//                continue;
+//            }
+//
+//        }
+//        update_ing_name.clear();
+//        update_ing_quan.clear();
+    }
+
+    @FXML
+    void handleAddMenuBtn(ActionEvent event) {
+
     }
 
     //---------------------------------------- normal button method ----------------------------------------------------

@@ -315,7 +315,7 @@ public class Ingredient_Controller {
                         copyList = ingredient_table.getItems();
                         selectedRow = ingredient_table.getSelectionModel().getSelectedItems();
                         selectedRow.forEach(copyList::remove);
-
+//เอาเข้า menu_update ใส่ SortedList เข้ามาโชว์แทน
                         ingredient_table.refresh();
                         clearTextField();
 
