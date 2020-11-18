@@ -126,16 +126,14 @@ public class Menu_report_select_Controller {
 
     //--------------------------------------- change page method -------------------------------------------------------
 
-
-
-    //-------------------------------------------- database method -----------------------------------------------------
-
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
         ChangeScene cs = new ChangeScene("../Fxml/Report_page.fxml",event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
     }
+
+    //-------------------------------------------- database method -----------------------------------------------------
 
     @FXML
     void handleConfirmBtn(ActionEvent event) throws IOException {

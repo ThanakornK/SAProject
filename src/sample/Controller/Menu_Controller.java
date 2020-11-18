@@ -101,7 +101,6 @@ public class Menu_Controller {
                 listViewMenu.setItems(menuSortedList);
 //NullPointerException
                 menu_name.setCellValueFactory(new PropertyValueFactory<>("MenuName"));
-//                cost_price.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
             }
         });
     }

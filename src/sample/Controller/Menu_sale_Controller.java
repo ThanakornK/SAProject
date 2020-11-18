@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Class.Menu;
+import sample.Class.MenuRecipe;
 import sample.Class.Recipe;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Menu_sale_Controller {
                 List<Recipe> recipeList = new ArrayList<>();
                 recipeList.add(ex1); recipeList.add(ex2);
 
-                Menu menu = new Menu("example", recipeList);
+                MenuRecipe menu = new MenuRecipe("example", recipeList);
                 menu_name.setText(menu.getMenu_name());
             }
         });

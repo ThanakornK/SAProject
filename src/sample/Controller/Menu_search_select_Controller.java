@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +15,13 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.Class.MenuRecipe;
 import sample.Class.*;
 
 import java.io.IOException;
@@ -32,7 +37,7 @@ public class Menu_search_select_Controller {
     private TextField nameField;
 
     @FXML
-    private ListView<?> listView;
+    private ListView<String> listView;
 
     @FXML
     private Button backBtn;
@@ -42,9 +47,15 @@ public class Menu_search_select_Controller {
 
     AlertBox alertBox = new AlertBox();
 
+    private ObservableList<MenuRecipe> menuList = FXCollections.observableArrayList();
+
+    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
+
     private ObservableList<Recipe> recipesList = FXCollections.observableArrayList();
 
     private ObservableList<MenuRecipe> memuList = FXCollections.observableArrayList();
+
+    private ObservableList<String> menuStrList = FXCollections.observableArrayList();
 
     Recipe selectRecipe;
 
@@ -55,79 +66,69 @@ public class Menu_search_select_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                readAllMenu(memuList);
-                readAllRec(recipesList);
+                readMenu(menuStrList);
+
+
+                listView.setCellFactory(param -> new ListCell<String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item);
+                        }
+                    }
+                });
+
+                FilteredList<String> menuFilterList = new FilteredList<>(menuStrList, p -> true);
+                nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    menuFilterList.setPredicate(menu -> {
+                        if (newValue == null || newValue.isEmpty()){
+                            return true;
+                        }
+
+                        if (menu.indexOf(newValue) != -1){
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    });
+
+                });
+
+                // wrap filter list to sorted list
+                SortedList<String> sortedList = new SortedList<>(menuFilterList);
+
+                listView.setItems(sortedList);
             }
         });
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
-    private void readAllIng(ObservableList<Ingredient> list){
-        Connection con = DBConnect.connect();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+    public void getSelectMenu(MouseEvent mouseEvent) {
+        if (listView.getSelectionModel().getSelectedItem() != null){   // check select row not null
 
-        try {
-            String sql = "SELECT * FROM Ingredient";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while(rs.next()) {
-                String ingName = rs.getString("Ing_name");
-                double ingPrice = rs.getDouble("Ing_price");
-                int ingAmount = rs.getInt("Ing_amount");
+            nameField.setText(listView.getSelectionModel().getSelectedItem());
 
-                Ingredient newIngredient = new Ingredient(ingName,ingPrice,ingAmount);
-                list.add(newIngredient);
-
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
-    private void readAllRec(ObservableList<Recipe> list){
-        Connection con = DBConnect.connect();
-        PreparedStatement ps = null;
-        PreparedStatement ps2 = null;
-        ResultSet rs = null;
-        ResultSet rs2 = null;
+    private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
+                                            DoubleConsumer handler) {
 
-        try {
-            String sql = "SELECT * FROM Recipe";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while(rs.next()) {
-                String recName = rs.getString("Rec_name");
-
-                Recipe readRec = new Recipe(recName);
-
-                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
-                ps2 = con.prepareStatement(sql2);
-                rs2 = ps2.executeQuery();
-                while (rs2.next()){
-                    String ingName = rs2.getString("Ing_name");
-                    String rec_Name = rs2.getString("Rec_name");
-                    double ingQuan = rs2.getDouble("Ing_quan");
-                    System.out.println(String.format("Added %s into %s", ingName, rec_Name));
-                    IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
-                    temp.calculateTotalCost(ingredientList);
-                    readRec.addIngList(temp);
+        ChangeListener<Number> listener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> obs,
+                                Number oldSize, Number newSize) {
+                if (newSize.doubleValue() != Double.NaN) {
+                    handler.accept(newSize.doubleValue());
+                    size.removeListener(this);
                 }
-
-                list.add(readRec);
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
-        }
-    }
-    @FXML
-    void getSelectItem(ActionEvent event) {
-
+        };
+        size.addListener(listener);
     }
 
     //---------------------------------------- normal button method ----------------------------------------------------
@@ -139,8 +140,9 @@ public class Menu_search_select_Controller {
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
 
-        Stage stage = (Stage) backBtn.getScene().getWindow();
-        stage.close();
+        ChangeScene cs = new ChangeScene("../Fxml/Menu_edit_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
 
     }
 
@@ -151,6 +153,26 @@ public class Menu_search_select_Controller {
 
     @FXML
     void handleConfirmBtn(ActionEvent event) throws IOException {
+        Screen screen = Screen.getPrimary();
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Report_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        Report_Controller controller = fxmlLoader.getController();
+        String name = nameField.getText();
+        controller.setMenuChoose(name);
+        Rectangle2D sbounds = screen.getBounds();
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setTitle("Food Plan");
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
         // do sth with database
 
         // use below method to go back
@@ -160,5 +182,25 @@ public class Menu_search_select_Controller {
 //        cs.changeStageAction(screen);
     }
 
+    public void readMenu(ObservableList<String> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM MenuRecipe GROUP BY Menu_name";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String MenuName = rs.getString("Menu_name");
+                System.out.println(MenuName);
+                list.add(MenuName);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
 
 }

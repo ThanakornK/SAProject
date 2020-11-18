@@ -7,14 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Class.*;
+import sample.Class.Menu;
 import sample.Class.MenuRecipe;
 
 import java.io.IOException;
@@ -53,27 +51,34 @@ public class Menu_edit_Controller {
     private Button deleteBtn;
 
     @FXML
-    private TableColumn<Menu, String> menu_name;
+    private TableColumn<MenuRecipe, String> menu_name;
 
     @FXML
-    private TableColumn<Menu, String> menu_quan;
+    private TableColumn<MenuRecipe, String> menu_quan;
 
     @FXML
     private TableColumn<Recipe, String> rec_name;
 
-    private ObservableList<Menu> menuList = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Recipe> recTable;
+
+    private ObservableList<MenuRecipe> menuList = FXCollections.observableArrayList();
 
     private ObservableList<Recipe> recipesList = FXCollections.observableArrayList();
 
+    private ObservableList<Recipe> selectRecList = FXCollections.observableArrayList();
+
     private ObservableList<IngRecipe> selectRecIngList = FXCollections.observableArrayList();
 
-    private ObservableList<Menu> selectMenuRecList = FXCollections.observableArrayList();
+    private ObservableList<MenuRecipe> selectMenuRecList = FXCollections.observableArrayList();
 
     private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient
 
     private ObservableList<IngRecipe> tempList = FXCollections.observableArrayList();
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
+
+    MenuRecipe selectMenu;
 
     Recipe selectRecipe;
 
@@ -102,7 +107,7 @@ public class Menu_edit_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                readAllMenu(menuList);  // read menu from database
+                readAllMenu(menuList);  // read menuRecipe from database
                 readAllRec(recipesList);  // read recipe from database
 
                 rec_name.setCellValueFactory(new PropertyValueFactory<>("recName"));
@@ -115,7 +120,7 @@ public class Menu_edit_Controller {
                     for (IngRecipe i : selectRecipe.getIngList()) {
                         selectRecIngList.add(i);
                     }
-                    recTable.setItems(selectRecIngList);
+                    recTable.setItems(selectRecList);
                     recTable.refresh();
                 } else {
                     System.out.println("null naja");
@@ -134,17 +139,14 @@ public class Menu_edit_Controller {
         ResultSet rs = null;
 
         try {
-
-
-
+            String sql = "SELECT * FROM MenuRecipe";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()) {
                 String MenuName = rs.getString("Menu_name");
-                String sql = ("SELECT * FROM MenuRecipe WHERE Menu_name = '%s'", readMenu.getMenu_name());
-                MenuRecipe readMenu = new MenuRecipe(MenuName);
 
-                Menu newMenu = new Menu(MenuName,recipesList);
+
+                MenuRecipe newMenu = new MenuRecipe(MenuName,recipesList);
                 list.add(newMenu);
 
             }
@@ -191,6 +193,10 @@ public class Menu_edit_Controller {
             System.out.println(e.toString());
             alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
+    }
+
+    public void setSelectMenu(Recipe rec) {
+        this.selectRecipe = rec;
     }
 
     //---------------------------------------- normal button method ----------------------------------------------------
