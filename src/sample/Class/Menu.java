@@ -12,9 +12,9 @@ public class Menu {
         this.recipeList = recipeList;
     }
 
-    public String getMenu_name() {
-        return menu_name;
-    }
+//    public String getMenu_name() {
+//        return menu_name;
+//    }
 
     public void setMenu_name(String menu_name) {
         this.menu_name = menu_name;

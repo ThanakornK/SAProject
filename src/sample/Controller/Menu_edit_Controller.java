@@ -1,18 +1,27 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import sample.Class.ChangeScene;
+import sample.Class.*;
+import sample.Class.MenuRecipe;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Menu_edit_Controller {
 
@@ -44,6 +53,36 @@ public class Menu_edit_Controller {
     private Button deleteBtn;
 
     @FXML
+    private TableColumn<Menu, String> menu_name;
+
+    @FXML
+    private TableColumn<Menu, String> menu_quan;
+
+    @FXML
+    private TableColumn<Recipe, String> rec_name;
+
+    private ObservableList<Menu> menuList = FXCollections.observableArrayList();
+
+    private ObservableList<Recipe> recipesList = FXCollections.observableArrayList();
+
+    private ObservableList<IngRecipe> selectRecIngList = FXCollections.observableArrayList();
+
+    private ObservableList<Menu> selectMenuRecList = FXCollections.observableArrayList();
+
+    private ObservableList<Ingredient> recipeIngList = FXCollections.observableArrayList(); // Used to store local ingredient
+
+    private ObservableList<IngRecipe> tempList = FXCollections.observableArrayList();
+
+    private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
+
+    Recipe selectRecipe;
+
+    AlertBox alertBox = new AlertBox();
+
+    private DBConnect dbConnect = new DBConnect();
+
+
+    @FXML
     void handleAddBtn(ActionEvent event) {
 
     }
@@ -63,14 +102,96 @@ public class Menu_edit_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                readAllMenu(menuList);  // read menu from database
+                readAllRec(recipesList);  // read recipe from database
+
+                rec_name.setCellValueFactory(new PropertyValueFactory<>("recName"));
+                menu_name.setCellValueFactory(new PropertyValueFactory<>("menuName"));
+
+
+                if (selectRecipe != null) {
+                    add_menu_name_field.setText(selectRecipe.getRec_name());
+
+                    for (IngRecipe i : selectRecipe.getIngList()) {
+                        selectRecIngList.add(i);
+                    }
+                    recTable.setItems(selectRecIngList);
+                    recTable.refresh();
+                } else {
+                    System.out.println("null naja");
+                }
 
             }
+
         });
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
+    private void readAllMenu(ObservableList<MenuRecipe> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        try {
+
+
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String MenuName = rs.getString("Menu_name");
+                String sql = ("SELECT * FROM MenuRecipe WHERE Menu_name = '%s'", readMenu.getMenu_name());
+                MenuRecipe readMenu = new MenuRecipe(MenuName);
+
+                Menu newMenu = new Menu(MenuName,recipesList);
+                list.add(newMenu);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    private void readAllRec(ObservableList<Recipe> list) {
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        PreparedStatement ps2 = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+
+        try {
+            String sql = "SELECT * FROM Recipe";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String recName = rs.getString("Rec_name");
+
+                Recipe readRec = new Recipe(recName);
+
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'", readRec.getRec_name());
+                ps2 = con.prepareStatement(sql2);
+                rs2 = ps2.executeQuery();
+                while (rs2.next()) {
+                    String ingName = rs2.getString("Ing_name");
+                    String rec_Name = rs2.getString("Rec_name");
+                    double ingQuan = rs2.getDouble("Ing_quan");
+                    System.out.println(String.format("Added %s into %s", ingName, rec_Name));
+                    IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
+                    temp.calculateTotalCost(ingredientList);
+                    readRec.addIngList(temp);
+                }
+
+                list.add(readRec);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
 
     //---------------------------------------- normal button method ----------------------------------------------------
 
