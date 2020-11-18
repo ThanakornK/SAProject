@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Class.*;
 import sample.Class.Menu;
@@ -44,7 +45,7 @@ public class Recipe_Controller {
     private TextField recipe_name_field;
 
     @FXML
-    private Button update_rec_btn, sale_his_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn;
+    private Button update_rec_btn, delete_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn;
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
 
@@ -52,10 +53,13 @@ public class Recipe_Controller {
 
     private ObservableList<IngRecipe> selectIngRec = FXCollections.observableArrayList();
 
+    private Recipe selectRec;
+
     private AlertBox alertBox = new AlertBox();
+    private DBConnect dbConnect = new DBConnect();
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -78,13 +82,13 @@ public class Recipe_Controller {
                 FilteredList<Recipe> recipeFilterList = new FilteredList<>(recipeList, p -> true);
                 recipe_name_field.textProperty().addListener((observable, oldValue, newValue) -> {
                     recipeFilterList.setPredicate(recipe -> {
-                        if (newValue == null || newValue.isEmpty()){
+                        if (newValue == null || newValue.isEmpty()) {
                             return true;
                         }
 
-                        if (recipe.getRec_name().indexOf(newValue) != -1){
+                        if (recipe.getRec_name().indexOf(newValue) != -1) {
                             return true;
-                        } else{
+                        } else {
                             return false;
                         }
                     });
@@ -105,7 +109,7 @@ public class Recipe_Controller {
 
     //----------------------------------------- Normal method ----------------------------------------------------------
 
-    private void readAllIng(ObservableList<Ingredient> list){
+    private void readAllIng(ObservableList<Ingredient> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -114,12 +118,12 @@ public class Recipe_Controller {
             String sql = "SELECT * FROM Ingredient";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String ingName = rs.getString("Ing_name");
                 double ingPrice = rs.getDouble("Ing_price");
                 int ingAmount = rs.getInt("Ing_amount");
 
-                Ingredient newIngredient = new Ingredient(ingName,ingPrice,ingAmount);
+                Ingredient newIngredient = new Ingredient(ingName, ingPrice, ingAmount);
                 list.add(newIngredient);
 
             }
@@ -130,7 +134,7 @@ public class Recipe_Controller {
         }
     }
 
-    private void readAllRec(ObservableList<Recipe> list){
+    private void readAllRec(ObservableList<Recipe> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         PreparedStatement ps2 = null;
@@ -141,22 +145,22 @@ public class Recipe_Controller {
             String sql = "SELECT * FROM Recipe";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String recName = rs.getString("Rec_name");
 
                 Recipe readRec = new Recipe(recName);
 
-                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'",readRec.getRec_name());
+                String sql2 = String.format("SELECT * FROM IngRec WHERE Rec_name = '%s'", readRec.getRec_name());
                 ps2 = con.prepareStatement(sql2);
                 rs2 = ps2.executeQuery();
-                while (rs2.next()){
+                while (rs2.next()) {
                     String ingName = rs2.getString("Ing_name");
                     String rec_Name = rs2.getString("Rec_name");
                     double ingQuan = rs2.getDouble("Ing_quan");
                     System.out.println(String.format("Added %s into %s", ingName, rec_Name));
                     IngRecipe temp = new IngRecipe(ingName, recName, ingQuan);
                     temp.calculateTotalCost(ingredientList);
-                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe",temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
+                    System.out.println(String.format("%.2f is Total cost of %s in %s recipe", temp.getTotalCost(), temp.getIngName(), readRec.getRec_name()));
                     readRec.addIngList(temp);
                 }
 
@@ -169,37 +173,27 @@ public class Recipe_Controller {
         }
     }
 
-    public void getSelectMenu(){
+    public void getSelectMenu() {
         selectIngRec.clear();
 
-        if (listViewRec.getSelectionModel().getSelectedItem() != null){   // check select row not null
+        if (listViewRec.getSelectionModel().getSelectedItem() != null) {   // check select row not null
 
             System.out.println(listViewRec.getSelectionModel().getSelectedItem().getRec_name() + " has been selected");
-            sale_his_btn.setDisable(false);
-            sale_his_btn.setVisible(true);
+            delete_btn.setDisable(false);
+            delete_btn.setVisible(true);
 
-            for(IngRecipe i: listViewRec.getSelectionModel().getSelectedItem().getIngList()){
+            for (IngRecipe i : listViewRec.getSelectionModel().getSelectedItem().getIngList()) {
                 selectIngRec.add(i);
             }
             ing_list.setItems(selectIngRec);
             ing_list.refresh();
 
+            selectRec = listViewRec.getSelectionModel().getSelectedItem();
+
         }
     }
 
     //--------------------------------------- Button method -----------------------------------------------------
-
-    @FXML
-    void handle_sale_his(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./../Fxml/Recipe_sale_page.fxml"));
-        Parent parentRoot = fxmlLoader.load();
-        Recipe_sale_Controller controller = fxmlLoader.getController();
-        controller.setRec_name(listViewRec.getSelectionModel().getSelectedItem().getRec_name());
-        Stage stage = new Stage();
-        stage.setTitle("ยอดขายของสูตรอาหาร");
-        stage.setScene(new Scene(parentRoot));
-        stage.show();
-    }
 
     @FXML
     void handle_update_rec(ActionEvent event) throws IOException {
@@ -217,7 +211,7 @@ public class Recipe_Controller {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Ingredient_page.fxml"));
-        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.setScene(new Scene(loader.load(), 1280, 800));
         stage.show();
     }
 
@@ -226,7 +220,7 @@ public class Recipe_Controller {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Menu_page.fxml"));
-        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.setScene(new Scene(loader.load(), 1280, 800));
         stage.show();
 
     }
@@ -236,8 +230,36 @@ public class Recipe_Controller {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("./../Fxml/Main_page.fxml"));
-        stage.setScene(new Scene(loader.load(),1280,800));
+        stage.setScene(new Scene(loader.load(), 1280, 800));
         stage.show();
     }
 
+    //----------------------------------------------- Database method --------------------------------------------------
+
+    @FXML
+    public void handleDelBtn() {
+
+        if (alertBox.alertConfirm("คุณต้องการจะลบสูตรอาหารนี้ใช่หรือไม่") == 0) {
+
+            for (Recipe r : recipeList) {
+                if (r.getRec_name().equals(selectRec.getRec_name())) {
+                    if (dbConnect.deleteRecord("delete from IngRec WHERE Rec_name = ?", "str", selectRec.getRec_name()) == 0) {
+                        System.out.println("Delete data from Recipe Successful");
+                        if (dbConnect.deleteRecord("delete from Recipe Where Rec_name = ?", "str", selectRec.getRec_name()) == 0) {
+                            System.out.println("Delete data from Recipe Successful");
+                            listViewRec.refresh();
+                            ing_list.refresh();
+                            recipe_name_field.setLayoutX(221.0001);
+                            recipe_name_field.setLayoutX(222);
+                            break;
+                        }
+                    }
+
+                }
+            }
+//        }
+
+        }
+
+    }
 }
