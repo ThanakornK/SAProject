@@ -392,16 +392,6 @@ public class Recipe_edit_Controller {
         }
     }
 
-//    @FXML
-//    void handleUpdateBtn(ActionEvent event){
-//
-//    }
-//
-//    @FXML
-//    void handleDelBtn(ActionEvent event){
-//
-//    }
-
 
     @FXML
     void handleEditRecBtn(ActionEvent event) {
