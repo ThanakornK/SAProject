@@ -249,8 +249,6 @@ public class Recipe_Controller {
                             System.out.println("Delete data from Recipe Successful");
                             listViewRec.refresh();
                             ing_list.refresh();
-                            recipe_name_field.setLayoutX(221.0001);
-                            recipe_name_field.setLayoutX(222);
                             break;
                         }
                     }

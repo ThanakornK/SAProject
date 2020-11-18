@@ -1,23 +1,30 @@
 package sample.Class;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.List;
 
 public class MenuRecipe {
     private int menuRec_ID;
     private String menu_name;
-    private List<Recipe> recipeList;
+    private ObservableList<Recipe> recipeList = FXCollections.observableArrayList();
     private Double recommend_fq;
 
-    public MenuRecipe(int menuRec_ID, String menu_name, List<Recipe> recipeList) {
+    public MenuRecipe(int menuRec_ID, String menu_name, ObservableList<Recipe> recipeList) {
         this.menuRec_ID = menuRec_ID;
         this.menu_name = menu_name;
         this.recipeList = recipeList;
     }
 
-    public MenuRecipe( String menu_name, List<Recipe> recipeList) {
+    public MenuRecipe( String menu_name, ObservableList<Recipe> recipeList) {
         this.menu_name = menu_name;
         this.recipeList = recipeList;
+    }
+
+    public MenuRecipe ( String menu_name ){
+        this.menu_name = menu_name;
     }
 
     public int getMenuRec_ID() {
@@ -32,11 +39,11 @@ public class MenuRecipe {
         this.menu_name = menu_name;
     }
 
-    public List<Recipe> getRecipeList() {
+    public ObservableList<Recipe> getRecipeList() {
         return recipeList;
     }
 
-    public void setRecipeList(List<Recipe> recipeList) {
+    public void setRecipeList(ObservableList<Recipe> recipeList) {
         this.recipeList = recipeList;
     }
 
@@ -46,5 +53,9 @@ public class MenuRecipe {
 
     public void setRecommend_fq(Double recommend_fq) {
         this.recommend_fq = recommend_fq;
+    }
+
+    public void addRecList(Recipe rec){
+        this.recipeList.add(rec);
     }
 }
