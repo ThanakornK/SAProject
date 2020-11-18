@@ -1,18 +1,27 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.Class.AlertBox;
 import sample.Class.ChangeScene;
+import sample.Class.DBConnect;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Menu_edit_Controller {
 
@@ -23,7 +32,7 @@ public class Menu_edit_Controller {
     private Button editMenuBtn;
 
     @FXML
-    private TextField add_menu_name_field;
+    private TextField update_menu_name_field;
 
     @FXML
     private Button add_Menu_btn;
@@ -32,10 +41,10 @@ public class Menu_edit_Controller {
     private Button back_btn, menuSearchBtn;
 
     @FXML
-    private ListView<?> recipe_list_view;
+    private ListView<String> recipe_list_view;
 
     @FXML
-    private ListView<?> select_rec_lsView;
+    private ListView<String> select_rec_lsView;
 
     @FXML
     private Button add_btn;
@@ -44,25 +53,62 @@ public class Menu_edit_Controller {
     private Button deleteBtn;
 
     @FXML
-    void handleAddBtn(ActionEvent event) {
-
-    }
+    private ObservableList<String> allRec = FXCollections.observableArrayList();
 
     @FXML
-    void handleDeleteBtn(ActionEvent event) {
+    private ObservableList<String> selectRec = FXCollections.observableArrayList();
 
-    }
+    private ObservableList<String> tempSelectRec = FXCollections.observableArrayList();
 
-    @FXML
-    void handleAddMenuBtn(ActionEvent event) {
+    String curMenuName;
 
-    }
+    String selectFromAllRec;
+
+    String selectFromSelectRec;
+
+    DBConnect dbConnect = new DBConnect();
+
+    AlertBox alertBox = new AlertBox();
 
     @FXML
     public void initialize(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                if(curMenuName != null){
+                    readAllRec(allRec);
+                    readAllSelectRec(selectRec);
+                    update_menu_name_field.setText(curMenuName);
+                    recipe_list_view.setCellFactory(param -> new ListCell<String>(){
+                        @Override
+                        protected void updateItem(String item, boolean empty){
+                            super.updateItem(item, empty);
+
+                            if(empty || item == null || item == null) {
+                                setText(null);
+                            }   else {
+                                setText(item);
+                            }
+                        }
+                    });
+
+                    select_rec_lsView.setCellFactory(param -> new ListCell<String>(){
+                        @Override
+                        protected void updateItem(String item, boolean empty){
+                            super.updateItem(item, empty);
+
+                            if(empty || item == null || item == null) {
+                                setText(null);
+                            }   else {
+                                setText(item);
+                            }
+                        }
+                    });
+
+
+                    recipe_list_view.setItems(allRec);
+                    select_rec_lsView.setItems(selectRec);
+                }
 
             }
         });
@@ -70,11 +116,117 @@ public class Menu_edit_Controller {
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
+    public void readAllRec(ObservableList<String> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        try {
+            String sql = "SELECT * FROM Recipe";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                String recName = rs.getString("Rec_name");
+
+                list.add(recName);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    public void readAllSelectRec(ObservableList<String> list){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = String.format("SELECT Rec_name FROM MenuRecipe WHERE Menu_name = '%s'", curMenuName);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                String recName = rs.getString("Rec_name");
+
+                list.add(recName);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    public void setCurMenuName(String name){
+        this.curMenuName = name;
+    }
+
+    public void getSelectionAllRec(){
+        if( recipe_list_view.getSelectionModel().getSelectedItem() != null){
+            selectFromAllRec = recipe_list_view.getSelectionModel().getSelectedItem();
+        }
+    }
+
+    public void getSelectionSelectRec(){
+        if( select_rec_lsView.getSelectionModel().getSelectedItem() != null){
+            selectFromSelectRec = select_rec_lsView.getSelectionModel().getSelectedItem();
+        }
+    }
+
+    public int isInSelectRec(String name){
+        if(selectRec.isEmpty()){
+            return 0;
+        }
+        for(String recName: selectRec){
+            if(recName.equals(name)){
+                return -1;
+            }
+        }
+        return 0;
+    }
 
     //---------------------------------------- normal button method ----------------------------------------------------
 
+    @FXML
+    void handleAddBtn() {
+        if( isInSelectRec(selectFromAllRec) == -1){
+            alertBox.alertERR("err", "มีสูตรอาหารนี้อยู่แล้ว");
+        }
+        else {
+            tempSelectRec.add(selectFromAllRec);
+            selectRec.add(selectFromAllRec);
+            select_rec_lsView.refresh();
+        }
+    }
 
+    @FXML
+    void handleDeleteBtn() {
+        if(!tempSelectRec.isEmpty()){
+            for(String rec: tempSelectRec){
+                if(rec.equals(selectFromAllRec)){
+                    tempSelectRec.remove(rec);
+                    selectRec.remove(rec);
+                    select_rec_lsView.refresh();
+                    break;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for(String rec: selectRec){
+            if(rec.equals(selectFromAllRec)){
+                //if(dbConnect.deleteRecord("delete from MenuRecipe WHERE Rec_name = ? AND Menu_name = ?", "str", selectFromAllRec, curMenuName) == 0) {
+
+                //}
+                //selectRec
+            }
+        }
+    }
+
+    @FXML
+    void handleAddMenuBtn(ActionEvent event) {
+
+    }
 
     //--------------------------------------- change page method -------------------------------------------------------
 
@@ -97,8 +249,9 @@ public class Menu_edit_Controller {
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
 
-        ChangeScene cs = new ChangeScene("../Fxml/Menu_search_select.fxml");
-        cs.newWindow();
+        ChangeScene cs = new ChangeScene("../Fxml/Menu_search_select.fxml", event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
 
     }
 
