@@ -114,6 +114,74 @@ public class FoodQuan_Controller {
         });
     }
 
+    public void readSetRecipe_tb(ObservableList<RecipeReport> list) {
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
+                    "FROM MenuRecipe " +
+                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
+                    "WHERE  MenuRecipe.Menu_name = ? AND " +
+                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
+                    "FROM FoodQuan " +
+                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, menuSelect);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String regName = rs.getString("Rec_name");
+                double recommendFq = rs.getDouble("Recommend_fq");
+
+                RecipeReport rp = new RecipeReport(regName, recommendFq, 0.0);
+                list.add(rp);
+
+            }
+            recPlanQuan_table.setItems(list);
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
+    public void readSetIng_tb(ObservableList<IngReport> list) {
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+
+            String sql = "SELECT MenuRecipe.Rec_name, Ingredient.Ing_name, SUM(IngRec.Ing_quan), Ingredient.Ing_price, Ingredient.Ing_amount " +
+                    "FROM (( IngRec " +
+                    "INNER JOIN MenuRecipe ON MenuRecipe.Rec_name = IngRec.Rec_name) " +
+                    "INNER JOIN Ingredient ON Ingredient.Ing_name = IngRec.Ing_name) " +
+                    "WHERE MenuRecipe.Menu_name = ? " +
+                    "GROUP BY Ingredient.Ing_name;";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, menuSelect);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                String ing_name = rs.getString("Ing_name");
+                double ing_amount = rs.getDouble("Ing_amount");
+                double ing_quan = rs.getDouble("SUM(IngRec.Ing_quan)");
+                double ing_price = rs.getDouble("Ing_price");
+
+                Ingredient newIng = new Ingredient(ing_name,ing_price,ing_amount);
+                IngReport newIngReport = new IngReport(newIng,ing_quan,newIng.getIng_price()*ing_quan);
+                list.add(newIngReport);
+
+            }
+            ingPlaQuan_table.setItems(list);
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     //----------------------------------------- normal method ----------------------------------------------------------
 
     public void setIngReportColumnDouble(TableColumn<IngReport, Double> tableCol) {
@@ -231,74 +299,6 @@ public class FoodQuan_Controller {
     @FXML
     void handleMenuConfirm(ActionEvent event) {
 
-    }
-
-    public void readSetRecipe_tb(ObservableList<RecipeReport> list) {
-        Connection con = DBConnect.connect();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
-                    "FROM MenuRecipe " +
-                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
-                    "WHERE  MenuRecipe.Menu_name = ? AND " +
-                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
-                    "FROM FoodQuan " +
-                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, menuSelect);
-            rs = ps.executeQuery();
-
-            while(rs.next()) {
-                String regName = rs.getString("Rec_name");
-                double recommendFq = rs.getDouble("Recommend_fq");
-
-                RecipeReport rp = new RecipeReport(regName, recommendFq, 0.0);
-                list.add(rp);
-
-            }
-            recPlanQuan_table.setItems(list);
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
-        }
-    }
-
-    public void readSetIng_tb(ObservableList<IngReport> list) {
-        Connection con = DBConnect.connect();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-
-            String sql = "SELECT MenuRecipe.Rec_name, Ingredient.Ing_name, SUM(IngRec.Ing_quan), Ingredient.Ing_price, Ingredient.Ing_amount " +
-                    "FROM (( IngRec " +
-                    "INNER JOIN MenuRecipe ON MenuRecipe.Rec_name = IngRec.Rec_name) " +
-                    "INNER JOIN Ingredient ON Ingredient.Ing_name = IngRec.Ing_name) " +
-                    "WHERE MenuRecipe.Menu_name = ? " +
-                    "GROUP BY Ingredient.Ing_name;";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, menuSelect);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-
-                String ing_name = rs.getString("Ing_name");
-                double ing_amount = rs.getDouble("Ing_amount");
-                double ing_quan = rs.getDouble("SUM(IngRec.Ing_quan)");
-                double ing_price = rs.getDouble("Ing_price");
-
-                Ingredient newIng = new Ingredient(ing_name,ing_price,ing_amount);
-                IngReport newIngReport = new IngReport(newIng,ing_quan,newIng.getIng_price()*ing_quan);
-                list.add(newIngReport);
-
-            }
-            ingPlaQuan_table.setItems(list);
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
