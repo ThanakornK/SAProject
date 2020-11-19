@@ -260,7 +260,6 @@ public class Recipe_edit_Controller {
                 } else {
                     continue;
                 }
-
             }
         } else {
             alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");

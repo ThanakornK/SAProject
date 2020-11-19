@@ -20,16 +20,19 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
-import sample.Class.AlertBox;
-import sample.Class.DBConnect;
-import sample.Class.IngReport;
-import sample.Class.RecipeReport;
+import sample.Class.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.function.DoubleConsumer;
 
 public class FoodLeft_Controller {
@@ -76,6 +79,8 @@ public class FoodLeft_Controller {
     private String menuSelect = "";
 
     private AlertBox alertBox;
+    private DBConnect dbConnect = new DBConnect();
+    private String foodDate;
 
     private ObservableList<RecipeReport> recList = FXCollections.observableArrayList();
 
@@ -99,6 +104,51 @@ public class FoodLeft_Controller {
                 }
             }
         });
+    }
+
+    @FXML
+    private void getDateAction(ActionEvent event) {
+        if (dateSale.getValue() != null) {
+            Locale lc = new Locale("en","EN");
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd",lc).format(new Date());
+            String selectDate = dateSale.getValue().toString();
+            if (isDateOfInterestValid("yyyy-MM-dd", currentDate, selectDate)){
+                foodDate = currentDate;
+            }else{
+                AlertBox alertBox = new AlertBox();
+                alertBox.alertERR("err","กรุณาเลือกเวลาปัจจุบันหรืออนาคต");
+                dateSale.setValue(LocalDate.now());
+            }
+
+        } else {
+            AlertBox alertBox = new AlertBox();
+            alertBox.alertERR("err","กรุณาเลือกวันที่ขาย");
+        }
+        insertFoodQuan();
+    }
+
+    public static boolean isDateOfInterestValid(String dateformat, String currentDate, String dateOfInterest) {
+
+        String format = dateformat;
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date cd = null;
+        Date doi = null;
+
+        try {
+            cd = sdf.parse(currentDate);
+            doi = sdf.parse(dateOfInterest);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diff = cd.getTime() - doi.getTime();
+        int diffDays = (int) (diff / (24 * 1000 * 60 * 60));
+
+        if (diffDays > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void setRecipeReportColumnDouble(TableColumn<RecipeReport, Double> tableCol) {
@@ -269,6 +319,21 @@ public class FoodLeft_Controller {
             }
         };
         size.addListener(listener);
+    }
+
+    public void insertFoodQuan(){
+        for (RecipeReport rp: recList) {
+            ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+            System.out.println(foodDate + " " + rp.getMenuRecId() + " " + rp.getTotal_fqReport());
+            paraCommands.add(new ParaCommand("str", foodDate));
+            paraCommands.add(new ParaCommand("int", String.valueOf(rp.getMenuRecId())));
+            paraCommands.add(new ParaCommand("double", String.valueOf(rp.getTotal_fqReport()))); // get total foodquan
+
+            if(dbConnect.insertRecord("INSERT INTO FoodQuan (Food_date, MenuRec_ID, Total_fq, LeftOver_fq) VALUES (?,?,?,0)", paraCommands) == 0){
+                System.out.println("Insert success");
+                paraCommands.clear();
+            }
+        }
     }
 
 }
