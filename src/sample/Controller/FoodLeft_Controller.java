@@ -1,17 +1,36 @@
 package sample.Controller;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import sample.Class.AlertBox;
+import sample.Class.DBConnect;
+import sample.Class.IngReport;
+import sample.Class.RecipeReport;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.function.DoubleConsumer;
 
 public class FoodLeft_Controller {
 
@@ -25,10 +44,22 @@ public class FoodLeft_Controller {
     private AnchorPane showMenu_con;
 
     @FXML
-    private TableView<?> recPlanQuan_table;
+    private TableView<RecipeReport> recLeftQuan_table;
 
     @FXML
-    private TableView<?> ingPlaQuan_table;
+    private TableView<RecipeReport> recRecomQuan_table;
+
+    @FXML
+    private TableColumn<RecipeReport, String> rec_leftNameCol;
+
+    @FXML
+    private TableColumn<RecipeReport, Double> rec_leftQuanCol;
+
+    @FXML
+    private TableColumn<RecipeReport, String> rec_recomNameCol;
+
+    @FXML
+    private TableColumn<RecipeReport, Double> rec_recomQuanCol;
 
     @FXML
     private Button calculateFoodQuan_btn;
@@ -42,7 +73,87 @@ public class FoodLeft_Controller {
     @FXML
     private TextField menu_name_field;
 
+    private String menuSelect = "";
+
+    private AlertBox alertBox;
+
+    private ObservableList<RecipeReport> recList = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (menuSelect != ""){
+                    menu_name_field.setText(menuSelect);
+                    readSetRecipe(recList);
+
+                    rec_leftNameCol.setCellValueFactory(new PropertyValueFactory<RecipeReport,String>("recNameReport"));
+                    rec_leftQuanCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, Double>("leftOver_fqReport"));
+                    setRecipeReportColumnDouble(rec_leftQuanCol);
+
+                    rec_recomNameCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, String>("recNameReport"));
+                    rec_recomQuanCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, Double>("recommend_fqReport"));
+
+                    setRecipeReportColumnDouble(rec_recomQuanCol);
+                }
+            }
+        });
+    }
+
+    public void setRecipeReportColumnDouble(TableColumn<RecipeReport, Double> tableCol) {
+        tableCol.setCellFactory(tc -> new TableCell<RecipeReport, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f",item));
+                }
+            }
+        });
+    }
+
     //----------------------------------------- normal method ----------------------------------------------------------
+
+    public void setMenuSelect(String menu) {
+        this.menuSelect = menu;
+    }
+
+    public void readSetRecipe(ObservableList<RecipeReport> list) {
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
+                    "FROM MenuRecipe " +
+                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
+                    "WHERE  MenuRecipe.Menu_name = ? AND " +
+                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
+                    "FROM FoodQuan " +
+                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, menuSelect);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String regName = rs.getString("Rec_name");
+                double recomend_fq = rs.getDouble("Recommend_fq");
+                double leftOver_fq = rs.getDouble("LeftOver_fq");
+
+                RecipeReport rp = new RecipeReport(regName, recomend_fq, 0.0, leftOver_fq);
+                list.add(rp);
+            }
+            recLeftQuan_table.setItems(list);
+            recRecomQuan_table.setItems(list);
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
 
     @FXML
     void handleCalculate(ActionEvent event) {
@@ -93,16 +204,30 @@ public class FoodLeft_Controller {
     //---------------------------------------- normal button method ----------------------------------------------------
 
 
-
     //--------------------------------------- change page method -------------------------------------------------------
 
     @FXML
     void handleFoodPlanBox(ActionEvent event) throws IOException {
+        Screen screen = Screen.getPrimary();
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/FoodQuan_page.fxml"));
-        stage.setScene(new Scene(loader.load(),1280,800));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/FoodQuan_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        FoodQuan_Controller controller = fxmlLoader.getController();
+        controller.setMenuSelect(menuSelect);
+        Rectangle2D sbounds = screen.getBounds();
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setTitle("Food Plan");
+        stage.setScene(new Scene(parentRoot));
         stage.show();
+
     }
 
     @FXML
@@ -130,5 +255,20 @@ public class FoodLeft_Controller {
 
     }
 
+    private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
+                                            DoubleConsumer handler) {
+
+        ChangeListener<Number> listener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> obs,
+                                Number oldSize, Number newSize) {
+                if (newSize.doubleValue() != Double.NaN) {
+                    handler.accept(newSize.doubleValue());
+                    size.removeListener(this);
+                }
+            }
+        };
+        size.addListener(listener);
+    }
 
 }

@@ -49,7 +49,7 @@ public class Menu_report_select_Controller {
 
     private ObservableList<String> menuStrList = FXCollections.observableArrayList();
 
-    private AlertBox alertBox;
+    private AlertBox alertBox = new AlertBox();
 
     @FXML
     private void initialize() {

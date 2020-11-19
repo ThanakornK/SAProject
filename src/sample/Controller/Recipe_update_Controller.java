@@ -247,20 +247,6 @@ public class Recipe_update_Controller {
         update_ing_quan.clear();
 
     }
-//     method double click try at home
-
-//    @FXML
-//    void recipelistGetClick(MouseEvent mouseEvent) {
-//        ingTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//
-//                if (event.getClickCount() == 2) {
-//                    // add AllrecipeList selectRow to select_rec_list
-//                }
-//            }
-//        });
-//    }
 
     //---------------------------------------------- Change page method ----------------------------------------
 
