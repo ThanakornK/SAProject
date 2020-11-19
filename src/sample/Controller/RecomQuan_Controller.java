@@ -7,6 +7,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -156,9 +159,8 @@ public class RecomQuan_Controller {
 
     @FXML
     public void handleBackBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/FoodQuan_page.fxml",event);
-        Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        stage.close();
     }
 
     @FXML

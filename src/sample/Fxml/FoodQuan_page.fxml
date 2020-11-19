@@ -39,7 +39,7 @@
                   <TableView fx:id="recPlanQuan_table" editable="true" layoutX="28.0" layoutY="71.0" prefHeight="340.0" prefWidth="585.0">
                     <columns>
                       <TableColumn fx:id="rec_nameCol" editable="false" prefWidth="418.0" text="ชื่ออาหาร" />
-                      <TableColumn fx:id="rec_totalCol" prefWidth="168.0" text="ปริมาณอาหาร" />
+                      <TableColumn fx:id="rec_totalCol" onEditCommit="#OnEditChanged" prefWidth="168.0" text="ปริมาณอาหาร" />
                     </columns>
                   </TableView>
                   <Text layoutX="232.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="แผนปริมาณอาหาร">

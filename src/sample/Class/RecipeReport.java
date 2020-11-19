@@ -48,4 +48,12 @@ public class RecipeReport {
     public Double getLeftOver_fqReport() {
         return leftOver_fqReport;
     }
+
+    public void setTotal_fqReport(Double total_fqReport) {
+        this.total_fqReport = total_fqReport;
+    }
+
+    public void setLeftOver_fqReport(Double leftOver_fqReport) {
+        this.leftOver_fqReport = leftOver_fqReport;
+    }
 }

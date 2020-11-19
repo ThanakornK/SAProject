@@ -14,9 +14,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import sample.Class.*;
 
 import java.io.IOException;
@@ -103,6 +106,9 @@ public class FoodQuan_Controller {
                     ing_nameCol.setCellValueFactory(new PropertyValueFactory<IngReport, String>("Ing_name"));
                     ing_quanCol.setCellValueFactory(new PropertyValueFactory<IngReport, Double>("Ing_quan"));
                     setIngReportColumnDouble(ing_quanCol);
+
+                    recPlanQuan_table.setEditable(true);
+                    rec_totalCol.setCellFactory(TextFieldTableCell.forTableColumn((new DoubleStringConverter())));
                 }
             }
         });
@@ -210,25 +216,14 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleRecomBtn(ActionEvent event) throws IOException {
-        Screen screen = Screen.getPrimary();
-        Button button = (Button) event.getSource();
-        Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/RecommendFoodQuan_page.fxml"));
         Parent parentRoot = (Parent) fxmlLoader.load();
         RecomQuan_Controller controller = fxmlLoader.getController();
         controller.setMenuSelect(menuSelect);
-        Rectangle2D sbounds = screen.getBounds();
-        double sw = sbounds.getWidth() ;
-        double sh = sbounds.getHeight();
-
-        listenToSizeInitialization(stage.widthProperty(),
-                w -> stage.setX(( sw - w) /2));
-        listenToSizeInitialization(stage.heightProperty(),
-                h -> stage.setY(( sh - h) /2));
-
-        stage.setTitle("Food Plan");
+        Stage stage = new Stage();
         stage.setScene(new Scene(parentRoot));
         stage.show();
+
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
@@ -322,4 +317,8 @@ public class FoodQuan_Controller {
         size.addListener(listener);
     }
 
+    public void OnEditChanged(TableColumn.CellEditEvent<RecipeReport, Double> recipeReportDoubleCellEditEvent) {
+        RecipeReport recipeReport = recPlanQuan_table.getSelectionModel().getSelectedItem();
+        recipeReport.setTotal_fqReport(recipeReportDoubleCellEditEvent.getNewValue());
+    }
 }

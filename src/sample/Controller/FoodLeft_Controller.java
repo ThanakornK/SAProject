@@ -14,9 +14,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import sample.Class.AlertBox;
 import sample.Class.DBConnect;
 import sample.Class.IngReport;
@@ -199,7 +202,6 @@ public class FoodLeft_Controller {
 
 
     //---------------------------------------- normal button method ----------------------------------------------------
-
 
 
     //--------------------------------------- change page method -------------------------------------------------------
