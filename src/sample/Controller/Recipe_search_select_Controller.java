@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,7 +71,25 @@ public class Recipe_search_select_Controller {
                         }
                     }
                 });
-                listView.setItems(recipesList);
+
+                FilteredList<Recipe> recipeFilterList = new FilteredList<>(recipesList, p -> true);
+                nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    recipeFilterList.setPredicate(recipe -> {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        if (recipe.getRec_name().indexOf(newValue) != -1) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+
+                });
+
+                SortedList<Recipe> RecipeSortedList = new SortedList<>(recipeFilterList);
+                listView.setItems(RecipeSortedList);
 
             }
         });
@@ -147,6 +167,7 @@ public class Recipe_search_select_Controller {
         System.out.println(select.getRec_name() + " has been selected.");
         if( select != null){
             selectRecipe = select;
+//            nameField.setText(select.getRec_name());
         }
     }
 
@@ -168,6 +189,12 @@ public class Recipe_search_select_Controller {
 
     //---------------------------------------- normal button method ----------------------------------------------------
 
+    @FXML
+    public void handleReBtn(){
+        if( !(nameField.getText().isEmpty()) ){
+            nameField.clear();
+        }
+    }
 
 
     //--------------------------------------- change page method -------------------------------------------------------
@@ -204,7 +231,6 @@ public class Recipe_search_select_Controller {
         stage.show();
     }
 
-    //-------------------------------------------- database method -----------------------------------------------------
 
 
 

@@ -45,7 +45,7 @@ public class Recipe_Controller {
     private TextField recipe_name_field;
 
     @FXML
-    private Button update_rec_btn, delete_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn;
+    private Button update_rec_btn, delete_btn, ing_page_btn, recipe_page_btn, menu_page_btn, home_btn, reBtn;
 
     private ObservableList<Ingredient> ingredientList = FXCollections.observableArrayList();
 
@@ -190,6 +190,7 @@ public class Recipe_Controller {
 
             selectRec = listViewRec.getSelectionModel().getSelectedItem();
 
+            recipe_name_field.setText(selectRec.getRec_name());
         }
     }
 
@@ -202,6 +203,15 @@ public class Recipe_Controller {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Fxml/Recipe_update_page.fxml"));
         stage.setScene(new Scene(loader.load()));
         stage.show();
+    }
+
+    @FXML
+    void handleReBtn(){
+        if( !(recipe_name_field.getText().isEmpty() && selectIngRec.isEmpty()) ){
+            recipe_name_field.clear();
+            selectIngRec.clear();
+            listViewRec.refresh();
+        }
     }
 
     //--------------------------------------- Change page method -------------------------------------------------------
@@ -249,8 +259,6 @@ public class Recipe_Controller {
                             System.out.println("Delete data from Recipe Successful");
                             listViewRec.refresh();
                             ing_list.refresh();
-                            recipe_name_field.setLayoutX(221.0001);
-                            recipe_name_field.setLayoutX(222);
                             break;
                         }
                     }

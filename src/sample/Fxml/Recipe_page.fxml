@@ -30,34 +30,35 @@
             </Button>
             <AnchorPane layoutX="6.0" layoutY="77.0" prefHeight="576.0" prefWidth="1280.0" style="-fx-background-color: #FFD089;">
                <children>
-                  <Button fx:id="home_btn" layoutX="1085.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก">
+                  <Button fx:id="home_btn" layoutX="1094.0" layoutY="507.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="127.0" text="กลับหน้าแรก">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font></Button>
                   <AnchorPane layoutX="540.0" layoutY="61.0" prefHeight="410.0" prefWidth="715.0" style="-fx-background-color: lightgreen;">
                      <children>
-                        <Text fx:id="recipe_name" layoutX="55.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อสูตรอาหาร:" wrappingWidth="600.0000196397305">
+                        <Text fx:id="recipe_name" layoutX="40.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อสูตรอาหาร:" wrappingWidth="600.0000196397305">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Text>
-                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="71.0" prefHeight="325.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
+                        <TableView fx:id="ing_list" layoutX="55.0" layoutY="111.0" prefHeight="285.0" prefWidth="600.0" stylesheets="@../StyleSheet/table.css">
                           <columns>
                             <TableColumn fx:id="ing_name" prefWidth="469.0" text="ชื่อวัตถุดิบ" />
                             <TableColumn fx:id="cost_price" prefWidth="149.0" text="ราคาต้นทุน" />
                           </columns>
                         </TableView>
-                        <TextField fx:id="recipe_name_field" layoutX="222.0" layoutY="10.0" prefHeight="48.0" prefWidth="427.0" promptText="กรอกชื่อสูตรอาหารเพื่อค้นหา">
+                        <TextField fx:id="recipe_name_field" layoutX="207.0" layoutY="10.0" prefHeight="48.0" prefWidth="427.0" promptText="กรอกชื่อสูตรอาหารเพื่อค้นหา">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </TextField>
+                        <Button fx:id="reBtn" layoutX="640.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleReBtn" prefHeight="48.0" prefWidth="70.0" text="ล้าง" />
                      </children>
                   </AnchorPane>
                   <ListView fx:id="listViewRec" layoutX="33.0" layoutY="27.0" onMouseClicked="#getSelectMenu" prefHeight="512.0" prefWidth="466.0" stylesheets="@../StyleSheet/table.css" />
-                  <Button fx:id="update_rec_btn" layoutX="811.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="175.0" text="เพิ่ม/แก้ไข สูตรอาหาร">
+                  <Button fx:id="update_rec_btn" layoutX="812.0" layoutY="507.0" mnemonicParsing="false" onAction="#handle_update_rec" prefHeight="55.0" prefWidth="199.0" text="เพิ่ม/แก้ไข สูตรอาหาร">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font>
                   </Button>
                   <Button fx:id="delete_btn" disable="true" layoutX="575.0" layoutY="507.0" mnemonicParsing="false" onAction="#handleDelBtn" prefHeight="55.0" prefWidth="175.0" text="ลบสูตรอาหาร" visible="false">

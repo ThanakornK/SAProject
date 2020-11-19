@@ -35,14 +35,20 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="update_menu_name_field" layoutX="142.0" layoutY="29.0" prefHeight="44.0" prefWidth="823.0" promptText="กรอกชื่อเมนูเพื่อค้นหา">
+            <TextField fx:id="update_menu_name_field" editable="false" layoutX="142.0" layoutY="29.0" prefHeight="44.0" prefWidth="823.0" promptText="กดปุ่มต้นหาเพื่อค้นหาเมนู">
                <font>
                   <Font size="20.0" />
                </font></TextField>
-            <Button fx:id="add_Menu_btn" layoutX="711.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleAddMenuBtn" prefHeight="53.0" prefWidth="129.0" text="ยืนยันการแก้ไข" />
-            <Button fx:id="back_btn" layoutX="461.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="53.0" prefWidth="129.0" text="ยกเลิก" />
-            <ListView fx:id="recipe_list_view" layoutX="75.0" layoutY="121.0" prefHeight="375.0" prefWidth="450.0" />
-            <ListView fx:id="select_rec_lsView" layoutX="760.0" layoutY="121.0" prefHeight="375.0" prefWidth="450.0" />
+            <Button fx:id="add_Menu_btn" layoutX="679.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleAddMenuBtn" prefHeight="53.0" prefWidth="162.0" text="ยืนยันการแก้ไข">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <Button fx:id="back_btn" layoutX="444.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="53.0" prefWidth="162.0" text="ยกเลิก">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <ListView fx:id="recipe_list_view" layoutX="75.0" layoutY="121.0" onMouseClicked="#getSelectionAllRec" prefHeight="375.0" prefWidth="450.0" stylesheets="@../StyleSheet/table.css" />
+            <ListView fx:id="select_rec_lsView" layoutX="760.0" layoutY="121.0" onMouseClicked="#getSelectionSelectRec" prefHeight="375.0" prefWidth="450.0" stylesheets="@../StyleSheet/table.css" />
             <Text layoutX="236.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="สูตรอาหารที่มี">
                <font>
                   <Font size="25.0" />
@@ -53,8 +59,14 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="add_btn" layoutX="600.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
-            <Button fx:id="deleteBtn" layoutX="600.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
+            <Button fx:id="add_btn" layoutX="540.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <Button fx:id="deleteBtn" layoutX="664.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
             <Button fx:id="menu_search_Btn" layoutX="998.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="40.0" prefWidth="83.0" text="ค้นหา" />
          </children>
       </AnchorPane>

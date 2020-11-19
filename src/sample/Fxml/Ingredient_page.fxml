@@ -29,10 +29,7 @@
             </Button>
             <AnchorPane layoutX="6.0" layoutY="77.0" prefHeight="576.0" prefWidth="1280.0" style="-fx-background-color: #FFD089;">
                <children>
-                  <Button fx:id="home_btn" layoutX="1085.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก">
-                     <font>
-                        <Font size="18.0" />
-                     </font></Button>
+                  <Button fx:id="home_btn" layoutX="1085.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleHomeBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
                   <AnchorPane layoutX="50.0" layoutY="91.0" prefHeight="417.0" prefWidth="480.0" style="-fx-background-color: lightgreen;">
                      <children>
                         <Text layoutX="28.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ชื่อวัตถุดิบ">
@@ -65,10 +62,7 @@
                               <Font size="20.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="add_btn" layoutX="168.0" layoutY="303.0" mnemonicParsing="false" onAction="#insertRecord" prefHeight="60.0" prefWidth="145.0" text="เพิ่มวัตถุดิบ">
-                           <font>
-                              <Font size="20.0" />
-                           </font></Button>
+                        <Button fx:id="add_btn" layoutX="168.0" layoutY="303.0" mnemonicParsing="false" onAction="#insertRecord" prefHeight="60.0" prefWidth="145.0" text="เพิ่มวัตถุดิบ" />
                         <Button fx:id="delete_btn" layoutX="67.0" layoutY="303.0" mnemonicParsing="false" onAction="#deleteRecord" prefHeight="60.0" prefWidth="145.0" text="ลบวัตถุดิบ" visible="false" />
                         <Button fx:id="update_btn" layoutX="272.0" layoutY="303.0" mnemonicParsing="false" onAction="#updateRecord" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false" />
                         <TextField fx:id="update_ing_name" editable="false" layoutX="139.0" layoutY="52.0" prefHeight="51.0" prefWidth="326.0" promptText="กรอกชื่อวัตถุดิบเพื่อค้นหา" visible="false">
@@ -105,10 +99,7 @@
                         <TableColumn fx:id="ing_amountCol" editable="false" prefWidth="175.0" resizable="false" text="จำนวนคงเหลือ" />
                      </columns>
                   </TableView>
-                  <Button fx:id="clear_btn" layoutX="230.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="40.0" prefWidth="120.0" text="เคลียร์ฟอร์ม">
-                     <font>
-                        <Font size="18.0" />
-                     </font></Button>
+                  <Button fx:id="clear_btn" layoutX="230.0" layoutY="520.0" mnemonicParsing="false" onAction="#handleClearBtn" prefHeight="40.0" prefWidth="120.0" text="เคลียร์ฟอร์ม" />
                </children>
             </AnchorPane>
          </children>
