@@ -12,11 +12,13 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 import sample.Class.*;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,6 +67,7 @@ public class RecomQuan_Controller {
                     recipe_nameCol.setCellValueFactory(new PropertyValueFactory<RecipeReport,String>("recNameReport"));
                     recomendQuanCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, Double>("recommend_fqReport"));
                     originalQuanCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, Double>("total_fqReport"));
+                    additionCol.setCellValueFactory(new PropertyValueFactory<RecipeReport, String>("note"));
                     setRecipeReportColumnDouble(originalQuanCol);
                 }
             }
@@ -77,7 +80,7 @@ public class RecomQuan_Controller {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq " +
+            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.Total_fq " +
                     "FROM MenuRecipe INNER JOIN FoodQuan " +
                     "ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
                     "WHERE MenuRecipe.Menu_name = ? AND FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
@@ -89,9 +92,13 @@ public class RecomQuan_Controller {
             while(rs.next()) {
                 String regName = rs.getString("Rec_name");
                 double recommendFq = rs.getDouble("Recommend_fq");
+                double totalFq = rs.getDouble("Total_fq");
+                double calculate = totalFq - recommendFq;
+                String note = calculate > 0? "ลด" : "เพิ่ม";
+//                System.out.println(calculate + note);
 
-                RecipeReport rp = new RecipeReport(regName, recommendFq, 0.0);
-                System.out.println(String.format("%s", rp.getRecNameReport()));
+                RecipeReport rp = new RecipeReport(regName, recommendFq, totalFq, note);
+                System.out.println(String.format("%s", rp.getNote()));
                 list.add(rp);
 
             }
@@ -148,9 +155,10 @@ public class RecomQuan_Controller {
     }
 
     @FXML
-    public void handleBackBtn(ActionEvent event) {
-        Stage stage = (Stage) backBtn.getScene().getWindow();
-        stage.close();
+    public void handleBackBtn(ActionEvent event) throws IOException {
+        ChangeScene cs = new ChangeScene("../Fxml/FoodQuan_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
     }
 
     @FXML

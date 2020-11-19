@@ -92,6 +92,7 @@ public class FoodQuan_Controller {
             @Override
             public void run() {
                 if (menuSelect != ""){
+                    menu_name_field.setText(menuSelect);
                     readSetRecipe_tb(recList);
 
                     rec_nameCol.setCellValueFactory(new PropertyValueFactory<RecipeReport,String>("recNameReport"));
@@ -160,7 +161,7 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleBackBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/FoodQuan_page.fxml",event);
+        ChangeScene cs = new ChangeScene("../Fxml/Main_page.fxml", event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
     }
@@ -175,15 +176,18 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleCheckStoreBtn(ActionEvent event) throws IOException {
-
-        ChangeScene cs = new ChangeScene("../Fxml/Ingredient_store_page.fxml");
-        cs.newWindow();
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/Ingredient_store_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        Ingredient_store_Controller controller = fxmlLoader.getController();
+        controller.setMenuSelect(menuSelect);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
     }
 
     @FXML
     public void go_FoodLeft_page(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/FoodLeft_page.fxml",event);
+        ChangeScene cs = new ChangeScene("../Fxml/FoodLeft_page.fxml", event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
     }
@@ -259,7 +263,7 @@ public class FoodQuan_Controller {
                     "WHERE MenuRecipe.Menu_name = ? " +
                     "GROUP BY Ingredient.Ing_name;";
             ps = con.prepareStatement(sql);
-            ps.setString(1,menuSelect);
+            ps.setString(1, menuSelect);
             rs = ps.executeQuery();
             while (rs.next()) {
 
