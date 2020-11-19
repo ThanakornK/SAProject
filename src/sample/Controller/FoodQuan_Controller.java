@@ -187,9 +187,25 @@ public class FoodQuan_Controller {
 
     @FXML
     public void go_FoodLeft_page(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/FoodLeft_page.fxml", event);
         Screen screen = Screen.getPrimary();
-        cs.changeStageAction(screen);
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Fxml/FoodLeft_page.fxml"));
+        Parent parentRoot = (Parent) fxmlLoader.load();
+        FoodLeft_Controller controller = fxmlLoader.getController();
+        controller.setMenuSelect(menuSelect);
+        Rectangle2D sbounds = screen.getBounds();
+        double sw = sbounds.getWidth() ;
+        double sh = sbounds.getHeight();
+
+        listenToSizeInitialization(stage.widthProperty(),
+                w -> stage.setX(( sw - w) /2));
+        listenToSizeInitialization(stage.heightProperty(),
+                h -> stage.setY(( sh - h) /2));
+
+        stage.setTitle("Food Plan");
+        stage.setScene(new Scene(parentRoot));
+        stage.show();
     }
 
     @FXML
