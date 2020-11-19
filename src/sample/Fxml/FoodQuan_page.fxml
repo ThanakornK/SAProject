@@ -73,7 +73,7 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <DatePicker fx:id="dateSale" layoutX="269.0" layoutY="29.0" prefHeight="35.0" prefWidth="175.0" promptText="เลือกวันที่ขาย" />
+            <DatePicker fx:id="dateSale" layoutX="269.0" layoutY="29.0" onAction="#getDateAction" prefHeight="35.0" prefWidth="175.0" promptText="เลือกวันที่ขาย" />
             <TextField fx:id="menu_name_field" editable="false" layoutX="632.0" layoutY="25.0" prefHeight="44.0" prefWidth="410.0" promptText="กดปุ่ม &quot;ค้นหา&quot; เพื่อเลือกเมนู">
                <font>
                   <Font size="20.0" />
