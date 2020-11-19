@@ -279,7 +279,8 @@ public class FoodQuan_Controller {
 
             String sql = "SELECT MenuRecipe.Rec_name, Ingredient.Ing_name, SUM(IngRec.Ing_quan), Ingredient.Ing_price, Ingredient.Ing_amount " +
                     "FROM (( IngRec " +
-                    "INNER JOIN MenuRecipe ON MenuRecipe.Rec_name = IngRec.Rec_name) INNER JOIN Ingredient ON Ingredient.Ing_name = IngRec.Ing_name) " +
+                    "INNER JOIN MenuRecipe ON MenuRecipe.Rec_name = IngRec.Rec_name) " +
+                    "INNER JOIN Ingredient ON Ingredient.Ing_name = IngRec.Ing_name) " +
                     "WHERE MenuRecipe.Menu_name = ? " +
                     "GROUP BY Ingredient.Ing_name;";
             ps = con.prepareStatement(sql);
