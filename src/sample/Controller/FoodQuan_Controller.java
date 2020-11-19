@@ -129,24 +129,19 @@ public class FoodQuan_Controller {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT MenuRecipe.MenuRec_ID, MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
+            String sql = "SELECT * " +
                     "FROM MenuRecipe " +
-                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
-                    "WHERE MenuRecipe.Menu_name = ? AND " +
-                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
-                    "FROM FoodQuan " +
-                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
+                    "WHERE MenuRecipe.Menu_name = ? ;";
             ps = con.prepareStatement(sql);
-            ps.setString(1, menuSelect);
+            ps.setString(1,menuSelect);
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                int menuId = rs.getInt("MenuRec_ID");
-                String recName = rs.getString("Rec_name");
+                String regName = rs.getString("Rec_name");
                 double recommendFq = rs.getDouble("Recommend_fq");
-
-                RecipeReport rp = new RecipeReport(recName, recommendFq, 0.0);
-                rp.setMenuRecId(menuId);
+                int recId = rs.getInt("MenuRec_ID");
+                RecipeReport rp = new RecipeReport(regName,recommendFq,0.0);
+                rp.setMenuRecId(recId);
                 list.add(rp);
 
             }
@@ -350,31 +345,6 @@ public class FoodQuan_Controller {
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
-
-//    @FXML
-//    void update(ActionEvent event) {
-//        Connection con = DBConnect.connect();
-//        PreparedStatement ps = null;
-//        ResultSet rs = null;
-//        try {
-//
-//            String sql = "UPDATE FoodQuan " +
-//                    "SET FoodQuan.Total_fq = ?" +
-//                    "FROM FoodQuan, MenuRecipe" +
-//                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID;";
-//            ps = con.prepareStatement(sql);
-//
-//            for(int i = 0 ; i < recPlanQuan_table.getItems().size(); i++){
-//
-//                ps.setString(1, recPlanQuan_table.getItems().get(i).getTotal_fqReport().toString());
-//                ps.execute();
-//
-//            }
-//
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//    }
 
     private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
                                             DoubleConsumer handler) {

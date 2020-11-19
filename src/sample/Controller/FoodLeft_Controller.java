@@ -89,6 +89,7 @@ public class FoodLeft_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                dateSale.setValue(LocalDate.now());
                 if (menuSelect != ""){
                     menu_name_field.setText(menuSelect);
                     readSetRecipe(recList);
@@ -124,7 +125,7 @@ public class FoodLeft_Controller {
             AlertBox alertBox = new AlertBox();
             alertBox.alertERR("err","กรุณาเลือกวันที่ขาย");
         }
-        insertFoodQuan();
+        updateFoodLeft();
     }
 
     public static boolean isDateOfInterestValid(String dateformat, String currentDate, String dateOfInterest) {
@@ -177,23 +178,19 @@ public class FoodLeft_Controller {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
+            String sql = "SELECT * " +
                     "FROM MenuRecipe " +
-                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
-                    "WHERE  MenuRecipe.Menu_name = ? AND " +
-                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
-                    "FROM FoodQuan " +
-                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
+                    "WHERE MenuRecipe.Menu_name = ? ;";
             ps = con.prepareStatement(sql);
-            ps.setString(1, menuSelect);
+            ps.setString(1,menuSelect);
             rs = ps.executeQuery();
 
             while(rs.next()) {
                 String regName = rs.getString("Rec_name");
-                double recomend_fq = rs.getDouble("Recommend_fq");
-                double leftOver_fq = rs.getDouble("LeftOver_fq");
-
-                RecipeReport rp = new RecipeReport(regName, recomend_fq, 0.0, leftOver_fq);
+                double recommendFq = rs.getDouble("Recommend_fq");
+                int recId = rs.getInt("MenuRec_ID");
+                RecipeReport rp = new RecipeReport(regName,recommendFq,0.0, 0.0);
+                rp.setMenuRecId(recId);
                 list.add(rp);
             }
             recLeftQuan_table.setItems(list);
@@ -321,16 +318,54 @@ public class FoodLeft_Controller {
         size.addListener(listener);
     }
 
-    public void insertFoodQuan(){
-        for (RecipeReport rp: recList) {
-            ArrayList<ParaCommand> paraCommands = new ArrayList<>();
-            System.out.println(foodDate + " " + rp.getMenuRecId() + " " + rp.getTotal_fqReport());
-            paraCommands.add(new ParaCommand("str", foodDate));
-            paraCommands.add(new ParaCommand("int", String.valueOf(rp.getMenuRecId())));
-            paraCommands.add(new ParaCommand("double", String.valueOf(rp.getTotal_fqReport()))); // get total foodquan
+//    @FXML
+//    void update(ActionEvent event) {
+//        Connection con = DBConnect.connect();
+//        PreparedStatement ps = null;
+//        ResultSet rs = null;
+//        try {
+//
+//            String sql = "UPDATE FoodQuan " +
+//                    "SET FoodQuan.Total_fq = ?" +
+//                    "FROM FoodQuan, MenuRecipe" +
+//                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID;";
+//            ps = con.prepareStatement(sql);
+//
+//            for(int i = 0 ; i < recPlanQuan_table.getItems().size(); i++){
+//
+//                ps.setString(1, recPlanQuan_table.getItems().get(i).getTotal_fqReport().toString());
+//                ps.execute();
+//
+//            }
+//
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 
-            if(dbConnect.insertRecord("INSERT INTO FoodQuan (Food_date, MenuRec_ID, Total_fq, LeftOver_fq) VALUES (?,?,?,0)", paraCommands) == 0){
-                System.out.println("Insert success");
+    public void updateFoodLeft(){
+        for (RecipeReport rp: recList) {
+            System.out.println(rp.getRecNameReport());
+            ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+            ArrayList<ParaCommand> paraCommands2 = new ArrayList<>();
+            paraCommands.add(new ParaCommand("double", String.valueOf(rp.getLeftOver_fqReport())));
+            paraCommands.add(new ParaCommand("int", String.valueOf(rp.getMenuRecId())));
+            paraCommands2.add(new ParaCommand("double", String.valueOf(rp.getRecommend_fqReport())));
+            paraCommands2.add(new ParaCommand("int", String.valueOf(rp.getMenuRecId())));
+
+            if(dbConnect.updateRecord("UPDATE FoodQuan " +
+                    "SET LeftOver_fq = ?" +
+                    "WHERE (MenuRec_ID = ?)", paraCommands) == 0){
+                System.out.println("Update Left over food success");
+                System.out.println(rp.getLeftOver_fqReport() + " " + rp.getMenuRecId());
+                paraCommands.clear();
+            }
+
+            if(dbConnect.updateRecord("UPDATE MenuRecipe " +
+                    "SET Recommend_fq = ?" +
+                    "WHERE (MenuRec_ID = ?)", paraCommands2) == 0){
+                System.out.println("Update Recommend food success");
+                System.out.println(rp.getRecommend_fqReport() + " " + rp.getMenuRecId());
                 paraCommands.clear();
             }
         }

@@ -198,7 +198,7 @@ public class Menu_update_Controller {
                     paraCommands.add(new ParaCommand("str", s));
                     paraCommands.add(new ParaCommand("double", "0"));
 
-                    if(dbConnect.insertRecord("INSERT  INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0){
+                    if(dbConnect.insertRecord("INSERT INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0){
                         System.out.println("Insert success");
                         paraCommands.clear();
                     }
