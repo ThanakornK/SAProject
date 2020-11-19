@@ -120,7 +120,10 @@ public class FoodLeft_Controller {
             String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
                     "FROM MenuRecipe " +
                     "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
-                    "WHERE MenuRecipe.Menu_name = ? ;";
+                    "WHERE  MenuRecipe.Menu_name = ? AND " +
+                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
+                    "FROM FoodQuan " +
+                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
             ps = con.prepareStatement(sql);
             ps.setString(1, menuSelect);
             rs = ps.executeQuery();
@@ -130,7 +133,7 @@ public class FoodLeft_Controller {
                 double recomend_fq = rs.getDouble("Recommend_fq");
                 double leftOver_fq = rs.getDouble("LeftOver_fq");
 
-                RecipeReport rp = new RecipeReport(regName, recomend_fq, leftOver_fq);
+                RecipeReport rp = new RecipeReport(regName, recomend_fq, 0.0, leftOver_fq);
                 list.add(rp);
             }
             recLeftQuan_table.setItems(list);

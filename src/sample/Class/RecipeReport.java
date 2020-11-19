@@ -8,9 +8,10 @@ public class RecipeReport {
     private Double leftOver_fqReport;
     private String note;
 
-    public RecipeReport(String recNameReport, double recommend_fqReport, double leftOver_fqReport) {
+    public RecipeReport(String recNameReport, Double recommend_fqReport, Double total_fqReport, Double leftOver_fqReport) {
         this.recNameReport = recNameReport;
         this.recommend_fqReport = recommend_fqReport;
+        this.total_fqReport = total_fqReport;
         this.leftOver_fqReport = leftOver_fqReport;
     }
 

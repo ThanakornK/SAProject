@@ -244,9 +244,13 @@ public class FoodQuan_Controller {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq " +
+            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
                     "FROM MenuRecipe " +
-                    "WHERE MenuRecipe.Menu_name = ? ;";
+                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
+                    "WHERE  MenuRecipe.Menu_name = ? AND " +
+                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
+                    "FROM FoodQuan " +
+                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
             ps = con.prepareStatement(sql);
             ps.setString(1, menuSelect);
             rs = ps.executeQuery();
