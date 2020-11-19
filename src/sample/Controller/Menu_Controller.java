@@ -65,11 +65,6 @@ public class Menu_Controller {
                 readAllIng(ingredientList);
                 readAllRec(recipesList);  // read recipe from database
                 readAllMenuName(menuList);  // read menu from database
-                if(!menu_name_field.getText().isEmpty()){
-
-                }
-
-
 
                 listViewMenu.setCellFactory(param -> new ListCell<MenuRecipe>() {
                     @Override

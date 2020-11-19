@@ -50,7 +50,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="update_btn" layoutX="319.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleUpdateBtn" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ">
+                  <Button fx:id="update_btn" layoutX="319.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleUpdateBtn" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false">
                      <font>
                         <Font size="20.0" />
                      </font>

@@ -63,7 +63,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="delete_btn" layoutX="540.0" layoutY="507.0" mnemonicParsing="false" onAction="#handleDelBtn" prefHeight="55.0" prefWidth="129.0" text="ลบเมนู">
+                  <Button fx:id="delete_btn" layoutX="540.0" layoutY="507.0" mnemonicParsing="false" onAction="#handleDelBtn" prefHeight="55.0" prefWidth="129.0" text="ลบเมนู" visible="false">
                      <font>
                         <Font size="20.0" />
                      </font>

@@ -380,7 +380,7 @@ public class Recipe_update_Controller {
                 if (add_rec_name_field.getText().isEmpty()) {
                     alertBox.alertERR("err", "กรุณากรอกชื่อสูตรอาหาร");
                 } else if (addIngInfo.isEmpty()) {
-                    alertBox.alertERR("err", "ไม่มีวัตุดิบที่ใช้");
+                    alertBox.alertERR("err", "ไม่มีวัตถุดิบที่ใช้");
                 } else {
 
 
