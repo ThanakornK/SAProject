@@ -160,7 +160,6 @@ public class Recipe_search_select_Controller {
         }
     }
 
-
     public void getSelectItem(){
 
         Recipe select = listView.getSelectionModel().getSelectedItem();
@@ -229,13 +228,6 @@ public class Recipe_search_select_Controller {
         stage.setTitle("Food Plan");
         stage.setScene(new Scene(parentRoot));
         stage.show();
-        // do sth with database
-
-        // use below method to go back
-//        ChangeScene cs = new ChangeScene("../Fxml/Recipe_edit_page.fxml",event);
-//        Screen screen = Screen.getPrimary();
-//        cs.changeStageAction(screen);
-
     }
 
 
