@@ -37,6 +37,9 @@ public class Ingredient_store_Controller {
     private TextField ing_name_field;
 
     @FXML
+    private Label labelPrice;
+
+    @FXML
     private TableColumn<IngReport, String> ing_nameCol;
 
     @FXML
@@ -55,6 +58,8 @@ public class Ingredient_store_Controller {
     private Button reportBtn;
 
     private String menuSelect = "";
+
+    private Double allPrice = 0.0;
 
     private ObservableList<IngReport> ingList = FXCollections.observableArrayList();
 
@@ -95,6 +100,7 @@ public class Ingredient_store_Controller {
                 SortedList<IngReport> ingSortedList = new SortedList<>(ingFilterList);
 
                 ing_table.setItems(ingSortedList);
+                labelPrice.setText(String.valueOf(allPrice));
 
             }
         });
@@ -161,6 +167,7 @@ public class Ingredient_store_Controller {
 
                 Ingredient newIng = new Ingredient(ing_name, ing_price, ing_amount);
                 IngReport newIngReport = new IngReport(newIng, ing_quan);
+                allPrice += newIngReport.getIng_originCost();
                 list.add(newIngReport);
 
             }
