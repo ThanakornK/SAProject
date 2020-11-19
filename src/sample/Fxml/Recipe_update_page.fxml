@@ -56,7 +56,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="update_btn" disable="true" layoutX="319.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleUpdateBtn" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ" visible="false">
+                  <Button fx:id="update_btn" layoutX="319.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleUpdateBtn" prefHeight="60.0" prefWidth="145.0" text="แก้ไขวัตดุดิบ">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -86,8 +86,8 @@
                </font></TextField>
             <TableView fx:id="ingTable" layoutX="650.0" layoutY="114.0" onMouseClicked="#getSelectedRow" prefHeight="385.0" prefWidth="590.0" stylesheets="@../StyleSheet/table.css">
               <columns>
-                <TableColumn fx:id="ing_name" prefWidth="490.0" text="ชื่อวัตถุดิบ" />
-                <TableColumn fx:id="ing_quan" prefWidth="100.0" text="ปริมาณที่ใช้" />
+                <TableColumn fx:id="ing_name" prefWidth="417.0" text="ชื่อวัตถุดิบ" />
+                <TableColumn fx:id="ing_quan" prefWidth="172.0" text="ปริมาณที่ใช้" />
               </columns>
             </TableView>
             <Button fx:id="add_rec_btn" layoutX="855.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleAddRecBtn" prefHeight="60.0" prefWidth="182.0" text="ยืนยันการเพิ่มสูตร">
