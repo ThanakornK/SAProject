@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class FoodQuan_Controller {
 
@@ -79,6 +80,8 @@ public class FoodQuan_Controller {
     private ObservableList<RecipeReport> recList = FXCollections.observableArrayList();
     private ObservableList<IngReport> ingList = FXCollections.observableArrayList();
 
+    private ObservableList<RecipeReport> copyQuan = FXCollections.observableArrayList();
+
     @FXML
     public void initialize() {
         Platform.runLater(new Runnable() {
@@ -128,6 +131,10 @@ public class FoodQuan_Controller {
                 }
             }
         });
+    }
+
+    public void setCopyQuan(ObservableList<RecipeReport> list) {
+        copyQuan = list;
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
@@ -185,8 +192,9 @@ public class FoodQuan_Controller {
 
     @FXML
     public void handleRecomBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/RecommendFoodQuan_page.fxml");
-        cs.newWindow();
+        ChangeScene cs = new ChangeScene("../Fxml/RecommendFoodQuan_page.fxml",event);
+        Screen screen = Screen.getPrimary();
+        cs.changeStageAction(screen);
     }
 
     //-------------------------------------------- database method -----------------------------------------------------

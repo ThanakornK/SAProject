@@ -32,7 +32,7 @@ public class Ingredient_store_Controller {
     private TableColumn<?, ?> ing_nameCol;
 
     @FXML
-    private TableColumn<?, ?> ing_amoutCol;
+    private TableColumn<?, ?> ing_amountCol;
 
     @FXML
     private TableColumn<?, ?> ing_usageCol;

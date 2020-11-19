@@ -1,6 +1,8 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Class.ChangeScene;
+import sample.Class.RecipeReport;
 
 import java.io.IOException;
 
@@ -43,6 +46,9 @@ public class Menu_edit_Controller {
     @FXML
     private Button deleteBtn;
 
+    private ObservableList<String> oldRec = FXCollections.observableArrayList();
+    private ObservableList<String> newRec = FXCollections.observableArrayList();
+
     @FXML
     void handleAddBtn(ActionEvent event) {
 
@@ -63,6 +69,18 @@ public class Menu_edit_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                oldRec.add("ตลาดคลองข้าง"); oldRec.add("ตลาดข้างคลอง"); oldRec.add("ตลาดคลองอยู่ข้างๆ");
+                newRec.add("ตลาดคลองข้าง"); oldRec.add("ตลาดข้างคลอง"); oldRec.add("ตลาดคลองอยู่ข้างๆ");
+
+                newRec.remove("ตลาดคลองอยู่ข้างๆ"); newRec.remove("ตลาดข้างคลอง");
+
+                System.out.println();
+
+                ObservableList<String> reList = compareDeleteList(oldRec,newRec);
+                System.out.println(reList.size());
+                for (int i = 0; i < reList.size(); i++) {
+                    System.out.println(reList.get(i));
+                }
 
             }
         });
@@ -70,7 +88,22 @@ public class Menu_edit_Controller {
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
-
+    public ObservableList<String> compareDeleteList(ObservableList<String> old, ObservableList<String> newList) {
+        ObservableList<String> resultList = FXCollections.observableArrayList();
+        int maxSize;
+        if (old.size() >= newList.size()){
+            maxSize = old.size();
+        }else{
+            maxSize = newList.size();
+        }
+        System.out.println(maxSize);
+        for (int i = 0; i < maxSize; i++) {
+            if (!newList.contains(old.get(i))) {
+                resultList.add(old.get(i));
+            }
+        }
+        return resultList;
+    }
 
     //---------------------------------------- normal button method ----------------------------------------------------
 

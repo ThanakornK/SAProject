@@ -23,7 +23,7 @@
       <TableView fx:id="ing_table" layoutX="48.0" layoutY="204.0" prefHeight="510.0" prefWidth="705.0">
         <columns>
           <TableColumn fx:id="ing_nameCol" prefWidth="285.0" text="ชื่อวัตถุดิบ" />
-          <TableColumn fx:id="ing_amoutCol" prefWidth="100.0" text="ปริมาณคงเหลือ" />
+          <TableColumn fx:id="ing_amountCol" prefWidth="100.0" text="ปริมาณคงเหลือ" />
             <TableColumn fx:id="ing_usageCol" prefWidth="100.0" text="ปริมาณที่ต้องใช้" />
             <TableColumn fx:id="ing_addCol" prefWidth="120.0" text="ปริมาณที่ต้องซื้อเพิ่ม" />
             <TableColumn fx:id="ing_costCol" prefWidth="100.0" text="ราคาต้นทุน" />
