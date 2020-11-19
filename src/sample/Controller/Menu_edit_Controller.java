@@ -16,12 +16,14 @@ import javafx.stage.Stage;
 import sample.Class.AlertBox;
 import sample.Class.ChangeScene;
 import sample.Class.DBConnect;
+import sample.Class.ParaCommand;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Menu_edit_Controller {
 
@@ -71,35 +73,35 @@ public class Menu_edit_Controller {
     AlertBox alertBox = new AlertBox();
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if(curMenuName != null){
+                if (curMenuName != null) {
                     readAllRec(allRec);
                     readAllSelectRec(selectRec);
                     update_menu_name_field.setText(curMenuName);
-                    recipe_list_view.setCellFactory(param -> new ListCell<String>(){
+                    recipe_list_view.setCellFactory(param -> new ListCell<String>() {
                         @Override
-                        protected void updateItem(String item, boolean empty){
+                        protected void updateItem(String item, boolean empty) {
                             super.updateItem(item, empty);
 
-                            if(empty || item == null || item == null) {
+                            if (empty || item == null || item == null) {
                                 setText(null);
-                            }   else {
+                            } else {
                                 setText(item);
                             }
                         }
                     });
 
-                    select_rec_lsView.setCellFactory(param -> new ListCell<String>(){
+                    select_rec_lsView.setCellFactory(param -> new ListCell<String>() {
                         @Override
-                        protected void updateItem(String item, boolean empty){
+                        protected void updateItem(String item, boolean empty) {
                             super.updateItem(item, empty);
 
-                            if(empty || item == null || item == null) {
+                            if (empty || item == null || item == null) {
                                 setText(null);
-                            }   else {
+                            } else {
                                 setText(item);
                             }
                         }
@@ -116,7 +118,7 @@ public class Menu_edit_Controller {
 
     //----------------------------------------- normal method ----------------------------------------------------------
 
-    public void readAllRec(ObservableList<String> list){
+    public void readAllRec(ObservableList<String> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -125,7 +127,7 @@ public class Menu_edit_Controller {
             String sql = "SELECT * FROM Recipe";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String recName = rs.getString("Rec_name");
 
                 list.add(recName);
@@ -136,16 +138,16 @@ public class Menu_edit_Controller {
         }
     }
 
-    public void readAllSelectRec(ObservableList<String> list){
+    public void readAllSelectRec(ObservableList<String> list) {
         Connection con = DBConnect.connect();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try{
+        try {
             String sql = String.format("SELECT Rec_name FROM MenuRecipe WHERE Menu_name = '%s'", curMenuName);
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String recName = rs.getString("Rec_name");
 
                 list.add(recName);
@@ -156,28 +158,28 @@ public class Menu_edit_Controller {
         }
     }
 
-    public void setCurMenuName(String name){
+    public void setCurMenuName(String name) {
         this.curMenuName = name;
     }
 
-    public void getSelectionAllRec(){
-        if( recipe_list_view.getSelectionModel().getSelectedItem() != null){
+    public void getSelectionAllRec() {
+        if (recipe_list_view.getSelectionModel().getSelectedItem() != null) {
             selectFromAllRec = recipe_list_view.getSelectionModel().getSelectedItem();
         }
     }
 
-    public void getSelectionSelectRec(){
-        if( select_rec_lsView.getSelectionModel().getSelectedItem() != null){
+    public void getSelectionSelectRec() {
+        if (select_rec_lsView.getSelectionModel().getSelectedItem() != null) {
             selectFromSelectRec = select_rec_lsView.getSelectionModel().getSelectedItem();
         }
     }
 
-    public int isInSelectRec(String name){
-        if(selectRec.isEmpty()){
+    public int isInSelectRec(String name) {
+        if (selectRec.isEmpty()) {
             return 0;
         }
-        for(String recName: selectRec){
-            if(recName.equals(name)){
+        for (String recName : selectRec) {
+            if (recName.equals(name)) {
                 return -1;
             }
         }
@@ -188,10 +190,9 @@ public class Menu_edit_Controller {
 
     @FXML
     void handleAddBtn() {
-        if( isInSelectRec(selectFromAllRec) == -1){
+        if (isInSelectRec(selectFromAllRec) == -1) {
             alertBox.alertERR("err", "มีสูตรอาหารนี้อยู่แล้ว");
-        }
-        else {
+        } else {
             tempSelectRec.add(selectFromAllRec);
             selectRec.add(selectFromAllRec);
             select_rec_lsView.refresh();
@@ -200,9 +201,9 @@ public class Menu_edit_Controller {
 
     @FXML
     void handleDeleteBtn() {
-        if(!tempSelectRec.isEmpty()){
-            for(String rec: tempSelectRec){
-                if(rec.equals(selectFromAllRec)){
+        if (!tempSelectRec.isEmpty()) {
+            for (String rec : tempSelectRec) {
+                if (rec.equals(selectFromAllRec)) {
                     tempSelectRec.remove(rec);
                     selectRec.remove(rec);
                     select_rec_lsView.refresh();
@@ -213,8 +214,8 @@ public class Menu_edit_Controller {
             }
         }
 
-        for(String rec: selectRec){
-            if(rec.equals(selectFromAllRec)){
+        for (String rec : selectRec) {
+            if (rec.equals(selectFromAllRec)) {
                 //if(dbConnect.deleteRecord("delete from MenuRecipe WHERE Rec_name = ? AND Menu_name = ?", "str", selectFromAllRec, curMenuName) == 0) {
 
                 //}
@@ -225,14 +226,39 @@ public class Menu_edit_Controller {
 
     @FXML
     void handleAddMenuBtn(ActionEvent event) {
+        if (alertBox.alertConfirm("ยืนยันการแก้ไขเมนูหรือไม่") == 0) {
+            if (selectRec.isEmpty()) {
+                alertBox.alertERR("err", "กรุณาเพิ่มสูตรอาหาร");
+            } else {
+                ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+                if (!tempSelectRec.isEmpty()) {
+                    for (String s : tempSelectRec) {
+                        paraCommands.add(new ParaCommand("str", curMenuName));
+                        paraCommands.add(new ParaCommand("str", s));
+                        paraCommands.add(new ParaCommand("double", "0"));
 
+                        if (dbConnect.insertRecord("INSERT  INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0) {
+                            paraCommands.clear();
+                        } else {
+                            System.out.println("no");
+                        }
+                    }
+                    tempSelectRec.clear();
+                    update_menu_name_field.clear();
+                    allRec.clear();
+                    selectRec.clear();
+                    recipe_list_view.refresh();
+                    select_rec_lsView.refresh();
+                }
+            }
+        }
     }
 
     //--------------------------------------- change page method -------------------------------------------------------
 
     @FXML
     void handleBackBtn(ActionEvent event) throws IOException {
-        ChangeScene cs = new ChangeScene("../Fxml/Menu_page.fxml",event);
+        ChangeScene cs = new ChangeScene("../Fxml/Menu_page.fxml", event);
         Screen screen = Screen.getPrimary();
         cs.changeStageAction(screen);
     }
@@ -256,7 +282,6 @@ public class Menu_edit_Controller {
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
-
 
 
 }

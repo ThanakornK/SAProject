@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="SBDatabase" uuid="7e4036fc-c89a-4a72-aa9c-c3d1dc067745">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\test\SAProject\src\material\SBDatabase.db</jdbc-url>
+    </data-source>
+  </component>
+</project>
