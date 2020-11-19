@@ -68,6 +68,8 @@ public class Menu_edit_Controller {
 
     String selectFromSelectRec;
 
+    int selectRecID;
+
     DBConnect dbConnect = new DBConnect();
 
     AlertBox alertBox = new AlertBox();
@@ -158,6 +160,25 @@ public class Menu_edit_Controller {
         }
     }
 
+    public void readID(int id){
+        Connection con = DBConnect.connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = String.format("SELECT * FROM MenuRecipe WHERE Menu_name = '%s' AND Rec_name = '%s'", curMenuName, selectFromSelectRec);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                int recID = rs.getInt("MenuRec_ID");
+                selectRecID = recID;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+        }
+    }
+
     public void setCurMenuName(String name) {
         this.curMenuName = name;
     }
@@ -171,6 +192,8 @@ public class Menu_edit_Controller {
     public void getSelectionSelectRec() {
         if (select_rec_lsView.getSelectionModel().getSelectedItem() != null) {
             selectFromSelectRec = select_rec_lsView.getSelectionModel().getSelectedItem();
+            readID(selectRecID);
+
         }
     }
 
@@ -203,7 +226,7 @@ public class Menu_edit_Controller {
     void handleDeleteBtn() {
         if (!tempSelectRec.isEmpty()) {
             for (String rec : tempSelectRec) {
-                if (rec.equals(selectFromAllRec)) {
+                if (rec.equals(selectFromSelectRec)) {
                     tempSelectRec.remove(rec);
                     selectRec.remove(rec);
                     select_rec_lsView.refresh();
@@ -214,12 +237,13 @@ public class Menu_edit_Controller {
             }
         }
 
-        for (String rec : selectRec) {
-            if (rec.equals(selectFromAllRec)) {
-                //if(dbConnect.deleteRecord("delete from MenuRecipe WHERE Rec_name = ? AND Menu_name = ?", "str", selectFromAllRec, curMenuName) == 0) {
-
-                //}
-                //selectRec
+        for (String rec : selectRec) {                      // For delete rec that is in database
+            if (rec.equals(selectFromSelectRec)) {
+                if(dbConnect.deleteRecord("DELETE FROM MenuRecipe WHERE MenuRec_ID = ?", "int", String.valueOf(selectRecID)) == 0) {
+                    selectRec.remove(selectFromSelectRec);
+                    select_rec_lsView.refresh();
+                    break;
+                }
             }
         }
     }
@@ -240,16 +264,17 @@ public class Menu_edit_Controller {
                         if (dbConnect.insertRecord("INSERT  INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0) {
                             paraCommands.clear();
                         } else {
-                            System.out.println("no");
+                            System.out.println("Insert fail");
                         }
                     }
-                    tempSelectRec.clear();
-                    update_menu_name_field.clear();
-                    allRec.clear();
-                    selectRec.clear();
-                    recipe_list_view.refresh();
-                    select_rec_lsView.refresh();
+
                 }
+                tempSelectRec.clear();
+                update_menu_name_field.clear();
+                allRec.clear();
+                selectRec.clear();
+                recipe_list_view.refresh();
+                select_rec_lsView.refresh();
             }
         }
     }

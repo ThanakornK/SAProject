@@ -53,8 +53,8 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="add_btn" layoutX="600.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
-            <Button fx:id="deleteBtn" layoutX="600.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
+            <Button fx:id="add_btn" layoutX="540.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleAddBtn" prefHeight="70.0" prefWidth="80.0" text="เพิ่ม" />
+            <Button fx:id="deleteBtn" layoutX="664.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleDeleteBtn" prefHeight="70.0" prefWidth="80.0" text="ลบ" />
             <Button fx:id="menu_search_Btn" layoutX="998.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="40.0" prefWidth="83.0" text="ค้นหา" />
          </children>
       </AnchorPane>
