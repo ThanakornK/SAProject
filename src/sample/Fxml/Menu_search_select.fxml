@@ -13,7 +13,7 @@
          <children>
             <Text layoutX="367.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ค้นหา">
                <font>
-                  <Font size="30.0" />
+                  <Font size="35.0" />
                </font>
             </Text>
          </children>
@@ -28,8 +28,15 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <ListView fx:id="listView" layoutX="62.0" layoutY="217.0" onMouseClicked="#getSelectItem" prefHeight="520.0" prefWidth="678.0" />
-      <Button fx:id="backBtn" layoutX="75.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="85.0" prefWidth="185.0" text="ยกเลิก" />
-      <Button fx:id="confirmBtn" layoutX="537.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleConfirmBtn" prefHeight="85.0" prefWidth="185.0" text="ยืนยัน" />
+      <ListView fx:id="listView" layoutX="62.0" layoutY="217.0" onMouseClicked="#getSelectItem" prefHeight="520.0" prefWidth="678.0" stylesheets="@../StyleSheet/table.css" />
+      <Button fx:id="backBtn" layoutX="75.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="85.0" prefWidth="185.0" text="ยกเลิก">
+         <font>
+            <Font size="20.0" />
+         </font></Button>
+      <Button fx:id="confirmBtn" layoutX="537.0" layoutY="783.0" mnemonicParsing="false" onAction="#handleConfirmBtn" prefHeight="85.0" prefWidth="185.0" text="ยืนยัน">
+         <font>
+            <Font size="20.0" />
+         </font></Button>
+      <Button fx:id="reBtn" layoutX="630.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleReBtn" prefHeight="48.0" prefWidth="70.0" text="ล้าง" />
    </children>
 </AnchorPane>

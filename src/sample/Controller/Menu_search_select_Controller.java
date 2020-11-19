@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -67,7 +69,24 @@ public class Menu_search_select_Controller {
                         }
                     }
                 });
-                listView.setItems(menuName);
+
+                FilteredList<String> menuFilterList = new FilteredList<>(menuName, p -> true);
+                nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    menuFilterList.setPredicate(menu -> {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        if (menu.indexOf(newValue) != -1) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+
+                });
+                SortedList<String> menuSortedList = new SortedList<>(menuFilterList);
+                listView.setItems(menuSortedList);
 
             }
         });
@@ -124,7 +143,12 @@ public class Menu_search_select_Controller {
 
     //---------------------------------------- normal button method ----------------------------------------------------
 
-
+    @FXML
+    public void handleReBtn(){
+        if( !(nameField.getText().isEmpty()) ){
+            nameField.clear();
+        }
+    }
 
     //--------------------------------------- change page method -------------------------------------------------------
 

@@ -250,6 +250,14 @@ public class Menu_Controller {
 
     //---------------------------------------- normal button method ----------------------------------------------------
 
+    @FXML
+    public void handleReBtn(){
+        if( !(menu_name_field.getText().isEmpty() && recNameList.isEmpty()) ){
+            menu_name_field.clear();
+            recNameList.clear();
+            listViewRec.refresh();
+        }
+    }
 
 
     //--------------------------------------- change page method -------------------------------------------------------
