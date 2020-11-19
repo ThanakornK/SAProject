@@ -28,8 +28,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.DoubleConsumer;
 
 public class Menu_report_select_Controller {
@@ -178,7 +176,7 @@ public class Menu_report_select_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 

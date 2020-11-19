@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class AlertBox {
 
-    public void alertERR(String alertType, String content){
+    public void normalAlert(String alertType, String content){
         if (alertType.equals("err")){
             Alert alertError = new Alert(Alert.AlertType.ERROR);
             alertError.setTitle("พบข้อผิดพลาด");

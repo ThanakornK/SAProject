@@ -111,7 +111,7 @@ public class Menu_search_select_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
         }
 
     }

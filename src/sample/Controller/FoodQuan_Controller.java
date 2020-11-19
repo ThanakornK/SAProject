@@ -6,9 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -24,10 +22,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class FoodQuan_Controller {
@@ -144,13 +140,13 @@ public class FoodQuan_Controller {
                 foodDate = currentDate;
             }else{
                 AlertBox alertBox = new AlertBox();
-                alertBox.alertERR("err","กรุณาเลือกเวลาปัจจุบันหรืออนาคต");
+                alertBox.normalAlert("err","กรุณาเลือกเวลาปัจจุบันหรืออนาคต");
                 dateSale.setValue(LocalDate.now());
             }
 
         } else {
             AlertBox alertBox = new AlertBox();
-            alertBox.alertERR("err","กรุณาเลือกวันที่ขาย");
+            alertBox.normalAlert("err","กรุณาเลือกวันที่ขาย");
         }
     }
 
@@ -290,7 +286,7 @@ public class FoodQuan_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
