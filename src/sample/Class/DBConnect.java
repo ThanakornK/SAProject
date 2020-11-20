@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class DBConnect {
     public static Connection connect() {
@@ -55,7 +57,7 @@ public class DBConnect {
 
         }catch (NumberFormatException e){
             AlertBox alertBox = new AlertBox();
-            alertBox.normalAlert("err","ข้อมูลที่กรอกไม่ถูกต้อง");
+            alertBox.alertERR("err","ข้อมูลที่กรอกไม่ถูกต้อง");
             return 1;
         }
     }

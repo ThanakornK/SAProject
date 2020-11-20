@@ -34,10 +34,10 @@
          <children>
             <AnchorPane fx:id="showMenu_con" layoutX="50.0" layoutY="94.0" prefHeight="492.0" prefWidth="1190.0" style="-fx-background-color: lightgreen;">
                <children>
-                  <TableView fx:id="recPlanQuan_table" layoutX="28.0" layoutY="71.0" prefHeight="340.0" prefWidth="585.0">
+                  <TableView fx:id="recLeftQuan_table" layoutX="28.0" layoutY="71.0" prefHeight="340.0" prefWidth="585.0">
                     <columns>
-                      <TableColumn editable="false" prefWidth="418.0" text="ชื่ออาหาร" />
-                      <TableColumn prefWidth="168.0" text="ปริมาณอาหาร" />
+                      <TableColumn fx:id="rec_leftNameCol" editable="false" prefWidth="418.0" text="ชื่ออาหาร" />
+                      <TableColumn fx:id="rec_leftQuanCol" prefWidth="168.0" text="ปริมาณอาหาร" />
                     </columns>
                   </TableView>
                   <Text layoutX="217.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ปริมาณอาหารคงเหลือ">
@@ -45,10 +45,10 @@
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <TableView fx:id="ingPlaQuan_table" layoutX="686.0" layoutY="68.0" prefHeight="340.0" prefWidth="478.0">
+                  <TableView fx:id="recRecomQuan_table" layoutX="686.0" layoutY="68.0" prefHeight="340.0" prefWidth="478.0">
                     <columns>
-                      <TableColumn prefWidth="300.0" text="ชื่ออาหาร" />
-                      <TableColumn prefWidth="177.0" text="ปริมาณอาหารที่ปรับเปลี่ยน" />
+                      <TableColumn fx:id="rec_recomNameCol" prefWidth="300.0" text="ชื่ออาหาร" />
+                      <TableColumn fx:id="rec_recomQuanCol" prefWidth="177.0" text="ปริมาณอาหารที่ปรับเปลี่ยน" />
                     </columns>
                   </TableView>
                   <Text layoutX="819.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="แนะนำการปรับปริมาณ">
@@ -58,7 +58,7 @@
                   </Text>
                   <Button fx:id="back_btn" layoutX="1044.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleBackBtn" prefHeight="55.0" prefWidth="120.0" text="กลับหน้าแรก" />
                   <Button fx:id="reportBtn" layoutX="535.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleReport" prefHeight="55.0" prefWidth="120.0" text="รายงาน" />
-                  <Button fx:id="saveLeftBtn" layoutX="239.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleSaveLeftBtn" prefHeight="53.0" prefWidth="164.0" text="บันทึกปริมาณคงเหลือ" />
+                  <Button fx:id="saveLeftBtn" layoutX="239.0" layoutY="424.0" mnemonicParsing="false" onAction="#updateFoodLeft" prefHeight="53.0" prefWidth="164.0" text="บันทึกปริมาณคงเหลือ" />
                </children>
             </AnchorPane>
             <Text layoutX="480.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เมนูที่ทำ">

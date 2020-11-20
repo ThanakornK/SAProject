@@ -136,7 +136,7 @@ public class Menu_edit_Controller {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -156,7 +156,7 @@ public class Menu_edit_Controller {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -175,7 +175,7 @@ public class Menu_edit_Controller {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -214,7 +214,7 @@ public class Menu_edit_Controller {
     @FXML
     void handleAddBtn() {
         if (isInSelectRec(selectFromAllRec) == -1) {
-            alertBox.normalAlert("err", "มีสูตรอาหารนี้อยู่แล้ว");
+            alertBox.alertERR("err", "มีสูตรอาหารนี้อยู่แล้ว");
         } else {
             tempSelectRec.add(selectFromAllRec);
             selectRec.add(selectFromAllRec);
@@ -252,7 +252,7 @@ public class Menu_edit_Controller {
     void handleAddMenuBtn(ActionEvent event) {
         if (alertBox.alertConfirm("ยืนยันการแก้ไขเมนูหรือไม่") == 0) {
             if (selectRec.isEmpty()) {
-                alertBox.normalAlert("err", "กรุณาเพิ่มสูตรอาหาร");
+                alertBox.alertERR("err", "กรุณาเพิ่มสูตรอาหาร");
             } else {
                 ArrayList<ParaCommand> paraCommands = new ArrayList<>();
                 if (!tempSelectRec.isEmpty()) {

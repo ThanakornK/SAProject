@@ -8,18 +8,24 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Class.*;
+import sample.Class.Menu;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menu_Controller {
 
@@ -59,11 +65,6 @@ public class Menu_Controller {
                 readAllIng(ingredientList);
                 readAllRec(recipesList);  // read recipe from database
                 readAllMenuName(menuList);  // read menu from database
-                if(!menu_name_field.getText().isEmpty()){
-
-                }
-
-
 
                 listViewMenu.setCellFactory(param -> new ListCell<MenuRecipe>() {
                     @Override
@@ -120,7 +121,7 @@ public class Menu_Controller {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -143,7 +144,7 @@ public class Menu_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
 
     }
@@ -182,7 +183,7 @@ public class Menu_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -207,7 +208,7 @@ public class Menu_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -302,7 +303,7 @@ public class Menu_Controller {
             if(dbConnect.deleteRecord("delete FROM MenuRecipe WHERE Menu_name = ?", "str", menu_name_field.getText()) == 0){
                 System.out.println("Delete successful");
             } else {
-                alertBox.normalAlert("err", "การลบข้อมูลผิดพลาด");
+                alertBox.alertERR("err", "การลบข้อมูลผิดพลาด");
             }
         }
     }

@@ -1,11 +1,16 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -24,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.function.DoubleConsumer;
 
 public class Menu_update_Controller {
 
@@ -125,7 +131,7 @@ public class Menu_update_Controller {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -160,14 +166,14 @@ public class Menu_update_Controller {
     void handleAddRecBtn() {
         if(!(selectRec == null)){
             if (isInAddRec(selectRec) == -1) {
-                alertBox.normalAlert("err", "มีสูตรอาหารนี้อยู่แล้ว");
+                alertBox.alertERR("err", "มีสูตรอาหารนี้อยู่แล้ว");
             }
             else {
                 addRec.add(selectRec);
                 select_rec_lsView.refresh();
             }
         } else {
-            alertBox.normalAlert("err", "กรุญาเลือกสูตรอาหาร");
+            alertBox.alertERR("err", "กรุญาเลือกสูตรอาหาร");
         }
     }
 
@@ -182,9 +188,9 @@ public class Menu_update_Controller {
 
         if(alertBox.alertConfirm("ยืนยันการเพิ่มเมนูหรือไม่") == 0) {
             if (add_menu_name_field.getText().isEmpty()) {
-                alertBox.normalAlert("err", "กรุณากรอกชื่อเมนู");
+                alertBox.alertERR("err", "กรุณากรอกชื่อเมนู");
             } else if (addRec.isEmpty()) {
-                alertBox.normalAlert("err", "กรุญาเพิ่มสูตรอาหาร");
+                alertBox.alertERR("err", "กรุญาเพิ่มสูตรอาหาร");
             } else {
                 ArrayList<ParaCommand> paraCommands = new ArrayList<>();
                 for(String s: addRec){
@@ -192,7 +198,7 @@ public class Menu_update_Controller {
                     paraCommands.add(new ParaCommand("str", s));
                     paraCommands.add(new ParaCommand("double", "0"));
 
-                    if(dbConnect.insertRecord("INSERT  INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0){
+                    if(dbConnect.insertRecord("INSERT INTO MenuRecipe(Menu_name, Rec_name, Recommend_fq) VALUES(?,?,?)", paraCommands) == 0){
                         System.out.println("Insert success");
                         paraCommands.clear();
                     }

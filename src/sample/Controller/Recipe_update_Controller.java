@@ -1,14 +1,17 @@
 package sample.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Class.*;
@@ -97,7 +100,7 @@ public class Recipe_update_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -136,7 +139,7 @@ public class Recipe_update_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -238,7 +241,7 @@ public class Recipe_update_Controller {
                 }
             }
         } else {
-            alertBox.normalAlert("err", "กรอกข้อมูลไม่ถูกต้อง");
+            alertBox.alertERR("err", "กรอกข้อมูลไม่ถูกต้อง");
         }
         update_ing_name.clear();
         update_ing_quan.clear();
@@ -327,17 +330,17 @@ public class Recipe_update_Controller {
         if (isDouble(add_ing_quan.getText()) == 0) {
 
             if (add_ing_name.getText().isEmpty()) {
-                alertBox.normalAlert("err", "กรูณากรอกชื่อวัตถุดิบ");
+                alertBox.alertERR("err", "กรูณากรอกชื่อวัตถุดิบ");
             } else if (add_ing_quan.getText().isEmpty()) {
-                alertBox.normalAlert("err", "กรุณากรอกปริมาณวัตถุดิบ");
+                alertBox.alertERR("err", "กรุณากรอกปริมาณวัตถุดิบ");
             } else if (Double.parseDouble(add_ing_quan.getText()) <= 0) {
-                alertBox.normalAlert("err", "ปริมาณวัตถุดิบที่ใช้ห้ามติดลบหรือเท่ากับ0");
+                alertBox.alertERR("err", "ปริมาณวัตถุดิบที่ใช้ห้ามติดลบหรือเท่ากับ0");
             } else if (isInAddList(add_ing_name.getText()) == -1) {
-                alertBox.normalAlert("err", "มีวัตถุดิบนี้อยู่แล้ว");
+                alertBox.alertERR("err", "มีวัตถุดิบนี้อยู่แล้ว");
             } else {
 
                 if (isInIngList(add_ing_name.getText()) == -1) {  // If there is no ingredient in database that has the same name in textfield alert user
-                    alertBox.normalAlert("err", "ไม่มีวัตถุดิบนี้ในระบบ");
+                    alertBox.alertERR("err", "ไม่มีวัตถุดิบนี้ในระบบ");
                 } else {
                     IngRecipe temp = new IngRecipe(ingredientList.get(isInIngList(add_ing_name.getText())).getIng_name(), "temp", Double.parseDouble(add_ing_quan.getText()));
                     recipeIngList.add(ingredientList.get(isInIngList(add_ing_name.getText())));
@@ -351,7 +354,7 @@ public class Recipe_update_Controller {
                 }
             }
         } else {
-            alertBox.normalAlert("err", "ข้อมูลที่กรอกไม่ถูกต้อง");
+            alertBox.alertERR("err", "ข้อมูลที่กรอกไม่ถูกต้อง");
         }
     }
 
@@ -361,9 +364,9 @@ public class Recipe_update_Controller {
         if (alertBox.alertConfirm("ยืนยันการเพิ่มสูตรอาหารหรือไม่") == 0) {
 
                 if (add_rec_name_field.getText().isEmpty()) {
-                    alertBox.normalAlert("err", "กรุณากรอกชื่อสูตรอาหาร");
+                    alertBox.alertERR("err", "กรุณากรอกชื่อสูตรอาหาร");
                 } else if (addIngInfo.isEmpty()) {
-                    alertBox.normalAlert("err", "ไม่มีวัตุดิบที่ใช้");
+                    alertBox.alertERR("err", "ไม่มีวัตถุดิบที่ใช้");
                 } else {
 
 
@@ -399,7 +402,7 @@ public class Recipe_update_Controller {
 
 
                     } else {
-                        alertBox.normalAlert("err", "สูตรอาหารนี้มีอยู่แล้ว");
+                        alertBox.alertERR("err", "สูตรอาหารนี้มีอยู่แล้ว");
                     }
                 }
                 ingQuantity.clear();

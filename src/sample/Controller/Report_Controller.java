@@ -2,6 +2,7 @@ package sample.Controller;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Report_Controller {
 
@@ -226,7 +229,7 @@ public class Report_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -290,7 +293,7 @@ public class Report_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 

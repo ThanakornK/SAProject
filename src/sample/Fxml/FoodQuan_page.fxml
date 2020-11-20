@@ -35,11 +35,11 @@
             <AnchorPane fx:id="showMenu_con" layoutX="50.0" layoutY="94.0" prefHeight="492.0" prefWidth="1190.0" style="-fx-background-color: lightgreen;">
                <children>
                   <Button fx:id="menuPageBtn1" layoutX="28.0" layoutY="423.0" mnemonicParsing="false" onAction="#go_menu_page" prefHeight="55.0" prefWidth="120.0" text="แก้ไขเมนู" />
-                  <Button fx:id="menuConfirmBtn1" layoutX="686.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleMenuConfirm" prefHeight="55.0" prefWidth="120.0" text="ยืนยันปริมาณอาหาร" />
+                  <Button fx:id="menuConfirmBtn1" layoutX="686.0" layoutY="423.0" mnemonicParsing="false" onAction="#getDateAction" prefHeight="55.0" prefWidth="120.0" text="ยืนยันปริมาณอาหาร" />
                   <TableView fx:id="recPlanQuan_table" editable="true" layoutX="28.0" layoutY="71.0" prefHeight="340.0" prefWidth="585.0">
                     <columns>
                       <TableColumn fx:id="rec_nameCol" editable="false" prefWidth="418.0" text="ชื่ออาหาร" />
-                      <TableColumn fx:id="rec_totalCol" prefWidth="168.0" text="ปริมาณอาหาร" />
+                      <TableColumn fx:id="rec_totalCol" onEditCommit="#OnEditChanged" prefWidth="168.0" text="ปริมาณอาหาร" />
                     </columns>
                   </TableView>
                   <Text layoutX="232.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="แผนปริมาณอาหาร">
@@ -73,7 +73,7 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <DatePicker fx:id="dateSale" layoutX="269.0" layoutY="29.0" onAction="#getDateAction" prefHeight="35.0" prefWidth="175.0" promptText="เลือกวันที่ขาย" />
+            <DatePicker fx:id="dateSale" layoutX="269.0" layoutY="29.0" prefHeight="35.0" prefWidth="175.0" promptText="เลือกวันที่ขาย" />
             <TextField fx:id="menu_name_field" editable="false" layoutX="632.0" layoutY="25.0" prefHeight="44.0" prefWidth="410.0" promptText="กดปุ่ม &quot;ค้นหา&quot; เพื่อเลือกเมนู">
                <font>
                   <Font size="20.0" />

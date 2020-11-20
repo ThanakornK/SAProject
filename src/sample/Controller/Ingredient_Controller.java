@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import sample.Class.AlertBox;
 import sample.Class.Ingredient;
 import sample.Class.DBConnect;
+import sample.Class.Menu;
 import sample.Class.ParaCommand;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class Ingredient_Controller {
@@ -122,7 +124,7 @@ public class Ingredient_Controller {
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-            alertBox.normalAlert("err", "การอ่านข้อมูลผิดพลาด");
+            alertBox.alertERR("err", "การอ่านข้อมูลผิดพลาด");
         }
     }
 
@@ -184,7 +186,7 @@ public class Ingredient_Controller {
     @FXML
     public void handleSearchBtn() {
         if (update_ing_name.getText().isEmpty()){                   // check update_ing_name is Empty?
-            alertBox.normalAlert("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการค้นหา");
+            alertBox.alertERR("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการค้นหา");
 
         } else {
             if (isInList(update_ing_name.getText()) != -1) {                                                                // show ing data and set update field can edit
@@ -200,7 +202,7 @@ public class Ingredient_Controller {
                 update_ing_name.setEditable(false);
 
             } else {                                                        // check if ing name don't exist
-                alertBox.normalAlert("err","ไม่พบวัตถุดิบ");
+                alertBox.alertERR("err","ไม่พบวัตถุดิบ");
                 clearTextField();
 
             }
@@ -301,7 +303,7 @@ public class Ingredient_Controller {
 
         if (update_ing_name.getText().isEmpty()) {                              // check if name field empty
 
-            alertBox.normalAlert("err","ยังไม่มีการเลือกข้อมูลที่ต้องการลบ");
+            alertBox.alertERR("err","ยังไม่มีการเลือกข้อมูลที่ต้องการลบ");
 
         }else {
 
@@ -322,7 +324,7 @@ public class Ingredient_Controller {
 
             } else {
 
-                alertBox.normalAlert("err","ไม่พบวัตถุดิบ");
+                alertBox.alertERR("err","ไม่พบวัตถุดิบ");
 
             }
 
@@ -333,16 +335,16 @@ public class Ingredient_Controller {
     @FXML
     public void insertRecord() {
             if (add_ing_name.getText().isEmpty() || add_ing_price.getText().isEmpty() || add_ing_amount.getText().isEmpty()){
-                alertBox.normalAlert("err", "กรุณากรอกข้อมูลให้ครบถ้วน");
+                alertBox.alertERR("err", "กรุณากรอกข้อมูลให้ครบถ้วน");
 
             }
 
             else if (Double.parseDouble(add_ing_price.getText()) <= 0){
-                alertBox.normalAlert("err", "กรุณากรอกราคาให้ถูกต้อง");
+                alertBox.alertERR("err", "กรุณากรอกราคาให้ถูกต้อง");
             }
 
             else if (Integer.parseInt(add_ing_amount.getText()) < 0){
-                alertBox.normalAlert("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
+                alertBox.alertERR("err", "กรอกจำนวนวัตถุดิบไม่ถูกต้อง");
             }
 
             else{
@@ -363,7 +365,7 @@ public class Ingredient_Controller {
                     }
 
                 }else {
-                    alertBox.normalAlert("err","วัตถุดิบนี้มีอยู่แล้ว");
+                    alertBox.alertERR("err","วัตถุดิบนี้มีอยู่แล้ว");
                 }
             }
 
@@ -374,22 +376,22 @@ public class Ingredient_Controller {
         try {
 
             if (update_ing_name.getText().isEmpty()){
-                alertBox.normalAlert("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการอัพเดต");
+                alertBox.alertERR("err","กรุณากรอกชื่อวัตถุดิบที่ต้องการอัพเดต");
 
             }else if (update_ing_price.getText().isEmpty() && update_ing_amount.getText().isEmpty()) {
-                alertBox.normalAlert("err","กรุณากรอกข้อมูลวัตถุดิบให้ครบถ้วน");
+                alertBox.alertERR("err","กรุณากรอกข้อมูลวัตถุดิบให้ครบถ้วน");
 
             }else if (isInList(update_ing_name.getText()) == -1) {
 
-                alertBox.normalAlert("err","ไม่มีข้อมูลดังกล่าวอยู่ในฐานข้อมูล");
+                alertBox.alertERR("err","ไม่มีข้อมูลดังกล่าวอยู่ในฐานข้อมูล");
 
             }else if (ingredientList.get(isInList(update_ing_name.getText()))
                     .equals(new Ingredient(update_ing_name.getText(),Double.parseDouble(update_ing_price.getText()),Integer.parseInt(update_ing_amount.getText())))){
 
-                alertBox.normalAlert("err","ข้อมูลไม่มีการเปลี่ยนแปลง");
+                alertBox.alertERR("err","ข้อมูลไม่มีการเปลี่ยนแปลง");
 
             }else if(Double.parseDouble(update_ing_price.getText()) <= 0 || Integer.parseInt(update_ing_amount.getText()) < 0){
-                alertBox.normalAlert("err","กรอกข้อมูลไม่ถูกต้อง");
+                alertBox.alertERR("err","กรอกข้อมูลไม่ถูกต้อง");
                 update_ing_price.clear();
                 update_ing_amount.clear();
 
@@ -413,7 +415,7 @@ public class Ingredient_Controller {
 
         } catch (NumberFormatException e) {
 
-            alertBox.normalAlert("err","ข้อมูลที่กรอกไม่ถูกต้อง");
+            alertBox.alertERR("err","ข้อมูลที่กรอกไม่ถูกต้อง");
 
         }
 
