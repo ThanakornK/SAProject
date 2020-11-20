@@ -27,6 +27,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.function.DoubleConsumer;
 
 public class FoodQuan_Controller {
@@ -83,6 +89,8 @@ public class FoodQuan_Controller {
     private String menuSelect = "";
 
     private AlertBox alertBox;
+    private DBConnect dbConnect = new DBConnect();
+    private String foodDate;
 
     private ObservableList<RecipeReport> recList = FXCollections.observableArrayList();
     private ObservableList<IngReport> ingList = FXCollections.observableArrayList();
@@ -94,6 +102,7 @@ public class FoodQuan_Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                dateSale.setValue(LocalDate.now());
                 if (menuSelect != ""){
                     menu_name_field.setText(menuSelect);
                     readSetRecipe_tb(recList);
@@ -120,22 +129,19 @@ public class FoodQuan_Controller {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT MenuRecipe.Rec_name, MenuRecipe.Recommend_fq, FoodQuan.LeftOver_fq, FoodQuan.Food_date " +
+            String sql = "SELECT * " +
                     "FROM MenuRecipe " +
-                    "INNER JOIN FoodQuan ON MenuRecipe.MenuRec_ID = FoodQuan.MenuRec_ID " +
-                    "WHERE  MenuRecipe.Menu_name = ? AND " +
-                    "FoodQuan.Food_date = (SELECT max(FoodQuan.Food_date) " +
-                    "FROM FoodQuan " +
-                    "WHERE FoodQuan.MenuRec_ID = MenuRecipe.MenuRec_ID) ;";
+                    "WHERE MenuRecipe.Menu_name = ? ;";
             ps = con.prepareStatement(sql);
-            ps.setString(1, menuSelect);
+            ps.setString(1,menuSelect);
             rs = ps.executeQuery();
 
             while(rs.next()) {
                 String regName = rs.getString("Rec_name");
                 double recommendFq = rs.getDouble("Recommend_fq");
-
-                RecipeReport rp = new RecipeReport(regName, recommendFq, 0.0);
+                int recId = rs.getInt("MenuRec_ID");
+                RecipeReport rp = new RecipeReport(regName,recommendFq,0.0);
+                rp.setMenuRecId(recId);
                 list.add(rp);
 
             }
@@ -183,6 +189,51 @@ public class FoodQuan_Controller {
     }
 
     //----------------------------------------- normal method ----------------------------------------------------------
+
+    @FXML
+    private void getDateAction(ActionEvent event) {
+        if (dateSale.getValue() != null) {
+            Locale lc = new Locale("en","EN");
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd",lc).format(new Date());
+            String selectDate = dateSale.getValue().toString();
+            if (isDateOfInterestValid("yyyy-MM-dd", currentDate, selectDate)){
+                foodDate = currentDate;
+            }else{
+                AlertBox alertBox = new AlertBox();
+                alertBox.alertERR("err","กรุณาเลือกเวลาปัจจุบันหรืออนาคต");
+                dateSale.setValue(LocalDate.now());
+            }
+
+        } else {
+            AlertBox alertBox = new AlertBox();
+            alertBox.alertERR("err","กรุณาเลือกวันที่ขาย");
+        }
+        insertFoodQuan();
+    }
+
+    public static boolean isDateOfInterestValid(String dateformat, String currentDate, String dateOfInterest) {
+
+        String format = dateformat;
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date cd = null;
+        Date doi = null;
+
+        try {
+            cd = sdf.parse(currentDate);
+            doi = sdf.parse(dateOfInterest);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diff = cd.getTime() - doi.getTime();
+        int diffDays = (int) (diff / (24 * 1000 * 60 * 60));
+
+        if (diffDays > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public void setIngReportColumnDouble(TableColumn<IngReport, Double> tableCol) {
         tableCol.setCellFactory(tc -> new TableCell<IngReport, Double>() {
@@ -291,15 +342,9 @@ public class FoodQuan_Controller {
         Stage stage = new Stage();
         stage.setScene(new Scene(parentRoot));
         stage.show();
-
     }
 
     //-------------------------------------------- database method -----------------------------------------------------
-
-    @FXML
-    void handleMenuConfirm(ActionEvent event) {
-
-    }
 
     private void listenToSizeInitialization(ObservableDoubleValue size,             // method for change position of window
                                             DoubleConsumer handler) {
@@ -320,5 +365,20 @@ public class FoodQuan_Controller {
     public void OnEditChanged(TableColumn.CellEditEvent<RecipeReport, Double> recipeReportDoubleCellEditEvent) {
         RecipeReport recipeReport = recPlanQuan_table.getSelectionModel().getSelectedItem();
         recipeReport.setTotal_fqReport(recipeReportDoubleCellEditEvent.getNewValue());
+    }
+
+    public void insertFoodQuan(){
+        for (RecipeReport rp: recList) {
+            ArrayList<ParaCommand> paraCommands = new ArrayList<>();
+            System.out.println(foodDate + " " + rp.getMenuRecId() + " " + rp.getTotal_fqReport());
+            paraCommands.add(new ParaCommand("str", foodDate));
+            paraCommands.add(new ParaCommand("int", String.valueOf(rp.getMenuRecId())));
+            paraCommands.add(new ParaCommand("double", String.valueOf(rp.getTotal_fqReport()))); // get total foodquan
+
+            if(dbConnect.insertRecord("INSERT INTO FoodQuan (Food_date, MenuRec_ID, Total_fq, LeftOver_fq) VALUES (?,?,?,0)", paraCommands) == 0){
+                System.out.println("Insert success");
+                paraCommands.clear();
+            }
+        }
     }
 }
