@@ -27,10 +27,6 @@ public class IngRecipe {
         return totalCost;
     }
 
-    public void setIngName(String ingName) {
-        this.ingName = ingName;
-    }
-
     public void setIngQuan(Double recQuan) {
         this.ingQuan = recQuan;
     }
